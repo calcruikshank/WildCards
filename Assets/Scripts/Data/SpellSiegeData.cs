@@ -71,6 +71,7 @@ public struct SpellSiegeData
     {
         Red,
         Green,
+        Blue,
         Black,
         White
     }

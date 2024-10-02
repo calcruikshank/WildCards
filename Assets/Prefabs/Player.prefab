@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8164691875682251412
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8164691875682251414}
+  - component: {fileID: 8079120379133140768}
+  - component: {fileID: 8164691875682251413}
+  - component: {fileID: 8164691875682251415}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8164691875682251414
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164691875682251412}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8079120379133140768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164691875682251412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 627240969
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &8164691875682251413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164691875682251412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bc6069ce6418004d998049c5e46d742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAI: 0
+  state: 0
+  col: {r: 0, g: 0, b: 0, a: 0}
+  transparentCol: {r: 0, g: 0, b: 0, a: 0}
+  instantiatedCaste: {fileID: 0}
+  creatureMask:
+    serializedVersion: 2
+    m_Bits: 64
+  dragonDeck:
+  - {fileID: 5255841600039758024, guid: 20b591e4a7f0a9b47a14524b175dfd4e, type: 3}
+  - {fileID: 5255841600039758024, guid: 20b591e4a7f0a9b47a14524b175dfd4e, type: 3}
+  - {fileID: 5255841600039758024, guid: 20b591e4a7f0a9b47a14524b175dfd4e, type: 3}
+  - {fileID: 5255841600039758024, guid: 20b591e4a7f0a9b47a14524b175dfd4e, type: 3}
+  - {fileID: 5255841600039758024, guid: 3f3624b931dbb114f8d24f600d65e344, type: 3}
+  - {fileID: 5255841600039758024, guid: 3f3624b931dbb114f8d24f600d65e344, type: 3}
+  - {fileID: 5255841600039758024, guid: 3f3624b931dbb114f8d24f600d65e344, type: 3}
+  - {fileID: 5255841600039758024, guid: 3f3624b931dbb114f8d24f600d65e344, type: 3}
+  - {fileID: 5255841600039758024, guid: 0d4fac986963f3341ae936fd1dd6f654, type: 3}
+  - {fileID: 5255841600039758024, guid: 0d4fac986963f3341ae936fd1dd6f654, type: 3}
+  - {fileID: 5255841600039758024, guid: 0d4fac986963f3341ae936fd1dd6f654, type: 3}
+  - {fileID: 5255841600039758024, guid: 0d4fac986963f3341ae936fd1dd6f654, type: 3}
+  - {fileID: 5255841600039758024, guid: 214f799af58fd8242ba1d5b953f4dae6, type: 3}
+  - {fileID: 5255841600039758024, guid: 214f799af58fd8242ba1d5b953f4dae6, type: 3}
+  - {fileID: 5255841600039758024, guid: 214f799af58fd8242ba1d5b953f4dae6, type: 3}
+  - {fileID: 5255841600039758024, guid: 214f799af58fd8242ba1d5b953f4dae6, type: 3}
+  - {fileID: 5255841600039758024, guid: 33196ad8a87031045969443ccdcd30f2, type: 3}
+  - {fileID: 5255841600039758024, guid: 33196ad8a87031045969443ccdcd30f2, type: 3}
+  - {fileID: 5255841600039758024, guid: 33196ad8a87031045969443ccdcd30f2, type: 3}
+  - {fileID: 5255841600039758024, guid: 33196ad8a87031045969443ccdcd30f2, type: 3}
+  - {fileID: 7354926551894329227, guid: 5e8c5e3fd5f21614d9c5e679632eea61, type: 3}
+  - {fileID: 7354926551894329227, guid: 5e8c5e3fd5f21614d9c5e679632eea61, type: 3}
+  - {fileID: 7354926551894329227, guid: 5e8c5e3fd5f21614d9c5e679632eea61, type: 3}
+  - {fileID: 7354926551894329227, guid: 5e8c5e3fd5f21614d9c5e679632eea61, type: 3}
+  - {fileID: 5255841600039758024, guid: a537093ed9ea8cb4fa6b52c94ea281da, type: 3}
+  - {fileID: 5255841600039758024, guid: a537093ed9ea8cb4fa6b52c94ea281da, type: 3}
+  - {fileID: 5255841600039758024, guid: a537093ed9ea8cb4fa6b52c94ea281da, type: 3}
+  - {fileID: 5255841600039758024, guid: a537093ed9ea8cb4fa6b52c94ea281da, type: 3}
+  - {fileID: 5255841600039758024, guid: 5b89c2ae167118447ae9dc50def990d7, type: 3}
+  - {fileID: 5255841600039758024, guid: 5b89c2ae167118447ae9dc50def990d7, type: 3}
+  - {fileID: 5255841600039758024, guid: 5b89c2ae167118447ae9dc50def990d7, type: 3}
+  - {fileID: 5255841600039758024, guid: 5b89c2ae167118447ae9dc50def990d7, type: 3}
+  - {fileID: 5255841600039758024, guid: 1f5352562734f6542abb868c3e7ff3ab, type: 3}
+  - {fileID: 5255841600039758024, guid: 1f5352562734f6542abb868c3e7ff3ab, type: 3}
+  - {fileID: 5255841600039758024, guid: 1f5352562734f6542abb868c3e7ff3ab, type: 3}
+  - {fileID: 5255841600039758024, guid: 1f5352562734f6542abb868c3e7ff3ab, type: 3}
+  - {fileID: 5255841600039758024, guid: dac5785e8ceec2a43a18c18bca731618, type: 3}
+  - {fileID: 5255841600039758024, guid: dac5785e8ceec2a43a18c18bca731618, type: 3}
+  - {fileID: 5255841600039758024, guid: dac5785e8ceec2a43a18c18bca731618, type: 3}
+  - {fileID: 5255841600039758024, guid: dac5785e8ceec2a43a18c18bca731618, type: 3}
+  - {fileID: 5255841600039758024, guid: 6c147f905afcd154ca91975415bc73d5, type: 3}
+  - {fileID: 5255841600039758024, guid: 6c147f905afcd154ca91975415bc73d5, type: 3}
+  - {fileID: 5255841600039758024, guid: 6c147f905afcd154ca91975415bc73d5, type: 3}
+  - {fileID: 5255841600039758024, guid: 6c147f905afcd154ca91975415bc73d5, type: 3}
+  demonDeck:
+  - {fileID: 8490984263599025761, guid: 572a96e60f24afa47a16a4e20bfe36c4, type: 3}
+  - {fileID: 2220564418927793112, guid: 265afe1cd1297e9489891bd5ee0d8baf, type: 3}
+  - {fileID: 4255716214507035492, guid: c2fa6885df3f40f42b96f3cdda6c3617, type: 3}
+  - {fileID: 7509559899320219305, guid: 18c5cf40afc66ec43aeed97f8f6282eb, type: 3}
+  - {fileID: 8490984263599025761, guid: c15d0beb5c8145d4c8e1fb9380023fba, type: 3}
+  - {fileID: 4255716214507035492, guid: b27f52a4f764e374685caba55ec40e09, type: 3}
+  - {fileID: 3473270290730563353, guid: 0d61da322741ea845a51a5765c0b25d0, type: 3}
+  - {fileID: 4255716214507035492, guid: 856278a5aa2929742bef39f57e3ad4d2, type: 3}
+  - {fileID: 4255716214507035492, guid: 3b0fb662270520d40bcd684da8f50f2e, type: 3}
+  - {fileID: 4255716214507035492, guid: f9bfaa4e246b4f04b814c856b6e79367, type: 3}
+  - {fileID: 4255716214507035492, guid: 9e5ab64abe6bc5440a0ba742e8786086, type: 3}
+  - {fileID: 4255716214507035492, guid: e5b848e3691028140877e123a3e2ca20, type: 3}
+  - {fileID: 4255716214507035492, guid: 2ec9cecc77119bb41a26e0c36e9f8a03, type: 3}
+  - {fileID: 4255716214507035492, guid: cb84eb3b8aef45643aff60a92a8e8fd0, type: 3}
+  - {fileID: 4255716214507035492, guid: ac100c3816574274d9097076d6663b3d, type: 3}
+  - {fileID: 4255716214507035492, guid: a236c3146452e964586267f8c1bab1ed, type: 3}
+  - {fileID: 4255716214507035492, guid: aba47d657fe6db24ebd5c93e850685b2, type: 3}
+  cardsInDeck: []
+  cardsInHand: []
+  cardSelected: {fileID: 0}
+  locallySelectedCard: {fileID: 0}
+  allVertextPointsInTilesOwned: []
+  playerHud: {fileID: 8061840716336608874, guid: ff649b0ea61d66149a0f91d41f2ab955, type: 3}
+  harvestedTiles: []
+  spellCounter: 0
+  numberOfLandsYouCanPlayThisTurn: 1
+  numberOfLandsPlayedThisTurn: 0
+  colorsToPickFrom:
+  - {r: 0.1882353, g: 0.49019608, b: 0.6313726, a: 0}
+  - {r: 0.3372549, g: 0.58431375, b: 0.25882354, a: 0}
+  - {r: 0.7254902, g: 0.38431373, b: 0.18431373, a: 0}
+  - {r: 0.75686276, g: 0.0627451, b: 0.03529412, a: 0}
+  structuresOwned: []
+  opponent: {fileID: 0}
+  gameSceneController: 
+  castlePrefab: {fileID: 93194238494307845, guid: 686d43d1302e4a447917903c2d11f2c0, type: 3}
+  ShowingPurchasableHarvestTiles: 0
+  visualSpawnEffect: {fileID: 8362349209469777723, guid: 1835dbeede209484cb976155d1b75638, type: 3}
+--- !u!114 &8164691875682251415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164691875682251412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fc8898574305d4dbcca8fc48587d7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseTileMap:
+    serializedVersion: 2
+    m_Bits: 8

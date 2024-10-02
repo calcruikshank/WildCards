@@ -7,7 +7,6 @@ using UnityEngine.Tilemaps;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject playerPrefab;
-    [SerializeField] GameObject aiPrefab;
     public static GameManager singleton;
     public enum State
     {

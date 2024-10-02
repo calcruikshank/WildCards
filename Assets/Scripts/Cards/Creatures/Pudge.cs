@@ -28,6 +28,16 @@ public class Pudge : Creature
 
     public override void Garrison()
     {
+        base.Garrison();
+        if (swallowedCreature != null)
+        {
+            GiveCounter((int)swallowedCreature.CurrentHealth);
+            swallowedCreature.actualPosition = this.actualPosition;
+            swallowedCreature.transform.position = this.actualPosition;
+            swallowedCreature = null;
+
+        }
+
     }
 
     public override void OnDeath()
