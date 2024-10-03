@@ -415,7 +415,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameObjectToInstantiate: {fileID: 720420457433826324, guid: 0869d3a4ea1ce2d4db090c2d9189b0e0, type: 3}
-  indexOfCard: 11
   greenManaCost: 0
   whiteManaCost: 0
   blackManaCost: 9

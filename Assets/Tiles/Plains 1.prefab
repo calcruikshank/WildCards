@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7541903687932736106}
   - component: {fileID: 2449656597802256171}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Gradient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1037174052394825424}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.10010001, z: 0}
   m_LocalScale: {x: 0.23449999, y: 0.23449999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7890006850879797133}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &2449656597802256171
 SpriteRenderer:
@@ -49,6 +49,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -97,7 +100,7 @@ GameObject:
   - component: {fileID: 9022332594188537058}
   - component: {fileID: -7011141208685322689}
   - component: {fileID: 7890982584060249880}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Plains 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,6 +114,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7364862864276254007}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0.099999994, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -118,7 +122,6 @@ Transform:
   m_Children:
   - {fileID: 7541903687932736106}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6544069976525486120
 MeshFilter:
@@ -145,6 +148,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

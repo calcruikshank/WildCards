@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9022332594188537058}
   - component: {fileID: -7011141208685322689}
   - component: {fileID: 7890982584060249880}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Island
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,6 +61,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -151,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7157385759207013768}
   - component: {fileID: 876778584867296238}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Gradient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,6 +193,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

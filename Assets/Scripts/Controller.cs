@@ -123,7 +123,7 @@ public class Controller : MonoBehaviour
     private void StartGame()
     {
         StartGameCoroutine();
-        SpawnCastleForPlayer();
+        SpawnCastleForPlayer(new Vector3(-9, 0, 0));
         OnTurn();
     }
 
@@ -136,8 +136,16 @@ public class Controller : MonoBehaviour
 
         //instantiate all player cards in hand
     }
-    private void SpawnCastleForPlayer()
+    private void SpawnCastleForPlayer(Vector3 position)
     {
+
+        GameObject castleInstance = Instantiate(castlePrefab, position, Quaternion.identity);
+
+
+        instantiatedCaste = castleInstance.GetComponent<PlayerKeep>();
+
+        LocalPlaceCastle(new Vector3Int(-7, 0, 0));
+
     }
     public void StartGameCoroutine()
     {
@@ -153,12 +161,6 @@ public class Controller : MonoBehaviour
         transparentCol.a = .5f;
         locallySelectedCard = null;
     }
-
-    private readonly Vector3 serverCastlePosition = new Vector3(-9, 0, 0);
-    private readonly Vector3 clientCastlePosition = new Vector3(10, 0, 0);
-
-
-
 
     protected void GrabAllObjectsFromGameManager()
     {
@@ -366,7 +368,6 @@ public class Controller : MonoBehaviour
     public bool ShowingPurchasableHarvestTiles = false;
     void LeftClickQueue(Vector3Int positionSent)
     {
-        Debug.Log("Local creature " + locallySelectedCard);
         if (locallySelectedCard != null && locallySelectedCard.cardType == SpellSiegeData.CardType.Creature && locallySelectedCard.playerOwningCard != null)
         {
             if (CheckToSeeIfCanSpawnCreature(positionSent))
@@ -556,18 +557,38 @@ public class Controller : MonoBehaviour
         {
             if (raycastHitCardInHand.transform.GetComponent<CardInHand>() != null && state != State.CreatureInHandSelected)
             {
-                SetVisualsToNothingSelectedLocally();
-                SetStateToNothingSelected();
-                SetVisualsToNothingSelectedLocally();
-                //todo
-                locallySelectedCardInHandToTurnOff = raycastHitCardInHand.transform.GetComponent<CardInHand>();
-                locallySelectedCardInHandToTurnOff.TurnOffVisualCard();
-                locallySelectedCard = Instantiate(locallySelectedCardInHandToTurnOff.gameObject, canvasMain.transform).GetComponent<CardInHand>();
-                locallySelectedCard.transform.position = locallySelectedCardInHandToTurnOff.transform.position;
-                locallySelectedCard.transform.localEulerAngles = Vector3.zero;
-                locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
-                ShowViablePlacableTiles(locallySelectedCardInHandToTurnOff);
-                return true;
+                if (locallySelectedCard == null)
+                {
+                    if (raycastHitCardInHand.transform.GetComponent<CardInHand>().playerOwningCard != null)
+                    {
+                        SetVisualsToNothingSelectedLocally();
+                        SetStateToNothingSelected();
+                        SetVisualsToNothingSelectedLocally();
+                        //todo
+                        locallySelectedCardInHandToTurnOff = raycastHitCardInHand.transform.GetComponent<CardInHand>();
+                        locallySelectedCardInHandToTurnOff.TurnOffVisualCard();
+                        locallySelectedCard = Instantiate(locallySelectedCardInHandToTurnOff.gameObject, canvasMain.transform).GetComponent<CardInHand>();
+                        locallySelectedCard.transform.position = locallySelectedCardInHandToTurnOff.transform.position;
+                        locallySelectedCard.transform.localEulerAngles = Vector3.zero;
+                        locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
+                        ShowViablePlacableTiles(locallySelectedCardInHandToTurnOff);
+                        return true;
+                    }
+                    else
+                    {
+                        SetVisualsToNothingSelectedLocally();
+                        SetStateToNothingSelected();
+                        SetVisualsToNothingSelectedLocally();
+                        //todo
+                        locallySelectedCardInHandToTurnOff = raycastHitCardInHand.transform.GetComponent<CardInHand>();
+                        locallySelectedCardInHandToTurnOff.TurnOffVisualCard();
+                        locallySelectedCard = Instantiate(locallySelectedCardInHandToTurnOff.gameObject, canvasMain.transform).GetComponent<CardInHand>();
+                        locallySelectedCard.transform.position = locallySelectedCardInHandToTurnOff.transform.position;
+                        locallySelectedCard.transform.localEulerAngles = Vector3.zero;
+                        locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
+                        return true;
+                    }
+                }
             }
         }
         if (Physics.Raycast(ray, out RaycastHit raycastHitCreatureOnBoard, Mathf.Infinity, creatureMask))
@@ -649,12 +670,12 @@ public class Controller : MonoBehaviour
 
     void HandleCreatureInHandSelected(Vector3Int cellSent)
     {
-        SpendManaToCast(cardSelected);
         CastCreatureOnTile(cardSelected, cellSent);
         SetStateToNothingSelected();
     }
     public virtual bool CheckToSeeIfCanSpawnCreature(Vector3Int cellSent)
     {
+        Debug.Log(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent).playerOwningTile + " player owning tile");
         if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent) == null)
         {
             //show error
@@ -700,7 +721,8 @@ public class Controller : MonoBehaviour
         }
 
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
-        creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>().creatureID, instantiatedCreature.GetComponent<Creature>());
+        creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>().creatureID,
+        instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
         instantiatedCreature.GetComponent<Creature>().OnETB();
 
@@ -915,6 +937,7 @@ public class Controller : MonoBehaviour
         GameObject instantiatedCardInHand = Instantiate(GameManager.singleton.GetCardAssociatedWithType(cardSent), cardParent).gameObject;
         CardInHand instantiatedCardInHandBehaviour = instantiatedCardInHand.GetComponent<CardInHand>();
         instantiatedCardInHandBehaviour.playerOwningCard = this;
+        cardsInHand.Add(instantiatedCardInHandBehaviour);
         if (locallySelectedCard != null)
         {
             SetStateToNothingSelected();
