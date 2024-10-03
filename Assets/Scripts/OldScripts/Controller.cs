@@ -1163,6 +1163,7 @@ public class Controller : MonoBehaviour
 
     public void PurchaseCard()
     {
+        goldAmount -= 3;
         Debug.Log("puchaseCard " + cardToPurchase);
         if (cardToPurchase != null)
         {
@@ -1178,7 +1179,6 @@ public class Controller : MonoBehaviour
             SetStateToNothingSelected();
             SetVisualsToNothingSelectedLocally();
         }
-
         cardToPurchase = null;
     }
 }
