@@ -502,11 +502,12 @@ MonoBehaviour:
   indexOfCard: 6
   greenManaCost: 0
   whiteManaCost: 0
-  blackManaCost: 2
-  redManaCost: 2
+  blackManaCost: 0
+  redManaCost: 0
   genericManaCost: 0
   remainingMana: 0
-  currentAttack: 5
+  tier: 0
+  currentAttack: 0
   currentHealth: 1
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
@@ -524,7 +525,7 @@ MonoBehaviour:
   genericManaText: {fileID: 8728899115942098730}
   playerOwningCard: {fileID: 0}
   isPurchasable: 0
-  cardAssignedToObject: 30
+  cardAssignedToObject: 43
   cardTitle: {fileID: 3816206094099844774}
   cardType: 0
   creatureType: 9
@@ -1126,7 +1127,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6368701001676014791
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2730,7 +2731,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9100109623929302715
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2990,7 +2991,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3860921828132964407, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3860921828132964407, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}
       propertyPath: m_AnchorMin.x
@@ -2998,7 +2999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3860921828132964407, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3860921828132964407, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}
       propertyPath: m_SizeDelta.x
@@ -3050,11 +3051,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3860921828132964407, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 12.365425
       objectReference: {fileID: 0}
     - target: {fileID: 3860921828132964407, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -2.17382
       objectReference: {fileID: 0}
     - target: {fileID: 3860921828132964407, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3074,7 +3075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3860921828132964408, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3860921828132964404, guid: d2a6da13a2fbb2c42b4e9dc56bcb32ae, type: 3}

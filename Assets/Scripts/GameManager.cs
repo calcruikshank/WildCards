@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -87,7 +88,7 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        SpawnCardChoices();
     }
 
     public Controller playerInScene;
@@ -100,13 +101,18 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < currentMaxCardChoices; i++)
         {
             CardInHand cardGrabbed = GrabRandomCard();
+            GameObject instantiatedCard = Instantiate(cardGrabbed.gameObject, parentOfCardSelections.transform);
         }
     }
 
     private CardInHand GrabRandomCard()
     {
-       
-        return null;
+        int tierGrabbed = UnityEngine.Random.Range(1, playerInScene.farmersOwned.Count);
+        if (tierGrabbed > 5)
+        {
+            tierGrabbed = 5;
+        }
+        return GetCardAssociatedWithType(GetCardAssociatedWithTier(tierGrabbed));
     }
     void Update()
     {
@@ -145,5 +151,56 @@ public class GameManager : MonoBehaviour
         instantiatedHealthText.GetComponent<TextMeshPro>().text = amount.ToString();
         instantiatedHealthText.GetComponent<TextMeshPro>().color = Color.green;
         Instantiate(healParticle, positionSent, Quaternion.identity);
+    }
+    public CardInHand GetCardAssociatedWithType(SpellSiegeData.Cards cardGrabbed)
+    {
+        CardInHand selectedObject;
+
+        selectedObject = allCardsInGame.FirstOrDefault(s => s.cardAssignedToObject == cardGrabbed);
+
+        if (selectedObject == null)
+        {
+            Debug.LogError("Could not find prefab associated with -> " + cardGrabbed + " defaulting to 0");
+            selectedObject = allCardsInGame[0];
+        }
+        return selectedObject;
+    }
+    public SpellSiegeData.Cards GetCardAssociatedWithRarity(SpellSiegeData.cardRarity cardRaritySent)
+    {
+        CardInHand selectedObject;
+
+        List<CardInHand> shuffledListOfAllCards = Shuffle(allCardsInGame);
+        selectedObject = shuffledListOfAllCards.FirstOrDefault(s => s.rarity == cardRaritySent);
+
+        if (selectedObject == null)
+        {
+            Debug.LogError("Could not find rarity associated with -> " + cardRaritySent + " defaulting to null");
+        }
+        return selectedObject.cardAssignedToObject;
+    }
+    public SpellSiegeData.Cards GetCardAssociatedWithTier(int tierSent)
+    {
+        CardInHand selectedObject;
+
+        List<CardInHand> shuffledListOfAllCards = Shuffle(allCardsInGame);
+        selectedObject = shuffledListOfAllCards.FirstOrDefault(s => s.tier == tierSent);
+
+        if (selectedObject == null)
+        {
+            Debug.LogError("Could not find rarity associated with -> " + tierSent + " defaulting to null");
+        }
+        return selectedObject.cardAssignedToObject;
+    }
+
+    public List<CardInHand> Shuffle(List<CardInHand> alpha)
+    {
+        for (int i = 0; i < alpha.Count; i++)
+        {
+            CardInHand temp = alpha[i];
+            int randomIndex = UnityEngine.Random.Range(i, alpha.Count);
+            alpha[i] = alpha[randomIndex];
+            alpha[randomIndex] = temp;
+        }
+        return alpha;
     }
 }

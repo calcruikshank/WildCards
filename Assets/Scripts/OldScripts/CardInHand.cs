@@ -19,6 +19,8 @@ public class CardInHand : MonoBehaviour
 
     public int remainingMana;
 
+    public int tier;
+
     public int currentAttack;
     public int currentHealth;
 
@@ -88,6 +90,12 @@ public class CardInHand : MonoBehaviour
 
     void Start()
     {
+        if (purchasableGlow == null)
+        {
+            purchasableGlow = Instantiate(GameManager.singleton.purchasableGlow, this.transform);
+            purchasableGlow.SetAsFirstSibling();
+            purchasableGlow.gameObject.SetActive(false);
+        }
     }
 
 
@@ -253,6 +261,11 @@ public class CardInHand : MonoBehaviour
     GameObject visualVersion;
     private void OnMouseOver()
     {
+        Debug.Log("Mouse over");
+        if (purchasableGlow != null)
+        {
+            purchasableGlow.gameObject.SetActive(true);
+        }
         if (playerOwningCard != null)
         {
             if (playerOwningCard.locallySelectedCard != null)
@@ -268,15 +281,25 @@ public class CardInHand : MonoBehaviour
                 visualVersion.GetComponentInChildren<Collider>().enabled = false;
             }
         }
+        else
+        {
+        }
     }
 
     private void OnMouseExit()
     {
-        if (playerOwningCard.locallySelectedCard != null)
+        if (playerOwningCard != null)
         {
-            playerOwningCard.locallySelectedCard.gameObject.SetActive(true);
+            if (playerOwningCard.locallySelectedCard != null)
+            {
+                playerOwningCard.locallySelectedCard.gameObject.SetActive(true);
+            }
         }
         TurnOffVisualCard();
+        if (purchasableGlow != null)
+        {
+            purchasableGlow.gameObject.SetActive(false);
+        }
     }
 
     internal void TurnOffVisualCard()

@@ -96,15 +96,16 @@ public class Controller : MonoBehaviour
 
     public Controller opponent;
 
-    private void Awake()
-    {
-        GameManager.singleton.playerList.Add(this);
-    }
     // Start is called before the first frame update
     protected virtual void Start()
     {
         GrabAllObjectsFromGameManager();
         mousePositionScript = GetComponent<MousePositionScript>();
+
+        GameManager.singleton.playerList.Add(this);
+        StartGame();
+
+        GrabEverythingFromPlayerData();
     }
 
     public List<ulong> gameSceneController = new List<ulong>();
@@ -118,14 +119,19 @@ public class Controller : MonoBehaviour
     private bool gameStarted = false;
     private void StartGame()
     {
-        Debug.Log("Starting the game as there are now 2 players connected.");
-
         SpawnCastleForPlayer();
         OnTurn();
     }
 
     [SerializeField] GameObject castlePrefab;
+    public void GrabEverythingFromPlayerData()
+    {
+        //todo
 
+        //instantiate all animals on the field
+
+        //instantiate all player cards in hand
+    }
     private void SpawnCastleForPlayer()
     {
     }
@@ -154,13 +160,12 @@ public class Controller : MonoBehaviour
     {
         canvasMain = GameManager.singleton.canvasMain.GetComponent<Canvas>();
         highlightTile = GameManager.singleton.highlightTile;
-        highlightMap = GameManager.singleton.highlightMap;// set these = to gamemanage.singleton.highlightmap TODO
+        highlightMap = GameManager.singleton.highlightMap;
         baseMap = GameManager.singleton.baseMap;
         environmentMap = GameManager.singleton.enviornmentMap;
         waterMap = GameManager.singleton.waterTileMap;
         grid = GameManager.singleton.grid;
         castle = GameManager.singleton.castleTransform;
-        //GameManager.singleton.playerList.Add(this);
     }
     protected void SpawnHUD()
     {
@@ -184,19 +189,15 @@ public class Controller : MonoBehaviour
             case State.PlacingCastle:
                 break;
             case State.NothingSelected:
-                HandleDrawCards();
                 TriggerAllCreatureAbilities();
                 break;
             case State.CreatureInHandSelected:
-                HandleDrawCards();
                 TriggerAllCreatureAbilities();
                 break;
             case State.SpellInHandSelected:
-                HandleDrawCards();
                 TriggerAllCreatureAbilities();
                 break;
             case State.StructureInHandSeleced:
-                HandleDrawCards();
                 TriggerAllCreatureAbilities();
                 break;
         }
@@ -428,10 +429,6 @@ public class Controller : MonoBehaviour
         }
     }
 
-    protected void HandleDrawCards()
-    {
-        DrawCard();
-    }
 
 
 
@@ -924,6 +921,14 @@ public class Controller : MonoBehaviour
             BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellPosition).SetOwnedByPlayer(this);
             BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellPosition).SetNotBeingHarvested();
         }
+    }
+
+    public void InstantiateCardInHand()
+    {
+        CardInHand cardAddingToHand = cardsInDeck[cardsInDeck.Count - 1];
+        GameObject instantiatedCardInHand = Instantiate(cardAddingToHand.gameObject, cardParent);
+        CardInHand instantiatedCardInHandBehaviour = instantiatedCardInHand.GetComponent<CardInHand>();
+        instantiatedCardInHandBehaviour.indexOfCard = cardAddingToHand.indexOfCard;
     }
 
     public void DrawCard()

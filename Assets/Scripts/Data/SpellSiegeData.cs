@@ -49,6 +49,7 @@ public struct SpellSiegeData
         Hedgehog, //hedgehog
         Attack, //attack
         Baboon, //baboon
+        farmer, //farmer
         NumOfCardTypes
     }
 
