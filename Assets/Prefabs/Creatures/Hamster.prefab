@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4041287377271137171}
   - component: {fileID: 8565062853966428981}
   - component: {fileID: 3298186682565764544}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 3393836028009327676}
   - component: {fileID: 415326066436598786}
   - component: {fileID: 4218221789047878655}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Text (TMP) (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 5158881535373382949}
   - component: {fileID: 599952236921727887}
   - component: {fileID: 8993513605899496440}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 445460765325298991}
   - component: {fileID: 8680423383546493775}
   - component: {fileID: 7374009741370505434}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +560,7 @@ GameObject:
   - component: {fileID: 6239865746917987992}
   - component: {fileID: 6239865746917987998}
   - component: {fileID: 8140395198483250823}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Hamster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +766,7 @@ GameObject:
   - component: {fileID: 578328339688491124}
   - component: {fileID: 5865687331358438402}
   - component: {fileID: 7534283529393728702}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -940,7 +940,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4742030054974793146}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Stats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1021,6 +1021,10 @@ PrefabInstance:
     - target: {fileID: 6530061157001056154, guid: b744932c1e84d4e418332e045e6cfecd, type: 3}
       propertyPath: m_Name
       value: selected (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6530061157001056154, guid: b744932c1e84d4e418332e045e6cfecd, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6530061157001056154, guid: b744932c1e84d4e418332e045e6cfecd, type: 3}
       propertyPath: m_IsActive

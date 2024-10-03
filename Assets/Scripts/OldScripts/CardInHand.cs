@@ -260,7 +260,6 @@ public class CardInHand : MonoBehaviour
     GameObject visualVersion;
     private void OnMouseOver()
     {
-        Debug.Log("Mouse over");
         if (purchasableGlow != null)
         {
             purchasableGlow.gameObject.SetActive(true);

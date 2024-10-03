@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class Creature : MonoBehaviour
 {
@@ -1016,6 +1017,20 @@ public class Creature : MonoBehaviour
 
         originalCardTransform.GetComponentInChildren<BoxCollider>().enabled = false;
         originalCardTransform.gameObject.SetActive(false);
+
+        foreach (Image img in originalCardTransform.GetComponentsInChildren<Image>())
+        {
+            Color imageColor = img.color;
+            imageColor.a = .4f;
+            img.color = imageColor;
+        }
+        foreach (TextMeshProUGUI tmp in originalCardTransform.GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            Color imageColor = tmp.color;
+            imageColor.a = .4f;
+            tmp.color = imageColor;
+        }
+
         UpdateCreatureHUD();
 
     }
@@ -1034,7 +1049,7 @@ public class Creature : MonoBehaviour
 
         originalCardTransform.transform.localScale = Vector3.one * 200 / originalCardTransform.transform.position.z;
         originalCardTransform.gameObject.SetActive(true);
-
+        
     }
 
     internal void VisuallySelect()
