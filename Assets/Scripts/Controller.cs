@@ -177,7 +177,7 @@ public class Controller : MonoBehaviour
     {
         instantiatedPlayerUI = Instantiate(playerHud, canvasMain.transform);
         cardParent = instantiatedPlayerUI.GetComponentInChildren<CustomHorizontalLayoutGroup>().transform;
-        cardParent.gameObject.GetComponent<Image>().color = transparentCol;
+        //cardParent.gameObject.GetComponent<Image>().color = transparentCol;
         hudElements = instantiatedPlayerUI.GetComponent<HudElements>();
         instantiatedPlayerUI.gameObject.SetActive(true);
     }
