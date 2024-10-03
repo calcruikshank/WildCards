@@ -568,14 +568,22 @@ public class Controller : MonoBehaviour
                     locallySelectedCard.transform.position = locallySelectedCardInHandToTurnOff.transform.position;
                     locallySelectedCard.transform.localEulerAngles = Vector3.zero;
                     locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
-                    state = State.CreatureInHandSelected;
+
+                    if (raycastHitCardInHand.transform.GetComponent<CardInHand>().cardType == SpellSiegeData.CardType.Creature)
+                    {
+                        state = State.CreatureInHandSelected;
+                    }
+                    if (raycastHitCardInHand.transform.GetComponent<CardInHand>().cardType == SpellSiegeData.CardType.Spell)
+                    {
+                        state = State.SpellInHandSelected;
+                    }
                     if (raycastHitCardInHand.transform.GetComponent<CardInHand>().playerOwningCard == null)
                     {
                         return true;
                     }
                     else
                     {
-                        state = State.CreatureInHandSelected;
+                        ShowViablePlacableTiles(locallySelectedCard);
                         return true;
                     }
                 }

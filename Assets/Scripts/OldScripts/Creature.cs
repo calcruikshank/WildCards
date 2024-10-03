@@ -1020,14 +1020,16 @@ public class Creature : MonoBehaviour
 
         foreach (Image img in originalCardTransform.GetComponentsInChildren<Image>())
         {
+            img.enabled = true;
+            img.gameObject.SetActive(true);
             Color imageColor = img.color;
-            imageColor.a = .4f;
+            imageColor.a = 1f;
             img.color = imageColor;
         }
         foreach (TextMeshProUGUI tmp in originalCardTransform.GetComponentsInChildren<TextMeshProUGUI>())
         {
             Color imageColor = tmp.color;
-            imageColor.a = .4f;
+            imageColor.a = 1f;
             tmp.color = imageColor;
         }
 
