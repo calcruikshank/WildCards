@@ -21,6 +21,9 @@ public class Controller : MonoBehaviour
         Waiting
     }
 
+    public int goldAmount = 0;
+    public int turn = 0;
+
     public Dictionary<Vector3Int, BaseTile> tilesOwned = new Dictionary<Vector3Int, BaseTile>();
 
 
@@ -119,6 +122,7 @@ public class Controller : MonoBehaviour
     private bool gameStarted = false;
     private void StartGame()
     {
+        StartGameCoroutine();
         SpawnCastleForPlayer();
         OnTurn();
     }
@@ -170,6 +174,7 @@ public class Controller : MonoBehaviour
     protected void SpawnHUD()
     {
         instantiatedPlayerUI = Instantiate(playerHud, canvasMain.transform);
+        cardParent = instantiatedPlayerUI.GetComponentInChildren<CustomHorizontalLayoutGroup>().transform;
         cardParent.gameObject.GetComponent<Image>().color = transparentCol;
         hudElements = instantiatedPlayerUI.GetComponent<HudElements>();
         instantiatedPlayerUI.gameObject.SetActive(true);
@@ -250,6 +255,11 @@ public class Controller : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
+            if (cardToPurchase != null)
+            {
+                PurchaseCard();
+                return;
+            }
             if (locallySelectedCard != null)
             {
                 if (cellPositionSentToClients != null)
@@ -266,6 +276,11 @@ public class Controller : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
+            if (cardToPurchase != null) 
+            {
+                PurchaseCard();
+                return;
+            }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 mousePositionWorldPoint;
             if (Physics.Raycast(ray, out RaycastHit raycastHit, Mathf.Infinity, mousePositionScript.baseTileMap))
@@ -277,6 +292,7 @@ public class Controller : MonoBehaviour
             {
                 LeftClickQueue(cellPositionSentToClients);
             }
+
 
             if (state == State.NothingSelected && cardSelected == null)
             {
@@ -351,7 +367,7 @@ public class Controller : MonoBehaviour
     void LeftClickQueue(Vector3Int positionSent)
     {
         Debug.Log("Local creature " + locallySelectedCard);
-        if (locallySelectedCard != null && locallySelectedCard.cardType == SpellSiegeData.CardType.Creature)
+        if (locallySelectedCard != null && locallySelectedCard.cardType == SpellSiegeData.CardType.Creature && locallySelectedCard.playerOwningCard != null)
         {
             if (CheckToSeeIfCanSpawnCreature(positionSent))
             {
@@ -360,7 +376,7 @@ public class Controller : MonoBehaviour
             }
             return;
         }
-        if (locallySelectedCard != null && locallySelectedCard.cardType == SpellSiegeData.CardType.Spell)
+        if (locallySelectedCard != null && locallySelectedCard.cardType == SpellSiegeData.CardType.Spell && locallySelectedCard.playerOwningCard != null)
         {
             LocalLeftClick(positionSent);
             return;
@@ -542,20 +558,16 @@ public class Controller : MonoBehaviour
             {
                 SetVisualsToNothingSelectedLocally();
                 SetStateToNothingSelected();
-                if (raycastHitCardInHand.transform.GetComponent<CardInHand>().isPurchasable)
-                {
-                    SetVisualsToNothingSelectedLocally();
-                    //todo
-                    locallySelectedCardInHandToTurnOff = raycastHitCardInHand.transform.GetComponent<CardInHand>();
-                    locallySelectedCardInHandToTurnOff.TurnOffVisualCard();
-                    locallySelectedCard = Instantiate(locallySelectedCardInHandToTurnOff.gameObject, canvasMain.transform).GetComponent<CardInHand>();
-                    locallySelectedCard.transform.position = locallySelectedCardInHandToTurnOff.transform.position;
-                    locallySelectedCard.transform.localEulerAngles = Vector3.zero;
-                    locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
-                    AddIndexOfCardInHandToTickQueueLocal(locallySelectedCardInHandToTurnOff.indexOfCard);
-                    ShowViablePlacableTiles(locallySelectedCardInHandToTurnOff);
-                    return true;
-                }
+                SetVisualsToNothingSelectedLocally();
+                //todo
+                locallySelectedCardInHandToTurnOff = raycastHitCardInHand.transform.GetComponent<CardInHand>();
+                locallySelectedCardInHandToTurnOff.TurnOffVisualCard();
+                locallySelectedCard = Instantiate(locallySelectedCardInHandToTurnOff.gameObject, canvasMain.transform).GetComponent<CardInHand>();
+                locallySelectedCard.transform.position = locallySelectedCardInHandToTurnOff.transform.position;
+                locallySelectedCard.transform.localEulerAngles = Vector3.zero;
+                locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
+                ShowViablePlacableTiles(locallySelectedCardInHandToTurnOff);
+                return true;
             }
         }
         if (Physics.Raycast(ray, out RaycastHit raycastHitCreatureOnBoard, Mathf.Infinity, creatureMask))
@@ -583,6 +595,8 @@ public class Controller : MonoBehaviour
                 }
             }
         }
+
+
         return false;
     }
 
@@ -627,33 +641,6 @@ public class Controller : MonoBehaviour
     private void TargetACreatureLocal(int selectedCreatureID, int creatureToTargetID, Vector3 actualPosition)
     {
         GameManager.singleton.allCreaturesOnField[selectedCreatureID].SetTargetToFollow(GameManager.singleton.allCreaturesOnField[creatureToTargetID], actualPosition);
-        
-    }
-
-
-    protected void LocalSelectCardWithIndex(int indexOfCardSelected)
-    {
-        CardInHand cardToSelect;
-        for (int i = 0; i < cardsInHand.Count; i++)
-        {
-            if (cardsInHand[i].indexOfCard == indexOfCardSelected)
-            {
-                cardToSelect = cardsInHand[i];
-                cardSelected = cardToSelect;
-                if (cardSelected.cardType == SpellSiegeData.CardType.Creature)
-                {
-                    state = State.CreatureInHandSelected;
-                }
-                if (cardSelected.cardType == SpellSiegeData.CardType.Spell)
-                {
-                    state = State.SpellInHandSelected;
-                }
-                if (cardSelected.cardType == SpellSiegeData.CardType.Structure)
-                {
-                    state = State.StructureInHandSeleced;
-                }
-            }
-        }
 
     }
 
@@ -923,38 +910,17 @@ public class Controller : MonoBehaviour
         }
     }
 
-    public void InstantiateCardInHand()
+    public void InstantiateCardInHand(SpellSiegeData.Cards cardSent)
     {
-        CardInHand cardAddingToHand = cardsInDeck[cardsInDeck.Count - 1];
-        GameObject instantiatedCardInHand = Instantiate(cardAddingToHand.gameObject, cardParent);
+        GameObject instantiatedCardInHand = Instantiate(GameManager.singleton.GetCardAssociatedWithType(cardSent), cardParent).gameObject;
         CardInHand instantiatedCardInHandBehaviour = instantiatedCardInHand.GetComponent<CardInHand>();
-        instantiatedCardInHandBehaviour.indexOfCard = cardAddingToHand.indexOfCard;
-    }
-
-    public void DrawCard()
-    {
-
-        if (cardsInDeck.Count <= 0)
-        {
-            return;
-        }
-        if (cardsInHand.Count >= maxHandSize)
-        {
-            return;
-        }
-        CardInHand cardAddingToHand = cardsInDeck[cardsInDeck.Count - 1]; //todo this might cause problems when dealing with shuffling cards back into the deck
-
-        cardAddingToHand.indexOfCard = cardsInDeck.Count - 1;
-        cardsInDeck.RemoveAt(cardsInDeck.Count - 1);
-
-        GameObject instantiatedCardInHand = Instantiate(cardAddingToHand.gameObject, cardParent);
-        CardInHand instantiatedCardInHandBehaviour = instantiatedCardInHand.GetComponent<CardInHand>();
-        instantiatedCardInHandBehaviour.indexOfCard = cardAddingToHand.indexOfCard;
-
-        cardsInHand.Add(instantiatedCardInHandBehaviour);
         instantiatedCardInHandBehaviour.playerOwningCard = this;
-        instantiatedCardInHandBehaviour.CheckToSeeIfPurchasable(resources);
+        if (locallySelectedCard != null)
+        {
+            SetStateToNothingSelected();
+        }
     }
+
 
     private void DiscardCard()
     {
@@ -973,12 +939,10 @@ public class Controller : MonoBehaviour
             return;
         }
         CardInHand cardAddingToHand = cardsInDeck[indexOfCard]; //todo this might cause problems when dealing with shuffling cards back into the deck
-        cardAddingToHand.indexOfCard = cardsInDeck.Count - 1;
         cardsInDeck.RemoveAt(indexOfCard);
 
         GameObject instantiatedCardInHand = Instantiate(cardAddingToHand.gameObject, cardParent);
         CardInHand instantiatedCardInHandBehaviour = instantiatedCardInHand.GetComponent<CardInHand>();
-        instantiatedCardInHandBehaviour.indexOfCard = cardAddingToHand.indexOfCard;
 
         cardsInHand.Add(instantiatedCardInHandBehaviour);
         instantiatedCardInHandBehaviour.playerOwningCard = this;
@@ -1137,7 +1101,7 @@ public class Controller : MonoBehaviour
     {
         hudElements.UpdateHudElements(resources);
         CheckAffordableCards();
-        totalMana = resources.blackMana  + resources.whiteMana + resources.greenMana + resources.redMana;
+        totalMana = resources.blackMana + resources.whiteMana + resources.greenMana + resources.redMana;
     }
 
 
@@ -1156,7 +1120,7 @@ public class Controller : MonoBehaviour
     //overridables
     public virtual void OnSpellCast()
     {
-       
+
         spellCounter++;
         foreach (KeyValuePair<int, Creature> creature in creaturesOwned)
         {
@@ -1183,6 +1147,39 @@ public class Controller : MonoBehaviour
             }
         }
         return creatureSelectedInHand;
+    }
+
+
+    public CardInHand cardToPurchase = null;
+    internal void SetToPurchaseACard(CardInHand locallySelectedCardToPurchase)
+    {
+        cardToPurchase = locallySelectedCardToPurchase;
+    }
+
+    internal void SetToDontPurchaseCard()
+    {
+        cardToPurchase = null;
+    }
+
+    public void PurchaseCard()
+    {
+        Debug.Log("puchaseCard " + cardToPurchase);
+        if (cardToPurchase != null)
+        {
+            InstantiateCardInHand(cardToPurchase.cardAssignedToObject);
+            if (cardToPurchase.gameObject != null)
+            {
+                Destroy(cardToPurchase.gameObject);
+            }
+            if (locallySelectedCardInHandToTurnOff.gameObject != null)
+            {
+                Destroy(locallySelectedCardInHandToTurnOff.gameObject);
+            }
+            SetStateToNothingSelected();
+            SetVisualsToNothingSelectedLocally();
+        }
+
+        cardToPurchase = null;
     }
 }
 

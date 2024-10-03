@@ -7,6 +7,5 @@ public class Attack : TargetedSpell
     protected override void SpecificSpellAbility()
     {
         creatureTargeted.HandleAttack();
-        playerCastingSpell.DrawCard();
     }
 }

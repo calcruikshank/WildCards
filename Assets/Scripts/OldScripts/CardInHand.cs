@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class CardInHand : MonoBehaviour
 {
     [SerializeField]public Transform GameObjectToInstantiate;
-    public int indexOfCard;
 
     public int greenManaCost;
     public int whiteManaCost;
@@ -304,6 +303,10 @@ public class CardInHand : MonoBehaviour
 
     internal void TurnOffVisualCard()
     {
+        if (purchasableGlow != null)
+        {
+            purchasableGlow.gameObject.SetActive(false);
+        }
         if (visualVersion != null)
         {
             Destroy(visualVersion);

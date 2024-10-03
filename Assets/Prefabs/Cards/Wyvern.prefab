@@ -506,7 +506,7 @@ MonoBehaviour:
   redManaCost: 5
   genericManaCost: 0
   remainingMana: 0
-  tier: 1
+  tier: 2
   currentAttack: 4
   currentHealth: 8
   cardArt: {fileID: 8030601344647228176}

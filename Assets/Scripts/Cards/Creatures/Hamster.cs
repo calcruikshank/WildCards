@@ -6,10 +6,6 @@ public class Hamster : Creature
 {
     public override void OnDeath()
     {
-        for (int i = 0; i < this.currentAttack; i++)
-        {
-            playerOwningCreature.DrawCard();
-        }
         base.OnDeath();
     }
 }
