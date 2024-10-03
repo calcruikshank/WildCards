@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static SpellSiegeData;
 
 public class GameManager : MonoBehaviour
 {
@@ -70,6 +71,13 @@ public class GameManager : MonoBehaviour
 
 
     public VisualAttackParticle rangedVisualAttackParticle;
+
+
+    [SerializeField] GameObject parentOfCardSelections;
+
+    public List<CardInHand> cardChoices;
+
+    public int currentMaxCardChoices = 3;
     private void Awake()
     {
         if (singleton != null) Destroy(this);
@@ -82,7 +90,24 @@ public class GameManager : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    public Controller playerInScene;
+
+    [SerializeField]public List<CardInHand> allCardsInGame;
+
+
+    public void SpawnCardChoices()
+    {
+        for (int i = 0; i < currentMaxCardChoices; i++)
+        {
+            CardInHand cardGrabbed = GrabRandomCard();
+        }
+    }
+
+    private CardInHand GrabRandomCard()
+    {
+       
+        return null;
+    }
     void Update()
     {
         

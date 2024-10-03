@@ -21,12 +21,6 @@ public class Controller : MonoBehaviour
         Waiting
     }
 
-    //Could use a state machine if creature is selected change state to creature selected 
-    //if card in hand is selected change state to placing card
-    //if neither are selected change state to selecting
-    //if environment is selected change state to environment selected
-    //if environment card is selected change state to environment card selected
-
     public Dictionary<Vector3Int, BaseTile> tilesOwned = new Dictionary<Vector3Int, BaseTile>();
 
 
@@ -55,7 +49,6 @@ public class Controller : MonoBehaviour
 
     protected Vector3Int placedCellPosition;
 
-    protected int turnThreshold = 1100; //todo make this 1400
     protected int maxHandSize = 9;
     [SerializeField] protected List<CardInHand> dragonDeck = new List<CardInHand>();
     [SerializeField] protected List<CardInHand> demonDeck = new List<CardInHand>();
@@ -83,18 +76,15 @@ public class Controller : MonoBehaviour
 
     public List<BaseTile> harvestedTiles = new List<BaseTile>();
 
-
     public int spellCounter = 0;
-
-
-    public int numberOfLandsYouCanPlayThisTurn = 1;
-    public int numberOfLandsPlayedThisTurn = 0;
 
     [SerializeField] protected Color[] colorsToPickFrom;
 
 
     public List<Structure> structuresOwned = new List<Structure>();
 
+
+    public List<Farmer> farmersOwned = new List<Farmer>();
     public enum ActionTaken
     {
         LeftClickBaseMap,
@@ -131,6 +121,7 @@ public class Controller : MonoBehaviour
         Debug.Log("Starting the game as there are now 2 players connected.");
 
         SpawnCastleForPlayer();
+        OnTurn();
     }
 
     [SerializeField] GameObject castlePrefab;
@@ -140,11 +131,10 @@ public class Controller : MonoBehaviour
     }
     public void StartGameCoroutine()
     {
-        //cardsInDeck = new List<CardInHand>(demonDeck);
         col.a = 1;
         transparentCol = col;
         transparentCol.a = .5f;
-        SpawnHUDAndHideOnAllNonOwners();
+        SpawnHUD();
         resources = new PlayerResources();
         resourcesChanged += UpdateHudForResourcesChanged;
 
@@ -152,9 +142,6 @@ public class Controller : MonoBehaviour
         transparentCol = col;
         transparentCol.a = .5f;
         locallySelectedCard = null;
-
-
-
     }
 
     private readonly Vector3 serverCastlePosition = new Vector3(-9, 0, 0);
@@ -175,12 +162,11 @@ public class Controller : MonoBehaviour
         castle = GameManager.singleton.castleTransform;
         //GameManager.singleton.playerList.Add(this);
     }
-    protected void SpawnHUDAndHideOnAllNonOwners()
+    protected void SpawnHUD()
     {
         instantiatedPlayerUI = Instantiate(playerHud, canvasMain.transform);
         cardParent.gameObject.GetComponent<Image>().color = transparentCol;
         hudElements = instantiatedPlayerUI.GetComponent<HudElements>();
-        hudElements.UpdateHudVisuals(this, turnThreshold);
         instantiatedPlayerUI.gameObject.SetActive(true);
     }
 
@@ -198,35 +184,24 @@ public class Controller : MonoBehaviour
             case State.PlacingCastle:
                 break;
             case State.NothingSelected:
-                HandleMana();
-                HandleHarvestTiles();
                 HandleDrawCards();
                 TriggerAllCreatureAbilities();
                 break;
             case State.CreatureInHandSelected:
-                HandleMana();
-                HandleHarvestTiles();
                 HandleDrawCards();
                 TriggerAllCreatureAbilities();
                 break;
             case State.SpellInHandSelected:
-                HandleMana();
-                HandleHarvestTiles();
                 HandleDrawCards();
                 TriggerAllCreatureAbilities();
                 break;
             case State.StructureInHandSeleced:
-                HandleMana();
-                HandleHarvestTiles();
                 HandleDrawCards();
                 TriggerAllCreatureAbilities();
                 break;
         }
     }
 
-    public void HandleHarvestTiles()
-    {
-    }
 
 
     // Update is called once per frame
@@ -326,7 +301,7 @@ public class Controller : MonoBehaviour
         {
             if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(tilePositionSent))
             {
-                if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(tilePositionSent).playerOwningTile == this && numberOfLandsYouCanPlayThisTurn > numberOfLandsPlayedThisTurn)
+                if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(tilePositionSent).playerOwningTile == this)
                 {
                     return true;
                 }
@@ -341,13 +316,8 @@ public class Controller : MonoBehaviour
         {
             return;
         }
-        numberOfLandsPlayedThisTurn++;
         AddTileToHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(vector3Int));
 
-        if (numberOfLandsPlayedThisTurn >= numberOfLandsYouCanPlayThisTurn)
-        {
-            HideHarvestedTiles();
-        }
         //IncreaseCostOfHarvestTiles();
     }
     private void HideHarvestedTiles()
@@ -362,14 +332,13 @@ public class Controller : MonoBehaviour
     }
     private void ShowHarvestedTiles()
     {
-        Debug.Log("showing harvest tiles " + numberOfLandsYouCanPlayThisTurn + " " + numberOfLandsPlayedThisTurn);
         foreach (KeyValuePair<Vector3Int, BaseTile> bt in tilesOwned)
         {
-            if (harvestedTiles.Contains(bt.Value) || numberOfLandsYouCanPlayThisTurn > numberOfLandsPlayedThisTurn)
+            if (harvestedTiles.Contains(bt.Value))
             {
                 bt.Value.ShowHarvestIcon();
             }
-            if (!harvestedTiles.Contains(bt.Value) && numberOfLandsYouCanPlayThisTurn > numberOfLandsPlayedThisTurn)
+            if (!harvestedTiles.Contains(bt.Value))
             {
                 bt.Value.HighlightTile();
                 highlightedTiles.Add(bt.Value);
@@ -381,7 +350,6 @@ public class Controller : MonoBehaviour
     void LeftClickQueue(Vector3Int positionSent)
     {
         Debug.Log("Local creature " + locallySelectedCard);
-        //visual section for spawning creatures
         if (locallySelectedCard != null && locallySelectedCard.cardType == SpellSiegeData.CardType.Creature)
         {
             if (CheckToSeeIfCanSpawnCreature(positionSent))
@@ -434,35 +402,14 @@ public class Controller : MonoBehaviour
             case State.PlacingCastle:
                 break;
             case State.NothingSelected:
-                HandleTurn();
                 break;
             case State.CreatureInHandSelected:
-                HandleTurn();
                 break;
             case State.SpellInHandSelected:
-                HandleTurn();
                 break;
             case State.StructureInHandSeleced:
-                HandleTurn();
                 break;
         }
-    }
-
-
-    private void HandleTurn()
-    {
-        if (hudElements != null)
-        {
-            hudElements.UpdateDrawSlider(GameManager.singleton.turnTimer);
-        }
-        if (GameManager.singleton.turnTimer > turnThreshold)
-        {
-            foreach (Controller controller in GameManager.singleton.playerList)
-            {
-            }
-            GameManager.singleton.turnTimer = 0;
-        }
-
     }
 
     protected void TriggerAllCreatureAbilities()
@@ -484,15 +431,6 @@ public class Controller : MonoBehaviour
     protected void HandleDrawCards()
     {
         DrawCard();
-    }
-
-
-    protected void HandleMana()
-    {
-        numberOfLandsYouCanPlayThisTurn = 1;
-        numberOfLandsPlayedThisTurn = 0;
-        //ClearMana();
-        AddToMana();
     }
 
 
@@ -539,7 +477,6 @@ public class Controller : MonoBehaviour
         {
             return;
         }
-        //Vector3 positionToSpawn = baseMap.GetCellCenterWorld(placedCellPosition);
         SetOwningTile(placedCellPosition);
 
         foreach (BaseTile neighbor in BaseMapTileState.singleton.GetBaseTileAtCellPosition(positionSent).neighborTiles)
@@ -552,9 +489,6 @@ public class Controller : MonoBehaviour
                 }
             }
         }
-        //instantiatedCaste = Instantiate(castle, positionSent, Quaternion.identity);
-        //instantiatedCaste.GetComponent<MeshRenderer>().material.color = col;
-        //AddStructureToTile(instantiatedCaste.GetComponent<Structure>(), positionSent);
     }
 
     protected void AddStructureToTile(Structure structure, Vector3Int positionSent)
@@ -593,8 +527,6 @@ public class Controller : MonoBehaviour
             baseTileSent.SetBeingHarvested();
         }
         baseTileSent.ShowHarvestIcon();
-        //baseTileSent.HighlightTile();
-        //numberOfLandsPlayedThisTurn++;
 
         resourcesChanged.Invoke(resources);
     }
@@ -680,20 +612,6 @@ public class Controller : MonoBehaviour
                 }
             }
         }
-        /*
-    if (locallySelectedCardInHandToTurnOff.cardType == SpellSiegeData.CardType.Structure)
-    {
-        foreach (KeyValuePair<Vector3Int, BaseTile> kvp in tilesOwned)
-        {
-            foreach (BaseTile neighbor in kvp.Value.neighborTiles)
-            {
-                if (!tilesOwned.ContainsValue(neighbor))
-                {
-                    neighbor.HighlightTile();
-                    highlightedTiles.Add(neighbor);
-                }
-            }
-        }*/
         if (locallySelectedCardInHandToTurnOff.cardType == SpellSiegeData.CardType.Spell)
         {
             if (locallySelectedCardInHandToTurnOff.GameObjectToInstantiate.GetComponent<Spell>() != null)
@@ -773,13 +691,10 @@ public class Controller : MonoBehaviour
         return false;
     }
 
-    [SerializeField] Transform visualSpawnEffect; GameObject localVisualCreture;
-    GameObject instantiatedSpawnPArticle;
     private void SpawnVisualCreatureOnTile(Vector3Int positionSent)
     {
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(positionSent);
 
-        instantiatedSpawnPArticle = Instantiate(visualSpawnEffect, new Vector3(positionToSpawn.x, positionToSpawn.y + .2f, positionToSpawn.z), Quaternion.identity).gameObject;
         Destroy(locallySelectedCard.gameObject);
 
         locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
@@ -819,10 +734,6 @@ public class Controller : MonoBehaviour
 
 
         RemoveCardFromHand(cardSelectedSent);
-        if (instantiatedSpawnPArticle != null)
-        {
-            Destroy(instantiatedSpawnPArticle);
-        }
 
         if (!instantiatedCreature.GetComponent<Creature>().garrison)
         {
@@ -849,10 +760,6 @@ public class Controller : MonoBehaviour
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
         instantiatedCreature.GetComponent<Creature>().OnETB();
 
-        if (instantiatedSpawnPArticle != null)
-        {
-            Destroy(instantiatedSpawnPArticle);
-        }
         instantiatedCreature.GetComponent<Creature>().SetStructureToFollow(opponent.instantiatedCaste, instantiatedCreature.GetComponent<Creature>().actualPosition);
     }
 
@@ -1029,7 +936,6 @@ public class Controller : MonoBehaviour
         if (cardsInHand.Count >= maxHandSize)
         {
             return;
-            //DiscardCard();
         }
         CardInHand cardAddingToHand = cardsInDeck[cardsInDeck.Count - 1]; //todo this might cause problems when dealing with shuffling cards back into the deck
 
@@ -1137,7 +1043,6 @@ public class Controller : MonoBehaviour
         if (locallySelectedCard != null)
         {
             locallySelectedCard = null;
-            //SetVisualsToNothingSelectedLocally();
         }
         cardSelected = null;
 

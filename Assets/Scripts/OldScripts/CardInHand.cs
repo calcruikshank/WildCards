@@ -5,13 +5,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
 public class CardInHand : MonoBehaviour
 {
     [SerializeField]public Transform GameObjectToInstantiate;
     public int indexOfCard;
 
     public int greenManaCost;
-    public int blueManaCost;
     public int whiteManaCost;
     public int blackManaCost;
     public int redManaCost;
@@ -133,10 +133,6 @@ public class CardInHand : MonoBehaviour
         {
             greenManaText.transform.parent.gameObject.SetActive(false);
         }
-        if (blueManaCost == 0)
-        {
-            blueManaText.transform.parent.gameObject.SetActive(false);
-        }
         if (blackManaCost == 0)
         {
             blackManaText.transform.parent.gameObject.SetActive(false);
@@ -153,20 +149,10 @@ public class CardInHand : MonoBehaviour
 
 
 
-        /*if (genericManaCost != 0)
-        {
-            genericManaText.transform.parent.gameObject.SetActive(true);
-            genericManaText.text = genericManaCost.ToString();
-        }*/
         if (greenManaCost != 0)
         {
             greenManaText.transform.parent.gameObject.SetActive(true);
             greenManaText.text = greenManaCost.ToString();
-        }
-        if (blueManaCost != 0)
-        {
-            blueManaText.transform.parent.gameObject.SetActive(true);
-            blueManaText.text = blueManaCost.ToString();
         }
         if (blackManaCost != 0)
         {
@@ -191,14 +177,6 @@ public class CardInHand : MonoBehaviour
 
     public virtual void CheckToSeeIfPurchasable(PlayerResources resources)
     {
-        if (this.cardAssignedToObject == SpellSiegeData.Cards.Harvest)
-        {
-            if (playerOwningCard.numberOfLandsPlayedThisTurn >= playerOwningCard.numberOfLandsYouCanPlayThisTurn)
-            {
-                SetToNotPurchasable();
-                return;
-            }
-        }
         if (purchasableGlow == null)
         {
             purchasableGlow = Instantiate(GameManager.singleton.purchasableGlow, this.transform);

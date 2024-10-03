@@ -19,11 +19,6 @@ public class HudElements : MonoBehaviour
     [SerializeField] Slider drawCardSlider;
     [SerializeField] public Transform cardParent;
 
-    public void UpdateHudVisuals(Controller playerSent, float maxDrawValue)
-    {
-        this.drawCardSlider.fillRect.GetComponent<Image>().color = playerSent.transparentCol;
-        drawCardSlider.maxValue = maxDrawValue;
-    }
     public void UpdateHudElements(PlayerResources playerResources)
     {
         blackMana.text = playerResources.blackMana.ToString();

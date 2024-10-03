@@ -8,8 +8,6 @@ public class NaturalGrowth : Spell
     {
         base.SpecificCastEffect();
         playerCastingSpell.DrawCard();
-        playerCastingSpell.numberOfLandsYouCanPlayThisTurn++;
         playerCastingSpell.CheckAffordableCards();
-        playerCastingSpell.HandleHarvestTiles();
     }
 }
