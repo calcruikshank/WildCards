@@ -5,5 +5,7 @@ using UnityEngine;
 [Serializable]
 public class PlayerData 
 {
-    public List<CardInHand> allCardsInDeck;
+    public int round;
+    public List<CardInHand> cardsInHand;
+    public List<Creature> creaturesOnField;
 }

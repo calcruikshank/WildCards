@@ -1,0 +1,25 @@
+Color Codes
+
+Strength - red
+- AD: #dd0f1c
+- Armor: #ab002e
+
+Dexterity - yellow
+-Attack Speed: #f8d212
+-Evasion: #D06F00
+- crit multi #d84c00
+
+Constitution - Green
+- Health: #63dc30
+- Armor Pen: #00a95a
+
+Mastery - Purple
+- crit chance: #d33a8e
+- crit multi: #7900b7
+- crit damage reduction: #7326e8
+
+Intelligence - Blue
+-AP: #1b9ae8 NEW : #00d6de
+-Mana Regen: #1759ff
+
+
