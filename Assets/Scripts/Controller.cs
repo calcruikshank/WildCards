@@ -773,9 +773,9 @@ public class Controller : MonoBehaviour
         {
             return;
         }
-        if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>() != null)
+        if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>() != null)
         {
-            if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().range != 0)
+            if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().range != 0)
             {
                 Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
                 if (environmentMap.GetInstantiatedObject(cellSent))
@@ -789,20 +789,20 @@ public class Controller : MonoBehaviour
                     instantiatedObjectsChangeTransparency.ChangeTransparent(100);
                 }
 
-                RemoveCardFromHand(cardSelected);
-                SpendManaToCast(cardSelected.GetComponent<CardInHand>());
-                GameObject instantiatedSpell = Instantiate(cardSelected.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
+                RemoveCardFromHand(locallySelectedCard);
+                SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
+                GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
                 instantiatedSpell.GetComponent<Spell>().InjectDependencies(cellSent, this);
                 OnSpellCast();
                 SetVisualsToNothingSelectedLocally();
                 SetStateToNothingSelected();
                 return;
             }
-            if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().range == 0 && !cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().SpellRequiresToBeCastOnAHarvestedTile)
+            if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().range == 0 && !locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().SpellRequiresToBeCastOnAHarvestedTile)
             {
                 Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
 
-                RemoveCardFromHand(cardSelected);
+                RemoveCardFromHand(locallySelectedCard);
                 SpendManaToCast(cardSelected.GetComponent<CardInHand>());
                 GameObject instantiatedSpell = Instantiate(cardSelected.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
                 instantiatedSpell.GetComponent<Spell>().InjectDependencies(cellSent, this);
