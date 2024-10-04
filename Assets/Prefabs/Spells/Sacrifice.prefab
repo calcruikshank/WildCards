@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d437ddc29fb90241bff874c74d192f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCastingSpell: {fileID: 0}
   instantiatedObject: {fileID: 0}
-  GOToInstantiate: {fileID: 7282744016949600942, guid: 2990e556684f6934d91551e8989cdaca, type: 3}
+  GOToInstantiate: {fileID: 7282744016949600942, guid: 1063f10c485e0434fb687b7fbc03167d, type: 3}
   requiresCreatureBeFriendly: 1
+  timer: 0

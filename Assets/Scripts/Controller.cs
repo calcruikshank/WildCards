@@ -58,7 +58,6 @@ public class Controller : MonoBehaviour
     public List<CardInHand> cardsInDeck = new List<CardInHand>();
     public List<CardInHand> cardsInHand = new List<CardInHand>();
 
-    public CardInHand cardSelected;
     public CardInHand locallySelectedCard;
     public List<Vector3> allVertextPointsInTilesOwned = new List<Vector3>();
 
@@ -296,7 +295,7 @@ public class Controller : MonoBehaviour
             }
 
 
-            if (state == State.NothingSelected && cardSelected == null)
+            if (state == State.NothingSelected && locallySelectedCard == null)
             {
                 if (ShowingPurchasableHarvestTiles)
                 {
@@ -454,8 +453,8 @@ public class Controller : MonoBehaviour
     }
     void AddIndexOfCreatureOnBoard(int index)
     {
+        SetToCreatureOnFieldSelected(GameManager.singleton.allCreaturesOnField[index]);
     }
-
 
 
     void LocalLeftClick(Vector3Int positionSent)
@@ -603,9 +602,9 @@ public class Controller : MonoBehaviour
                 if (state == State.SpellInHandSelected || state == State.StructureInHandSeleced)
                 {
                     SetVisualsToNothingSelectedLocally();
-                    if (cardSelected.GameObjectToInstantiate != null)
+                    if (locallySelectedCard.GameObjectToInstantiate != null)
                     {
-                        if (cardSelected.GameObjectToInstantiate.GetComponent<TargetedSpell>() != null)
+                        if (locallySelectedCard.GameObjectToInstantiate.GetComponent<TargetedSpell>() != null)
                         {
                             AddIndexOfCreatureOnBoard(raycastHitCreatureOnBoard.transform.GetComponent<Creature>().creatureID);
                             return true;
@@ -803,23 +802,23 @@ public class Controller : MonoBehaviour
                 Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
 
                 RemoveCardFromHand(locallySelectedCard);
-                SpendManaToCast(cardSelected.GetComponent<CardInHand>());
-                GameObject instantiatedSpell = Instantiate(cardSelected.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
+                SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
+                GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
                 instantiatedSpell.GetComponent<Spell>().InjectDependencies(cellSent, this);
                 OnSpellCast();
                 SetVisualsToNothingSelectedLocally();
                 SetStateToNothingSelected();
                 return;
             }
-            if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().range == 0 && cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().SpellRequiresToBeCastOnAHarvestedTile)
+            if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().range == 0 && locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<Spell>().SpellRequiresToBeCastOnAHarvestedTile)
             {
                 if (harvestedTiles.Contains(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent)))
                 {
                     Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
 
-                    RemoveCardFromHand(cardSelected);
-                    SpendManaToCast(cardSelected.GetComponent<CardInHand>());
-                    GameObject instantiatedSpell = Instantiate(cardSelected.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
+                    RemoveCardFromHand(locallySelectedCard);
+                    SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
+                    GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
                     instantiatedSpell.GetComponent<Spell>().InjectDependencies(cellSent, this);
                     OnSpellCast();
                     SetVisualsToNothingSelectedLocally();
@@ -835,7 +834,7 @@ public class Controller : MonoBehaviour
         {
             return;
         }
-        if (cardSelected != null)
+        if (locallySelectedCard != null)
         {
             if (!harvestedTiles.Contains(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent)) && tilesOwned.ContainsValue(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent)))
             {
@@ -855,14 +854,14 @@ public class Controller : MonoBehaviour
 
                 SetOwningTile(cellSent);
 
-                SpendManaToCast(cardSelected.GetComponent<CardInHand>());
+                SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
 
                 foreach (BaseTile bt in BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent).neighborTiles)
                 {
                     SetOwningTile(bt.tilePosition);
                 }
                 AddTileToHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent));
-                RemoveCardFromHand(cardSelected);
+                RemoveCardFromHand(locallySelectedCard);
                 SetVisualsToNothingSelectedLocally();
                 SetStateToNothingSelected();
                 return;
@@ -989,25 +988,25 @@ public class Controller : MonoBehaviour
     {
         if (state == State.SpellInHandSelected)
         {
-            if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>() != null)
+            if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>() != null)
             {
-                if (!cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly)
+                if (!locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly)
                 {
                     CastSpellOnTargetedCreature(creatureSelectedSent);
                     return;
                 }
-                if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly)
+                if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly)
                 {
-                    if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly && creatureSelectedSent.playerOwningCreature == null)
+                    if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly && creatureSelectedSent.playerOwningCreature == null)
                     {
                         return;
                     }
-                    if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly && creatureSelectedSent.playerOwningCreature == this)
+                    if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly && creatureSelectedSent.playerOwningCreature == this)
                     {
                         CastSpellOnTargetedCreature(creatureSelectedSent);
                         return;
                     }
-                    if (cardSelected.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly && creatureSelectedSent.playerOwningCreature != this)
+                    if (locallySelectedCard.GetComponent<CardInHand>().GameObjectToInstantiate.GetComponent<TargetedSpell>().requiresCreatureBeFriendly && creatureSelectedSent.playerOwningCreature != this)
                     {
                         return;
                     }
@@ -1019,12 +1018,12 @@ public class Controller : MonoBehaviour
 
     private void CastSpellOnTargetedCreature(Creature creatureSelectedSent)
     {
-        Debug.Log(cardSelected + " card selected send to casting spell on target creature");
-        SpendManaToCast(cardSelected.GetComponent<CardInHand>());
-        GameObject instantiatedSpell = Instantiate(cardSelected.GameObjectToInstantiate.gameObject, creatureSelectedSent.tileCurrentlyOn.tilePosition, Quaternion.identity);
+        Debug.Log(locallySelectedCard + " card selected send to casting spell on target creature");
+        SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
+        GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, creatureSelectedSent.tileCurrentlyOn.tilePosition, Quaternion.identity);
         instantiatedSpell.GetComponent<TargetedSpell>().InjectDependencies(creatureSelectedSent, this);
         OnSpellCast();
-        RemoveCardFromHand(cardSelected);
+        RemoveCardFromHand(locallySelectedCard);
         SetStateToNothingSelected();
     }
 
@@ -1034,13 +1033,13 @@ public class Controller : MonoBehaviour
         {
             locallySelectedCard = null;
         }
-        cardSelected = null;
+        locallySelectedCard = null;
 
         state = State.NothingSelected;
     }
     protected void SetStateToWaiting()
     {
-        cardSelected = null;
+        locallySelectedCard = null;
         state = State.Waiting;
     }
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4041287377271137171}
   - component: {fileID: 8565062853966428981}
   - component: {fileID: 3298186682565764544}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 3393836028009327676}
   - component: {fileID: 415326066436598786}
   - component: {fileID: 4218221789047878655}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP) (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 5158881535373382949}
   - component: {fileID: 599952236921727887}
   - component: {fileID: 8993513605899496440}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 445460765325298991}
   - component: {fileID: 8680423383546493775}
   - component: {fileID: 7374009741370505434}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -561,7 +561,7 @@ GameObject:
   - component: {fileID: 6239865746917987999}
   - component: {fileID: 1121575140204173997}
   - component: {fileID: 6239865746917987998}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Phoenix
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -724,7 +724,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7921025047922479681}
   - component: {fileID: 8723322641080022307}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: text_paper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -812,7 +812,7 @@ GameObject:
   - component: {fileID: 578328339688491124}
   - component: {fileID: 5865687331358438402}
   - component: {fileID: 7534283529393728702}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -986,7 +986,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4742030054974793146}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1070,7 +1070,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6530061157001056154, guid: b744932c1e84d4e418332e045e6cfecd, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1090,6 +1090,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6239865746917987993}
     m_Modifications:
+    - target: {fileID: 877660858165419475, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175110875635557194, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1175110875878812938, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1149,6 +1157,62 @@ PrefabInstance:
     - target: {fileID: 1175110875878813044, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
       propertyPath: m_Name
       value: Phoenix
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175110875878813044, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175110876441154533, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175110876457796869, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175110877007516313, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1337405044695960587, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2248827693572265954, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2557757000586973188, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2967029505663630715, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3934294835257848675, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3972954520559640974, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5250312974060343015, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5466291044410899287, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7440046447912128899, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7489582245658133235, guid: 05ad84fdb6793fb41b1934ddb5332feb, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

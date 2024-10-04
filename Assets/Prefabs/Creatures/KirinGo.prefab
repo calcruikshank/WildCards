@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4041287377271137171}
   - component: {fileID: 8565062853966428981}
   - component: {fileID: 3298186682565764544}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 3393836028009327676}
   - component: {fileID: 415326066436598786}
   - component: {fileID: 4218221789047878655}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP) (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 5158881535373382949}
   - component: {fileID: 599952236921727887}
   - component: {fileID: 8993513605899496440}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 445460765325298991}
   - component: {fileID: 8680423383546493775}
   - component: {fileID: 7374009741370505434}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +560,7 @@ GameObject:
   - component: {fileID: 6239865746917987992}
   - component: {fileID: 6239865746917987998}
   - component: {fileID: -1382810802556330611}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: KirinGo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -678,7 +678,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7921025047922479681}
   - component: {fileID: 8723322641080022307}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: text_paper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +766,7 @@ GameObject:
   - component: {fileID: 578328339688491124}
   - component: {fileID: 5865687331358438402}
   - component: {fileID: 7534283529393728702}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -940,7 +940,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4742030054974793146}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -974,9 +974,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6239865746917987993}
     m_Modifications:
+    - target: {fileID: 141187912399008415, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1639717412590120376, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1980291216930010705, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1997329154215777999, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2221511109482815811, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2221511109918266841, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2221511110095428840, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
       propertyPath: m_Name
       value: Kirin
+      objectReference: {fileID: 0}
+    - target: {fileID: 2221511110095428840, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2221511110095428842, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
       propertyPath: m_Enabled
@@ -1033,6 +1061,42 @@ PrefabInstance:
     - target: {fileID: 2221511110095428843, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2221511110342569845, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2221511111041780741, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856279394962185303, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2927828895989514318, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3663525254928356048, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3705580237487243325, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4252590192366588074, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7205576681935560296, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627221282751785757, guid: 640baee6a9a57b34ba5001820e7bfa87, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1102,7 +1166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6530061157001056154, guid: b744932c1e84d4e418332e045e6cfecd, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6530061157001056154, guid: b744932c1e84d4e418332e045e6cfecd, type: 3}
       propertyPath: m_IsActive
