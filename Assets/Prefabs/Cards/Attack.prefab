@@ -439,7 +439,7 @@ MonoBehaviour:
   genericManaText: {fileID: 5370495449841585311}
   playerOwningCard: {fileID: 0}
   isPurchasable: 0
-  cardAssignedToObject: 20
+  cardAssignedToObject: 41
   cardTitle: {fileID: 2682759985192988501}
   cardType: 1
   creatureType: 0
