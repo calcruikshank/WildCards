@@ -121,11 +121,6 @@ public class Creature : MonoBehaviour
             canAttackIcon.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + .1f, this.transform.position.z);
             canAttackIcon.transform.localEulerAngles = new Vector3(creatureImage.localEulerAngles.x, creatureImage.localEulerAngles.y + 45, creatureImage.localEulerAngles.z);
         }
-    }
-
-
-    void FixedUpdate()
-    {
         switch (creatureState)
         {
             case CreatureState.Moving:
@@ -177,7 +172,6 @@ public class Creature : MonoBehaviour
             case CreatureState.Dead:
                 break;
         }
-
     }
 
 
@@ -728,7 +722,7 @@ public class Creature : MonoBehaviour
         outline.OutlineWidth = 2.5f;
         grid = GameManager.singleton.grid;
         baseTileMap = GameManager.singleton.baseMap;
-        animatorForObject.SetTrigger("Run");
+        animatorForObject.SetTrigger("Idle");
         creatureImage = this.transform.GetChild(0);
 
         SetRangeLineRenderer();
@@ -757,6 +751,9 @@ public class Creature : MonoBehaviour
         canAttackIcon.position = new Vector3(0, 0f, 0);
         canAttackIcon.localEulerAngles = new Vector3(0, -45, 0);
         canAttackIcon.gameObject.SetActive(true);
+        animatorForObject.transform.localEulerAngles = new Vector3(0, 90, 0);
+
+        creatureState = CreatureState.Summoned;
     }
 
     public void SetStateToIdle()

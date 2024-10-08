@@ -15,32 +15,42 @@ public class Hedgehog : Creature
         Creature closestCreature = null;
         float minDistance = float.MaxValue;
         tauntFound = false;
-        foreach (KeyValuePair<int, Creature> creatureWithinRange in playerOwningCreature.opponent.creaturesOwned)
+
+
+
+        if (playerOwningCreature.opponent)
         {
-            if (creatureWithinRange.Value == null)
+            if (playerOwningCreature.opponent.creaturesOwned.Count > 0)
             {
-            }
 
-            if (creatureWithinRange.Value.playerOwningCreature != this.playerOwningCreature)
-            {
-                // Skip creatures with stealth
-                if (creatureWithinRange.Value.stealth)
+                foreach (KeyValuePair<int, Creature> creatureWithinRange in playerOwningCreature.opponent.creaturesOwned)
                 {
-                    continue;
-                }
+                    if (creatureWithinRange.Value == null)
+                    {
+                    }
 
-                if (creatureWithinRange.Value.taunt)
-                {
-                    currentTargetedCreature = creatureWithinRange.Value;
-                    tauntFound = true;
-                    break; // Since we always want to target the creature with taunt, we can break the loop here
-                }
+                    if (creatureWithinRange.Value.playerOwningCreature != this.playerOwningCreature)
+                    {
+                        // Skip creatures with stealth
+                        if (creatureWithinRange.Value.stealth)
+                        {
+                            continue;
+                        }
 
-                float distance = Vector3.Distance(this.transform.position, creatureWithinRange.Value.transform.position);
-                if (!tauntFound && distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestCreature = creatureWithinRange.Value;
+                        if (creatureWithinRange.Value.taunt)
+                        {
+                            currentTargetedCreature = creatureWithinRange.Value;
+                            tauntFound = true;
+                            break; // Since we always want to target the creature with taunt, we can break the loop here
+                        }
+
+                        float distance = Vector3.Distance(this.transform.position, creatureWithinRange.Value.transform.position);
+                        if (!tauntFound && distance < minDistance)
+                        {
+                            minDistance = distance;
+                            closestCreature = creatureWithinRange.Value;
+                        }
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -880,11 +881,11 @@ public class Controller : MonoBehaviour
 
     protected void SpendManaToCast(CardInHand cardSelectedSent)
     {
-        resources.redMana -= cardSelectedSent.redManaCost;
+        /*resources.redMana -= cardSelectedSent.redManaCost;
         resources.whiteMana -= cardSelectedSent.whiteManaCost;
         resources.blackMana -= cardSelectedSent.blackManaCost;
         resources.greenMana -= cardSelectedSent.greenManaCost;
-        SpendGenericMana(cardSelectedSent.genericManaCost);
+        SpendGenericMana(cardSelectedSent.genericManaCost);*/
         resourcesChanged.Invoke(resources);
     }
 
@@ -980,11 +981,8 @@ public class Controller : MonoBehaviour
         cardsInHand.Remove(cardToRemove);
         if (cardToRemove != null)
         {
-            if (cardToRemove.cardType != SpellSiegeData.CardType.Creature)
-            {
-                cardToRemove.DiscardAnimation();
-                cardToRemove.transform.parent = null;
-            }
+            cardToRemove.DiscardAnimation();
+            cardToRemove.transform.parent = null;
         }
     }
 
@@ -1037,6 +1035,9 @@ public class Controller : MonoBehaviour
     {
         if (locallySelectedCard != null)
         {
+            Destroy(locallySelectedCard.gameObject);
+
+            locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
             locallySelectedCard = null;
         }
         locallySelectedCard = null;

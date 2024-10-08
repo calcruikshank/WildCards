@@ -6,7 +6,10 @@ public class LogicForPurchasingCards : MonoBehaviour
     {
         if (GameManager.singleton.playerInScene.locallySelectedCard != null)
         {
-            GameManager.singleton.playerInScene.SetToPurchaseACard(GameManager.singleton.playerInScene.locallySelectedCard);
+            if (GameManager.singleton.playerInScene.locallySelectedCard.playerOwningCard == null)
+            {
+                GameManager.singleton.playerInScene.SetToPurchaseACard(GameManager.singleton.playerInScene.locallySelectedCard);
+            }
         }
     }
 
