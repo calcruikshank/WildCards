@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
+[Serializable]
 public class Creature : MonoBehaviour
 {
     Transform colorIndicator;
@@ -1161,7 +1162,7 @@ public class Creature : MonoBehaviour
         {
             tempLineRendererBetweenCreaturesGameObject.SetActive(false);
         }
-        this.playerOwningCreature.creaturesOwned.Remove(this.creatureID);
+        this.playerOwningCreature.creaturesOwned.Remove(this);
         OnMouseExit();
         creatureState = CreatureState.Dead;
     }

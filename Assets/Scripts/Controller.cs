@@ -62,7 +62,7 @@ public class Controller : MonoBehaviour
     public CardInHand locallySelectedCard;
     public List<Vector3> allVertextPointsInTilesOwned = new List<Vector3>();
 
-    protected Transform instantiatedPlayerUI;
+    [SerializeField] Transform instantiatedPlayerUI;
     protected Transform cardParent;
 
     protected Canvas canvasMain;
@@ -73,7 +73,7 @@ public class Controller : MonoBehaviour
     public delegate void ResourcesChanged(PlayerResources resources);
     public ResourcesChanged resourcesChanged;
 
-    [SerializeField] protected Transform playerHud;
+    //[SerializeField] protected Transform playerHud;
     protected HudElements hudElements;
     protected int numOfPurchasableHarvestTiles = 1;
 
@@ -99,23 +99,45 @@ public class Controller : MonoBehaviour
 
     public Controller opponent;
 
+
+    public bool hoveringOverSubmit;
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        GrabEverythingFromPlayerData();
+        string directoryPath = $"{Application.persistentDataPath}/playerData/";
+
+        if (!Directory.Exists(directoryPath) || Directory.GetFiles(directoryPath, "*.txt").Length == 0)
+        {
+            // No player data found, so create a new player
+            playerData = new PlayerData();
+            playerData.currentRound = 0;
+            playerData.playerRoundConfigurations = new List<RoundConfiguration>();
+            string newPlayerGuid = GenerateNewPlayerGuid();
+            SavePlayerConfigLocally(playerData, newPlayerGuid);
+
+            Debug.Log($"New player created with GUID: {newPlayerGuid}");
+
+            currentGUIDForPlayer = newPlayerGuid;
+        }
+        else
+        {
+            // Existing player data found, load the first available player's data
+            string[] existingFiles = Directory.GetFiles(directoryPath, "*.txt");
+            string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
+
+            playerData = GrabPlayerDataByGuid(existingPlayerGuid);
+            currentGUIDForPlayer = existingPlayerGuid;
+            Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
+        }
+
         GrabAllObjectsFromGameManager();
         mousePositionScript = GetComponent<MousePositionScript>();
 
         GameManager.singleton.playerList.Add(this);
         StartGame();
 
-        GrabEverythingFromPlayerData();
     }
 
-    public void GrabPlayerData()
-    {
-        //todo grab the file path created from saveplayerdata
-    }
 
     public List<ulong> gameSceneController = new List<ulong>();
     public void OnPlayerJoinedGameSceneServerRpc(ulong controllerSent)
@@ -134,14 +156,7 @@ public class Controller : MonoBehaviour
     }
 
     [SerializeField] GameObject castlePrefab;
-    public void GrabEverythingFromPlayerData()
-    {
-        //todo
-
-        //instantiate all animals on the field
-
-        //instantiate all player cards in hand
-    }
+    
     private void SpawnCastleForPlayer(Vector3 position)
     {
 
@@ -181,7 +196,7 @@ public class Controller : MonoBehaviour
     }
     protected void SpawnHUD()
     {
-        instantiatedPlayerUI = Instantiate(playerHud, canvasMain.transform);
+        //instantiatedPlayerUI = Instantiate(playerHud, canvasMain.transform);
         cardParent = instantiatedPlayerUI.GetComponentInChildren<CustomHorizontalLayoutGroup>().transform;
         //cardParent.gameObject.GetComponent<Image>().color = transparentCol;
         hudElements = instantiatedPlayerUI.GetComponent<HudElements>();
@@ -284,6 +299,10 @@ public class Controller : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
+            if (hoveringOverSubmit)
+            {
+                SubmitPlayerData();
+            }
             if (cardToPurchase != null)
             {
                 PurchaseCard();
@@ -438,9 +457,9 @@ public class Controller : MonoBehaviour
 
     protected void TriggerAllCreatureAbilities()
     {
-        foreach (KeyValuePair<int, Creature> kp in creaturesOwned)
+        foreach (Creature kp in creaturesOwned)
         {
-            kp.Value.OnTurn();
+            kp.OnTurn();
             Debug.Log(kp + " triggering");
         }
         foreach (KeyValuePair<Vector3Int, BaseTile> kp in tilesOwned)
@@ -669,7 +688,7 @@ public class Controller : MonoBehaviour
 
     }
 
-    public Dictionary<int, Creature> creaturesOwned = new Dictionary<int, Creature>();
+    public List<Creature> creaturesOwned = new List<Creature>();
 
 
     void HandleCreatureInHandSelected(Vector3Int cellSent)
@@ -725,8 +744,7 @@ public class Controller : MonoBehaviour
         }
 
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
-        creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>().creatureID,
-        instantiatedCreature.GetComponent<Creature>());
+        creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
         instantiatedCreature.GetComponent<Creature>().OnETB();
 
@@ -766,7 +784,7 @@ public class Controller : MonoBehaviour
         }
 
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
-        creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>().creatureID, instantiatedCreature.GetComponent<Creature>());
+        creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
         instantiatedCreature.GetComponent<Creature>().OnETB();
 
@@ -1035,9 +1053,6 @@ public class Controller : MonoBehaviour
     {
         if (locallySelectedCard != null)
         {
-            Destroy(locallySelectedCard.gameObject);
-
-            locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
             locallySelectedCard = null;
         }
         locallySelectedCard = null;
@@ -1149,9 +1164,9 @@ public class Controller : MonoBehaviour
     {
 
         spellCounter++;
-        foreach (KeyValuePair<int, Creature> creature in creaturesOwned)
+        foreach (Creature creature in creaturesOwned)
         {
-            creature.Value.OnOwnerCastSpell();
+            creature.OnOwnerCastSpell();
         }
 
     }
@@ -1209,25 +1224,119 @@ public class Controller : MonoBehaviour
         cardToPurchase = null;
     }
 
-    
 
-    PlayerData playerData;
-    public void SubmitBuild(List<CardInHand> cardsInHand, List<Creature> creaturesOnBoard, List<Farmer> farmersOnBoard) 
+    public PlayerData playerData;
+    public string currentGUIDForPlayer;
+    public void SubmitPlayerData()
     {
-        SavePlayerConfigLocally(playerData);
-    }
-    private void SavePlayerConfigLocally(PlayerData playerData)
+        // Ensure playerData is not null
+        if (playerData == null)
         {
-            string directoryPath = $"{Application.persistentDataPath}/playerData/";
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-         }
+            Debug.LogError("playerData is null. Initializing playerData object.");
+            playerData = new PlayerData();
+        }
 
-        string filePath = $"{directoryPath}";
+        // Ensure playerRoundConfigurations is not null
+        if (playerData.playerRoundConfigurations == null)
+        {
+            Debug.LogError("playerRoundConfigurations is null. Initializing playerRoundConfigurations list.");
+            playerData.playerRoundConfigurations = new List<RoundConfiguration>();
+        }
+
+        RoundConfiguration roundConfiguration = new RoundConfiguration
+        {
+            cardsInHand = cardsInHand,                // Assign the current cards in hand
+            creaturesOnField = creaturesOwned,        // Assign the current creatures on the field
+            round = playerData.currentRound + 1       // Set the round number to the next round
+        };
+
+        // Find the RoundConfiguration with the specified round number
+        RoundConfiguration existingConfig = playerData.playerRoundConfigurations
+            .Find(config => config != null && config.round == roundConfiguration.round);
+
+        if (existingConfig != null)
+        {
+            // Update the existing RoundConfiguration
+            int index = playerData.playerRoundConfigurations.IndexOf(existingConfig);
+            playerData.playerRoundConfigurations[index] = roundConfiguration;
+        }
+        else
+        {
+            // Add the new RoundConfiguration to the list if not found
+            playerData.playerRoundConfigurations.Add(roundConfiguration);
+        }
+
+        // Save the player data locally using the current GUID for the player
+        SavePlayerConfigLocally(playerData, currentGUIDForPlayer);
+    }
+
+
+    // Save player data using a unique GUID
+    private void SavePlayerConfigLocally(PlayerData playerData, string playerGuid)
+    {
+        string directoryPath = $"{Application.persistentDataPath}/playerData/";
+        if (!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+
+        string filePath = $"{directoryPath}{playerGuid}.txt"; // Save the file using the player's GUID
         string json = JsonUtility.ToJson(playerData);
 
         File.WriteAllText(filePath, json);
+    }
+
+    // Load player data based on the GUID
+    public PlayerData GrabPlayerDataByGuid(string playerGuid)
+    {
+        string filePath = $"{Application.persistentDataPath}/playerData/{playerGuid}.txt";
+
+        // Check if the file exists
+        if (File.Exists(filePath))
+        {
+            string json = File.ReadAllText(filePath);
+
+            // Deserialize the JSON string back to a PlayerData object
+            PlayerData playerDataFromJSON = JsonUtility.FromJson<PlayerData>(json);
+            return playerDataFromJSON;
+        }
+        else
+        {
+            Debug.Log($"File not found: {filePath}");
+        }
+
+        return null;
+    }
+
+    // Generate a new GUID for a player
+    public string GenerateNewPlayerGuid()
+    {
+        return Guid.NewGuid().ToString();
+    }
+
+    // Load all player data (optional: in case you want to get a list of all players)
+    public List<PlayerData> LoadAllPlayerData()
+    {
+        List<PlayerData> allPlayersData = new List<PlayerData>();
+        string directoryPath = $"{Application.persistentDataPath}/playerData/";
+
+        if (Directory.Exists(directoryPath))
+        {
+            string[] files = Directory.GetFiles(directoryPath, "*.txt");
+
+            foreach (string file in files)
+            {
+                string json = File.ReadAllText(file);
+                PlayerData playerDataFromJSON = JsonUtility.FromJson<PlayerData>(json);
+                allPlayersData.Add(playerDataFromJSON);
+            }
+        }
+        else
+        {
+            Debug.Log($"Directory not found: {directoryPath}");
+        }
+
+        return allPlayersData;
     }
 }
 

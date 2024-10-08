@@ -23,32 +23,32 @@ public class Hedgehog : Creature
             if (playerOwningCreature.opponent.creaturesOwned.Count > 0)
             {
 
-                foreach (KeyValuePair<int, Creature> creatureWithinRange in playerOwningCreature.opponent.creaturesOwned)
+                foreach (Creature creatureWithinRange in playerOwningCreature.opponent.creaturesOwned)
                 {
-                    if (creatureWithinRange.Value == null)
+                    if (creatureWithinRange == null)
                     {
                     }
 
-                    if (creatureWithinRange.Value.playerOwningCreature != this.playerOwningCreature)
+                    if (creatureWithinRange.playerOwningCreature != this.playerOwningCreature)
                     {
                         // Skip creatures with stealth
-                        if (creatureWithinRange.Value.stealth)
+                        if (creatureWithinRange.stealth)
                         {
                             continue;
                         }
 
-                        if (creatureWithinRange.Value.taunt)
+                        if (creatureWithinRange.taunt)
                         {
-                            currentTargetedCreature = creatureWithinRange.Value;
+                            currentTargetedCreature = creatureWithinRange;
                             tauntFound = true;
                             break; // Since we always want to target the creature with taunt, we can break the loop here
                         }
 
-                        float distance = Vector3.Distance(this.transform.position, creatureWithinRange.Value.transform.position);
+                        float distance = Vector3.Distance(this.transform.position, creatureWithinRange.transform.position);
                         if (!tauntFound && distance < minDistance)
                         {
                             minDistance = distance;
-                            closestCreature = creatureWithinRange.Value;
+                            closestCreature = creatureWithinRange;
                         }
                     }
                 }

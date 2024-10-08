@@ -8,9 +8,9 @@ public class Lion : Creature
     {
         base.OnTurn();
 
-        foreach (KeyValuePair<int, Creature> kvp in playerOwningCreature.creaturesOwned)
+        foreach (Creature kvp in playerOwningCreature.creaturesOwned)
         {
-            kvp.Value.GiveCounter(1);
+            kvp.GiveCounter(1);
         }
     }
 }

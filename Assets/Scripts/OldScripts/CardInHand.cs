@@ -264,41 +264,40 @@ public class CardInHand : MonoBehaviour
         {
             purchasableGlow.gameObject.SetActive(true);
         }
+
         if (playerOwningCard != null)
         {
             if (playerOwningCard.locallySelectedCard != null)
             {
                 playerOwningCard.locallySelectedCard.gameObject.SetActive(false);
             }
-            if (visualVersion == null && playerOwningCard.locallySelectedCard == null)
+
+            if (visualVersion == null) // Instantiate the visual card only if it doesn't already exist
             {
                 visualVersion = Instantiate(this.gameObject, GameManager.singleton.canvasMain.transform);
-                visualVersion.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + .525f);
+                visualVersion.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + 0.525f);
                 visualVersion.transform.localEulerAngles = Vector3.zero;
-                visualVersion.transform.localScale = visualVersion.transform.localScale * 2.5f;
+                visualVersion.transform.localScale *= 2.5f;
                 visualVersion.GetComponentInChildren<Collider>().enabled = false;
             }
-        }
-        else
-        {
         }
     }
 
     private void OnMouseExit()
     {
-        if (playerOwningCard != null)
+        if (playerOwningCard != null && playerOwningCard.locallySelectedCard != null)
         {
-            if (playerOwningCard.locallySelectedCard != null)
-            {
-                playerOwningCard.locallySelectedCard.gameObject.SetActive(true);
-            }
+            playerOwningCard.locallySelectedCard.gameObject.SetActive(true);
         }
+
         TurnOffVisualCard();
+
         if (purchasableGlow != null)
         {
             purchasableGlow.gameObject.SetActive(false);
         }
     }
+
 
     internal void TurnOffVisualCard()
     {
