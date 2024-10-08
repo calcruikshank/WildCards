@@ -761,12 +761,12 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
+        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData.positionOnBoard = cellSent;
         instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
-        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
+        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent.cardData);
         instantiatedCreature.GetComponent<Creature>().OnETB();
 
         #region assignRebirthAbility
@@ -808,11 +808,11 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData = cardDataSent;
+        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
-        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardAssociatedWithType);
+        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardDataSent);
 
         #region assignRebirthAbility
         if (instantiatedCreature.GetComponent<Cat>() != null)
@@ -841,10 +841,10 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-
+        instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
-        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
+        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent.cardData);
         instantiatedCreature.GetComponent<Creature>().OnETB();
 
         instantiatedCreature.GetComponent<Creature>().SetStructureToFollow(opponent.instantiatedCaste, instantiatedCreature.GetComponent<Creature>().actualPosition);
@@ -1104,6 +1104,8 @@ public class Controller : MonoBehaviour
         GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, creatureSelectedSent.tileCurrentlyOn.tilePosition, Quaternion.identity);
         instantiatedSpell.GetComponent<TargetedSpell>().InjectDependencies(creatureSelectedSent, this);
         OnSpellCast();
+        cardsInHand.Remove(locallySelectedCardInHandToTurnOff);
+        Destroy(locallySelectedCardInHandToTurnOff.gameObject);
         RemoveCardFromHand(locallySelectedCard);
         SetStateToNothingSelected();
     }
@@ -1276,7 +1278,7 @@ public class Controller : MonoBehaviour
             cardToPurchase = null;
             return;
         }
-        Debug.Log("puchaseCard " + cardToPurchase);
+        
         if (cardToPurchase != null)
         {
             InstantiateCardInHand(cardToPurchase.cardData.cardAssignedToObject);
@@ -1317,25 +1319,22 @@ public class Controller : MonoBehaviour
         RoundConfiguration roundConfiguration = new RoundConfiguration
         {
             allOwnedCards = allOwnedCardsInScene,
-            round = playerData.currentRound      // Set the round number to the next round
+            round = playerData.currentRound      
         };
-        // Find the RoundConfiguration with the specified round number
+        
         RoundConfiguration existingConfig = playerData.playerRoundConfigurations
             .Find(config => config != null && config.round == roundConfiguration.round);
 
         if (existingConfig != null)
         {
-            // Update the existing RoundConfiguration
             int index = playerData.playerRoundConfigurations.IndexOf(existingConfig);
             playerData.playerRoundConfigurations[index] = roundConfiguration;
         }
         else
         {
-            // Add the new RoundConfiguration to the list if not found
             playerData.playerRoundConfigurations.Add(roundConfiguration);
         }
 
-        // Save the player data locally using the current GUID for the player
         SavePlayerConfigLocally(playerData, currentGUIDForPlayer);
     }
 
@@ -1352,8 +1351,6 @@ public class Controller : MonoBehaviour
         }
     }
 
-
-    // Save player data using a unique GUID
     private void SavePlayerConfigLocally(PlayerData playerData, string playerGuid)
     {
         string directoryPath = $"{Application.persistentDataPath}/playerData/";
@@ -1362,13 +1359,12 @@ public class Controller : MonoBehaviour
             Directory.CreateDirectory(directoryPath);
         }
 
-        string filePath = $"{directoryPath}{playerGuid}.txt"; // Save the file using the player's GUID
+        string filePath = $"{directoryPath}{playerGuid}.txt"; 
         string json = JsonUtility.ToJson(playerData);
 
         File.WriteAllText(filePath, json);
     }
 
-    // Load player data based on the GUID
     public PlayerData GrabPlayerDataByGuid(string playerGuid)
     {
         string filePath = $"{Application.persistentDataPath}/playerData/{playerGuid}.txt";
@@ -1390,13 +1386,11 @@ public class Controller : MonoBehaviour
         return null;
     }
 
-    // Generate a new GUID for a player
     public string GenerateNewPlayerGuid()
     {
         return Guid.NewGuid().ToString();
     }
 
-    // Load all player data (optional: in case you want to get a list of all players)
     public List<PlayerData> LoadAllPlayerData()
     {
         List<PlayerData> allPlayersData = new List<PlayerData>();
@@ -1463,7 +1457,6 @@ public class Controller : MonoBehaviour
             }
         }
 
-        // If no existing configuration is found, create a new one (if needed).
         return new RoundConfiguration();
     }
 

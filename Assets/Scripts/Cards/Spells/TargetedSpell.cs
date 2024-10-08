@@ -26,6 +26,8 @@ public class TargetedSpell : MonoBehaviour
             instantiatedObject = Instantiate(GOToInstantiate, new Vector3(creatureTargeted.actualPosition.x, .4f, creatureTargeted.actualPosition.z), Quaternion.identity);
         }
         SpecificSpellAbility();
+
+        creatureTargeted.WriteCurrentDataToCardData();
     }
 
     protected virtual void SpecificSpellAbility()

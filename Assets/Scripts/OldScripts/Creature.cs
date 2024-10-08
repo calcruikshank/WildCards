@@ -23,7 +23,6 @@ public class Creature : MonoBehaviour
 
     protected Transform creatureImage;
 
-    [SerializeField] public float attack;
     public float currentAttack;
     float AttackRate = 4;
     protected float abilityRate = 4;
@@ -496,15 +495,15 @@ public class Creature : MonoBehaviour
         {
             this.healthText.color = Color.white;
         }
-        if (currentAttack > attack)
+        if (currentAttack > cardData.currentAttack)
         {
             this.attackText.color = Color.green;
         }
-        if (currentAttack == attack)
+        if (currentAttack == cardData.currentAttack)
         {
             this.attackText.color = Color.white;
         }
-        if (currentAttack < attack)
+        if (currentAttack < cardData.currentAttack)
         {
             this.attackText.color = Color.red;
         }
@@ -520,30 +519,20 @@ public class Creature : MonoBehaviour
         canAttack = true;
         canAttackIcon.gameObject.SetActive(true);
         HandleFriendlyCreaturesList();
-        //GiveCounter(1);
     }
     public void GiveCounter(int numOfCounters)
-    {
-
-        LocalGiveCounter(numOfCounters);
-        
-    }
-
-    public void LocalGiveCounter(int numOfCounters)
     {
         if (this != null && this.transform != null)
         {
             MaxHealth += numOfCounters;
             CurrentHealth += numOfCounters;
             currentAttack += numOfCounters;
-            attack += numOfCounters;
+            cardData.currentAttack += numOfCounters;
 
 
             UpdateCreatureHUD();
         }
     }
-
-
 
     public virtual void SetMove(Vector3 positionToTarget, Vector3 originalPosition)
     {
@@ -908,23 +897,7 @@ public class Creature : MonoBehaviour
             extents.Add(new Vector3Int(-extents[0].x, -extents[0].y, extents[0].z));
             extents.Add(new Vector3Int(-extents[1].x, extents[1].y, extents[1].z));
             extents.Add(new Vector3Int(-extents[0].x, +extents[0].y, extents[0].z));
-            /*if (currentCellPosition.y % 2 == 0)
-            {
-                extents.Add(new Vector3Int(-extents[0].x, -extents[0].y, extents[0].z));
-            }
-            if (currentCellPosition.y % 2 != 0)
-            {
-                extents.Add(new Vector3Int(-extents[0].x, -extents[0].y, extents[0].z));
-            }
-            extents.Add(new Vector3Int(-extents[1].x, extents[1].y, extents[1].z));
-            if (currentCellPosition.y % 2 != 0)
-            {
-                extents.Add(new Vector3Int(-extents[0].x + 1, +extents[0].y, extents[0].z));
-            }
-            if (currentCellPosition.y % 2 == 0)
-            {
-                extents.Add(new Vector3Int(-extents[0].x, +extents[0].y, extents[0].z));
-            }*/
+            
         }
         rangePositions.Add(BaseMapTileState.singleton.GetBaseTileAtCellPosition(currentCellPosition + extents[0]).top);
         rangePositions.Add(BaseMapTileState.singleton.GetBaseTileAtCellPosition(currentCellPosition + extents[0]).topRight);
@@ -1001,16 +974,15 @@ public class Creature : MonoBehaviour
 
     CardInHand originalCard;
     Transform originalCardTransform;
-    internal void SetOriginalCard(CardInHand cardSelected)
+    internal void SetOriginalCard(CardData cardSelected)
     {
-        this.attack = cardSelected.cardData.currentAttack;
-        this.MaxHealth = cardSelected.cardData.currentHealth;
-        this.currentAttack = cardSelected.cardData.currentAttack;
-        this.CurrentHealth = cardSelected.cardData.currentHealth;
-        this.creatureType = cardSelected.cardData.creatureType;
+        this.MaxHealth = cardSelected.currentHealth;
+        this.currentAttack = cardSelected.currentAttack;
+        this.CurrentHealth = cardSelected.currentHealth;
+        this.creatureType = cardSelected.creatureType;
         Debug.Log("Setting original card to " + cardSelected);
-        originalCard = cardSelected;
-        originalCardTransform = Instantiate(cardSelected.transform, GameManager.singleton.scalableUICanvas.transform);
+        originalCard = GameManager.singleton.GetCardAssociatedWithType(cardSelected.cardAssignedToObject);
+        originalCardTransform = Instantiate(originalCard.transform, GameManager.singleton.scalableUICanvas.transform);
         originalCardTransform.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
         originalCardTransform.transform.localEulerAngles = Vector3.zero;
         originalCardTransform.transform.localScale = originalCardTransform.transform.localScale * 2f;
@@ -1237,8 +1209,17 @@ public class Creature : MonoBehaviour
         }
     }
 
+    internal void WriteCurrentDataToCardData()
+    {
+        cardData.currentAttack = (int)this.currentAttack;
+        cardData.currentHealth = (int)this.CurrentHealth;
+        cardData.SaveCardDataToPlayerData(playerOwningCreature.playerData, playerOwningCreature.playerData.currentRound);
+    }
+
 
 
     #endregion
+
+
 
 }

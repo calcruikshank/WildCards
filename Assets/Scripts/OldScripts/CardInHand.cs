@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 public class CardInHand : MonoBehaviour
 {
@@ -279,6 +280,35 @@ public class CardData
     public CardData()
     {
         // Add default initialization if required
+    }
+
+    // Method to save card data to player data
+    public void SaveCardDataToPlayerData(PlayerData playerData, int round)
+    {
+        // Find the RoundConfiguration for the specified round
+        RoundConfiguration roundConfig = playerData.playerRoundConfigurations.Find(r => r.round == round);
+
+        if (roundConfig == null)
+        {
+            // If no configuration exists for this round, create a new one
+            roundConfig = new RoundConfiguration { round = round, allOwnedCards = new List<CardData>() };
+            playerData.playerRoundConfigurations.Add(roundConfig);
+        }
+
+        // Check if the card already exists in the round's owned cards list
+        CardData existingCard = roundConfig.allOwnedCards.Find(card => card.cardTitle == this.cardTitle);
+
+        if (existingCard != null)
+        {
+            // Update the existing card's data
+            int index = roundConfig.allOwnedCards.IndexOf(existingCard);
+            roundConfig.allOwnedCards[index] = this;
+        }
+        else
+        {
+            // Add the new card data to the list
+            roundConfig.allOwnedCards.Add(this);
+        }
     }
 }
 

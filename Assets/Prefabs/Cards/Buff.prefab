@@ -419,25 +419,27 @@ MonoBehaviour:
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
+    tier: 1
     currentAttack: 0
     currentHealth: 0
     range: 0
-    cardTitle: 
-    cardArtSprite: {fileID: 0}
-    commonRarityImage: {fileID: 0}
-    uncommonImage: {fileID: 0}
-    rareImage: {fileID: 0}
-    mythicImage: {fileID: 0}
-    legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
-    cardType: 0
+    cardTitle: Buff
+    cardArtSprite: {fileID: 21300000, guid: d6f781a02de81f84f8272b9e63244dfc, type: 3}
+    commonRarityImage: {fileID: 21300000, guid: 9b018ffb1c587804c8fcbcd443eaf627, type: 3}
+    uncommonImage: {fileID: 21300000, guid: ccdb82b1f41c0ea4b9d28529f02fadd6, type: 3}
+    rareImage: {fileID: 21300000, guid: 15e1fe999c1b72940b0086a8ba5f9411, type: 3}
+    mythicImage: {fileID: 21300000, guid: 7fc6d28a9b99b764b86b32764944c7cc, type: 3}
+    legendaryImage: {fileID: 21300000, guid: d58d46298f6757c498de226168dbded2, type: 3}
+    manaType: 4
+    cardAssignedToObject: 20
+    cardType: 1
     creatureType: 0
     rarity: 0
     traversableType: 0
+    positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-  GameObjectToInstantiate: {fileID: 720420457433826324, guid: 6592a1524eddcf848b0eeaa18f186426, type: 3}
+    purchaseCost: 3
+  GameObjectToInstantiate: {fileID: 720420457433826325, guid: 6592a1524eddcf848b0eeaa18f186426, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:
   - {fileID: 1865930526497011896}

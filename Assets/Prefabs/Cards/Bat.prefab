@@ -521,7 +521,9 @@ MonoBehaviour:
     creatureType: 0
     rarity: 0
     traversableType: 0
+    positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
+    purchaseCost: 3
   GameObjectToInstantiate: {fileID: 6239865746917987993, guid: ec67ad1df1cbc8f4882294a41bbfd2ef, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
