@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Keywords : MonoBehaviour
+public class obsoletekeywords : MonoBehaviour
 {
     [SerializeField] public Transform lifelinkIndicator;
     [SerializeField] public Transform deathtouchIndicator;

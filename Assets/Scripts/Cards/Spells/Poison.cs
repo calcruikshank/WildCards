@@ -6,6 +6,6 @@ public class Poison : TargetedSpell
 {
     protected override void SpecificSpellAbility()
     {
-        creatureTargeted.deathtouch = true;
+        creatureTargeted.keywords.Add(SpellSiegeData.Keywords.Deathtouch);
     }
 }

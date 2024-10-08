@@ -255,12 +255,12 @@ public class Creature : MonoBehaviour
             if (creatureWithinRange.playerOwningCreature != this.playerOwningCreature)
             {
                 // Skip creatures with stealth
-                if (creatureWithinRange.stealth)
+                if (creatureWithinRange.keywords.Contains(SpellSiegeData.Keywords.Stealth))
                 {
                     continue;
                 }
 
-                if (creatureWithinRange.taunt)
+                if (creatureWithinRange.keywords.Contains(SpellSiegeData.Keywords.Taunt))
                 {
                     currentTargetedCreature = creatureWithinRange;
                     tauntFound = true;
@@ -390,7 +390,7 @@ public class Creature : MonoBehaviour
                 canAttackIcon.gameObject.SetActive(false);
                 Transform instantiatedParticle = Instantiate(visualAttackParticle, new Vector3(this.transform.position.x, this.transform.position.y - .1f, this.transform.position.z), Quaternion.identity);
                 instantiatedParticle.GetComponent<VisualAttackParticle>().SetTarget(creatureToAttack, currentAttack);
-                if (deathtouch)
+                if (keywords.Contains(SpellSiegeData.Keywords.Deathtouch))
                 {
                     instantiatedParticle.GetComponent<VisualAttackParticle>().SetDeathtouch(creatureToAttack, currentAttack);
                 }
@@ -514,7 +514,10 @@ public class Creature : MonoBehaviour
     {
         if (turnStealthOff == true)
         {
-            stealth = false;
+            if (keywords.Contains(SpellSiegeData.Keywords.Stealth))
+            {
+                keywords.Remove(SpellSiegeData.Keywords.Stealth);
+            }
         }
         canAttack = true;
         canAttackIcon.gameObject.SetActive(true);
@@ -923,10 +926,6 @@ public class Creature : MonoBehaviour
     }
 
 
-    public bool lifelink = false;
-    public bool deathtouch = false;
-    public bool taunt = false;
-    public bool stealth = false;
     public bool garrison = false;
 
     GameObject rangeLrGO;
@@ -979,7 +978,9 @@ public class Creature : MonoBehaviour
         this.MaxHealth = cardSelected.currentHealth;
         this.currentAttack = cardSelected.currentAttack;
         this.CurrentHealth = cardSelected.currentHealth;
+        this.range = cardSelected.range;
         this.creatureType = cardSelected.creatureType;
+        this.numberOfTimesThisCanDie = cardSelected.numberOfTimesThisCanDie;
         Debug.Log("Setting original card to " + cardSelected);
         originalCard = GameManager.singleton.GetCardAssociatedWithType(cardSelected.cardAssignedToObject);
         originalCardTransform = Instantiate(originalCard.transform, GameManager.singleton.scalableUICanvas.transform);
@@ -1209,10 +1210,14 @@ public class Creature : MonoBehaviour
         }
     }
 
+    public List<SpellSiegeData.Keywords> keywords;
     internal void WriteCurrentDataToCardData()
     {
         cardData.currentAttack = (int)this.currentAttack;
         cardData.currentHealth = (int)this.CurrentHealth;
+        cardData.range = (int)this.range;
+        cardData.numberOfTimesThisCanDie = (int)this.numberOfTimesThisCanDie;
+        cardData.keywords = this.keywords;
         cardData.SaveCardDataToPlayerData(playerOwningCreature.playerData, playerOwningCreature.playerData.currentRound);
     }
 

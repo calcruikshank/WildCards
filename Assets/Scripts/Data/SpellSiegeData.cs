@@ -104,4 +104,13 @@ public struct SpellSiegeData
         SwimmingAndWalking,
         Flying
     }
+    public enum Keywords
+    {
+        Deathtouch,
+        Flying,
+        Taunt,
+        Reach,
+        Trample,
+        Stealth
+    }
 }

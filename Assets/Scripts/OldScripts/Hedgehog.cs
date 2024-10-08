@@ -32,12 +32,12 @@ public class Hedgehog : Creature
                     if (creatureWithinRange.playerOwningCreature != this.playerOwningCreature)
                     {
                         // Skip creatures with stealth
-                        if (creatureWithinRange.stealth)
+                        if (creatureWithinRange.keywords.Contains(SpellSiegeData.Keywords.Stealth))
                         {
                             continue;
                         }
 
-                        if (creatureWithinRange.taunt)
+                        if (creatureWithinRange.keywords.Contains(SpellSiegeData.Keywords.Taunt))
                         {
                             currentTargetedCreature = creatureWithinRange;
                             tauntFound = true;
