@@ -156,7 +156,7 @@ public class GameManager : MonoBehaviour
     {
         CardInHand selectedObject;
 
-        selectedObject = allCardsInGame.FirstOrDefault(s => s.cardAssignedToObject == cardGrabbed);
+        selectedObject = allCardsInGame.FirstOrDefault(s => s.cardData.cardAssignedToObject == cardGrabbed);
 
         if (selectedObject == null)
         {
@@ -170,26 +170,26 @@ public class GameManager : MonoBehaviour
         CardInHand selectedObject;
 
         List<CardInHand> shuffledListOfAllCards = Shuffle(allCardsInGame);
-        selectedObject = shuffledListOfAllCards.FirstOrDefault(s => s.rarity == cardRaritySent);
+        selectedObject = shuffledListOfAllCards.FirstOrDefault(s => s.cardData.rarity == cardRaritySent);
 
         if (selectedObject == null)
         {
             Debug.LogError("Could not find rarity associated with -> " + cardRaritySent + " defaulting to null");
         }
-        return selectedObject.cardAssignedToObject;
+        return selectedObject.cardData.cardAssignedToObject;
     }
     public SpellSiegeData.Cards GetCardAssociatedWithTier(int tierSent)
     {
         CardInHand selectedObject;
 
         List<CardInHand> shuffledListOfAllCards = Shuffle(allCardsInGame);
-        selectedObject = shuffledListOfAllCards.FirstOrDefault(s => s.tier == tierSent);
+        selectedObject = shuffledListOfAllCards.FirstOrDefault(s => s.cardData.tier == tierSent);
 
         if (selectedObject == null)
         {
             Debug.LogError("Could not find rarity associated with -> " + tierSent + " defaulting to null");
         }
-        return selectedObject.cardAssignedToObject;
+        return selectedObject.cardData.cardAssignedToObject;
     }
 
     public List<CardInHand> Shuffle(List<CardInHand> alpha)

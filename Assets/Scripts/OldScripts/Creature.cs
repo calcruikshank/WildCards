@@ -11,6 +11,8 @@ using UnityEngine.UI;
 [Serializable]
 public class Creature : MonoBehaviour
 {
+    public CardData cardData;
+
     Transform colorIndicator;
     [SerializeField] public float speed = 1f; //move speed
     [SerializeField] public int range; //num of tiles that can attack
@@ -1001,11 +1003,11 @@ public class Creature : MonoBehaviour
     Transform originalCardTransform;
     internal void SetOriginalCard(CardInHand cardSelected)
     {
-        this.attack = cardSelected.currentAttack;
-        this.MaxHealth = cardSelected.currentHealth;
-        this.currentAttack = cardSelected.currentAttack;
-        this.CurrentHealth = cardSelected.currentHealth;
-        this.creatureType = cardSelected.creatureType;
+        this.attack = cardSelected.cardData.currentAttack;
+        this.MaxHealth = cardSelected.cardData.currentHealth;
+        this.currentAttack = cardSelected.cardData.currentAttack;
+        this.CurrentHealth = cardSelected.cardData.currentHealth;
+        this.creatureType = cardSelected.cardData.creatureType;
         Debug.Log("Setting original card to " + cardSelected);
         originalCard = cardSelected;
         originalCardTransform = Instantiate(cardSelected.transform, GameManager.singleton.scalableUICanvas.transform);
@@ -1040,7 +1042,7 @@ public class Creature : MonoBehaviour
         rangeLr.enabled = true;
         if (playerOwningCreature.locallySelectedCard != null)
         {
-            if (playerOwningCreature.locallySelectedCard.cardType != SpellSiegeData.CardType.Spell)
+            if (playerOwningCreature.locallySelectedCard.cardData.cardType != SpellSiegeData.CardType.Spell)
             {
                 playerOwningCreature.locallySelectedCard.gameObject.SetActive(false);
             }

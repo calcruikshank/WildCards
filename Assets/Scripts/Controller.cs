@@ -22,6 +22,8 @@ public class Controller : MonoBehaviour
         Waiting
     }
 
+    public List<CardData> allOwnedCardsInScene;
+
     public int goldAmount = 0;
     public int turn = 0;
 
@@ -113,8 +115,8 @@ public class Controller : MonoBehaviour
             playerData.currentRound = 0;
             playerData.playerRoundConfigurations = new List<RoundConfiguration>();
             string newPlayerGuid = GenerateNewPlayerGuid();
+            allOwnedCardsInScene = new List<CardData>();
             SavePlayerConfigLocally(playerData, newPlayerGuid);
-
             Debug.Log($"New player created with GUID: {newPlayerGuid}");
 
             currentGUIDForPlayer = newPlayerGuid;
@@ -126,6 +128,7 @@ public class Controller : MonoBehaviour
             string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
 
             playerData = GrabPlayerDataByGuid(existingPlayerGuid);
+            allOwnedCardsInScene = playerData.playerRoundConfigurations[playerData.currentRound].allOwnedCards;
             currentGUIDForPlayer = existingPlayerGuid;
             Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
         }
@@ -393,7 +396,7 @@ public class Controller : MonoBehaviour
     public bool ShowingPurchasableHarvestTiles = false;
     void LeftClickQueue(Vector3Int positionSent)
     {
-        if (locallySelectedCard != null && locallySelectedCard.cardType == SpellSiegeData.CardType.Creature && locallySelectedCard.playerOwningCard != null)
+        if (locallySelectedCard != null && locallySelectedCard.cardData.cardType == SpellSiegeData.CardType.Creature && locallySelectedCard.playerOwningCard != null)
         {
             if (CheckToSeeIfCanSpawnCreature(positionSent))
             {
@@ -402,7 +405,7 @@ public class Controller : MonoBehaviour
             }
             return;
         }
-        if (locallySelectedCard != null && locallySelectedCard.cardType == SpellSiegeData.CardType.Spell && locallySelectedCard.playerOwningCard != null)
+        if (locallySelectedCard != null && locallySelectedCard.cardData.cardType == SpellSiegeData.CardType.Spell && locallySelectedCard.playerOwningCard != null)
         {
             LocalLeftClick(positionSent);
             return;
@@ -594,11 +597,11 @@ public class Controller : MonoBehaviour
                     locallySelectedCard.transform.localEulerAngles = Vector3.zero;
                     locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
 
-                    if (raycastHitCardInHand.transform.GetComponent<CardInHand>().cardType == SpellSiegeData.CardType.Creature)
+                    if (raycastHitCardInHand.transform.GetComponent<CardInHand>().cardData.cardType == SpellSiegeData.CardType.Creature)
                     {
                         state = State.CreatureInHandSelected;
                     }
-                    if (raycastHitCardInHand.transform.GetComponent<CardInHand>().cardType == SpellSiegeData.CardType.Spell)
+                    if (raycastHitCardInHand.transform.GetComponent<CardInHand>().cardData.cardType == SpellSiegeData.CardType.Spell)
                     {
                         state = State.SpellInHandSelected;
                     }
@@ -648,7 +651,7 @@ public class Controller : MonoBehaviour
     private void ShowViablePlacableTiles(CardInHand locallySelectedCardInHandToTurnOff)
     {
         Debug.Log("Showing viable placable tiles");
-        if (locallySelectedCardInHandToTurnOff.cardType == SpellSiegeData.CardType.Creature)
+        if (locallySelectedCardInHandToTurnOff.cardData.cardType == SpellSiegeData.CardType.Creature)
         {
             foreach (KeyValuePair<Vector3Int, BaseTile> kvp in tilesOwned)
             {
@@ -656,7 +659,7 @@ public class Controller : MonoBehaviour
                 highlightedTiles.Add(kvp.Value);
             }
         }
-        if (locallySelectedCardInHandToTurnOff.cardType == SpellSiegeData.CardType.Structure)
+        if (locallySelectedCardInHandToTurnOff.cardData.cardType == SpellSiegeData.CardType.Structure)
         {
             foreach (KeyValuePair<Vector3Int, BaseTile> kvp in tilesOwned)
             {
@@ -667,7 +670,7 @@ public class Controller : MonoBehaviour
                 }
             }
         }
-        if (locallySelectedCardInHandToTurnOff.cardType == SpellSiegeData.CardType.Spell)
+        if (locallySelectedCardInHandToTurnOff.cardData.cardType == SpellSiegeData.CardType.Spell)
         {
             if (locallySelectedCardInHandToTurnOff.GameObjectToInstantiate.GetComponent<Spell>() != null)
             {
@@ -744,6 +747,7 @@ public class Controller : MonoBehaviour
         }
 
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
+        instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
         instantiatedCreature.GetComponent<Creature>().OnETB();
@@ -1183,7 +1187,7 @@ public class Controller : MonoBehaviour
                 break;
             }
             numbersChosen.Add(randomNumber);
-            if (cardsInHand[randomNumber].cardType == SpellSiegeData.CardType.Creature)
+            if (cardsInHand[randomNumber].cardData.cardType == SpellSiegeData.CardType.Creature)
             {
                 creatureSelectedInHand = cardsInHand[randomNumber];
             }
@@ -1209,7 +1213,7 @@ public class Controller : MonoBehaviour
         Debug.Log("puchaseCard " + cardToPurchase);
         if (cardToPurchase != null)
         {
-            InstantiateCardInHand(cardToPurchase.cardAssignedToObject);
+            InstantiateCardInHand(cardToPurchase.cardData.cardAssignedToObject);
             if (cardToPurchase.gameObject != null)
             {
                 Destroy(cardToPurchase.gameObject);
@@ -1242,11 +1246,11 @@ public class Controller : MonoBehaviour
             Debug.LogError("playerRoundConfigurations is null. Initializing playerRoundConfigurations list.");
             playerData.playerRoundConfigurations = new List<RoundConfiguration>();
         }
+        SaveAllCardsInHandAndOnFieldIntoAllCardsData();
 
         RoundConfiguration roundConfiguration = new RoundConfiguration
         {
-            cardsInHand = cardsInHand,                // Assign the current cards in hand
-            creaturesOnField = creaturesOwned,        // Assign the current creatures on the field
+            allOwnedCards = allOwnedCardsInScene,
             round = playerData.currentRound + 1       // Set the round number to the next round
         };
 
@@ -1268,6 +1272,19 @@ public class Controller : MonoBehaviour
 
         // Save the player data locally using the current GUID for the player
         SavePlayerConfigLocally(playerData, currentGUIDForPlayer);
+    }
+
+    public void SaveAllCardsInHandAndOnFieldIntoAllCardsData()
+    {
+        allOwnedCardsInScene = new List<CardData>();
+        for (int i = 0; i < cardsInHand.Count; i++)
+        {
+            allOwnedCardsInScene.Add(cardsInHand[i].cardData);
+        }
+        for (int i = 0; i < creaturesOwned.Count; i++)
+        {
+            allOwnedCardsInScene.Add(creaturesOwned[i].cardData);
+        }
     }
 
 

@@ -1,263 +1,53 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
+using System;
 
-[Serializable]
 public class CardInHand : MonoBehaviour
 {
-    [SerializeField]public Transform GameObjectToInstantiate;
+    #region Fields and Properties
 
-    public int greenManaCost;
-    public int whiteManaCost;
-    public int blackManaCost;
-    public int redManaCost;
-    public int genericManaCost;
+    // Reference to CardData
+    [SerializeField] public CardData cardData;
+    [SerializeField] public GameObject GameObjectToInstantiate;
 
-    public int remainingMana;
+    // UI Components
+    [SerializeField] private Image cardArt;
+    [SerializeField] private Image[] raritySymbols;
+    [SerializeField] private TextMeshProUGUI attackText;
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI cardAbilityText;
+    [SerializeField] private TextMeshProUGUI greenManaText;
+    [SerializeField] private TextMeshProUGUI redManaText;
+    [SerializeField] private TextMeshProUGUI whiteManaText;
+    [SerializeField] private TextMeshProUGUI blackManaText;
+    [SerializeField] private TextMeshProUGUI blueManaText;
+    [SerializeField] private TextMeshProUGUI genericManaText;
 
-    public int tier;
-
-    public int currentAttack;
-    public int currentHealth;
-
-    [SerializeField] public Image cardArt;
-    [SerializeField] public Image[] raritySymbols;
-
-    [SerializeField] public TextMeshProUGUI attackText;
-    [SerializeField] public TextMeshProUGUI healthText;
-    [SerializeField] public TextMeshProUGUI cardAbilityText;
-
-    public Keywords keywords;
-
-    [SerializeField] TextMeshProUGUI greenManaText;
-    [SerializeField] TextMeshProUGUI redManaText;
-    [SerializeField] TextMeshProUGUI whiteManaText;
-    [SerializeField] TextMeshProUGUI blackManaText;
-    [SerializeField] TextMeshProUGUI blueManaText;
-
-    [SerializeField] TextMeshProUGUI genericManaText;
-
-    Transform purchasableGlow;
-
-    SpellSiegeData.ManaType manaType;
+    // Purchasable Information
+    public bool isPurchasable;
+    public Transform purchasableGlow;
+    public GameObject visualVersion;
 
     public Controller playerOwningCard;
+    #endregion
 
-    public bool isPurchasable;
-
-    public SpellSiegeData.Cards cardAssignedToObject;
-
-
-    public TextMeshProUGUI cardTitle;
-
-    public SpellSiegeData.CardType cardType;
-
-    public SpellSiegeData.CreatureType creatureType;
-    public SpellSiegeData.cardRarity rarity;
-    public SpellSiegeData.travType traversableType;
-    // Start is called before the first frame update
-
-    float discardPositiony;
+    #region Unity Methods
 
     private void Awake()
     {
         UpdateMana();
-
         UpdateAttack();
         UpdateRarity();
     }
 
-    public void UpdateAttack()
-    {
-        if (this.cardType == SpellSiegeData.CardType.Spell || this.cardType == SpellSiegeData.CardType.Structure)
-        {
-            attackText.transform.parent.gameObject.SetActive(false);
-            healthText.transform.parent.gameObject.SetActive(false);
-        }
-        if (this.cardType == SpellSiegeData.CardType.Creature)
-        {
-            attackText.transform.parent.gameObject.SetActive(true);
-            healthText.transform.parent.gameObject.SetActive(true);
-
-            this.attackText.text = currentAttack.ToString();
-            this.healthText.text = currentHealth.ToString();
-        }
-    }
-
     void Start()
     {
-        if (purchasableGlow == null)
-        {
-            purchasableGlow = Instantiate(GameManager.singleton.purchasableGlow, this.transform);
-            purchasableGlow.SetAsFirstSibling();
-            purchasableGlow.gameObject.SetActive(false);
-        }
+        InitializePurchasableGlow();
     }
 
+    private void Update() { }
 
-    [SerializeField] Sprite commonRarityImage;
-    [SerializeField] Sprite uncommon;
-    [SerializeField] Sprite rare;
-    [SerializeField] Sprite mythic;
-    [SerializeField] Sprite legendary;
-    public void UpdateRarity()
-    {
-        foreach (Image i in raritySymbols)
-        {
-            switch (rarity)
-            {
-                case SpellSiegeData.cardRarity.common:
-                    i.sprite = commonRarityImage;
-                    break;
-                case SpellSiegeData.cardRarity.uncommon:
-                    i.sprite = uncommon;
-                    break;
-                case SpellSiegeData.cardRarity.rare:
-                    i.sprite = rare;
-                    break;
-                case SpellSiegeData.cardRarity.mythic:
-                    i.sprite = mythic;
-                    break;
-                case SpellSiegeData.cardRarity.Legendary:
-                    i.sprite = legendary;
-                    break;
-            }
-        }
-    }
-    public void UpdateMana()
-    {
-        if (genericManaCost == 0)
-        {
-            if (genericManaText != null)
-            {
-                genericManaText.transform.parent.gameObject.SetActive(false);
-            }
-        }
-        if (greenManaCost == 0)
-        {
-            greenManaText.transform.parent.gameObject.SetActive(false);
-        }
-        if (blackManaCost == 0)
-        {
-            blackManaText.transform.parent.gameObject.SetActive(false);
-        }
-        if (whiteManaCost == 0)
-        {
-            whiteManaText.transform.parent.gameObject.SetActive(false);
-        }
-        if (redManaCost == 0)
-        {
-            redManaText.transform.parent.gameObject.SetActive(false);
-        }
-
-
-
-
-        if (greenManaCost != 0)
-        {
-            greenManaText.transform.parent.gameObject.SetActive(true);
-            greenManaText.text = greenManaCost.ToString();
-        }
-        if (blackManaCost != 0)
-        {
-            blackManaText.transform.parent.gameObject.SetActive(true);
-            blackManaText.text = blackManaCost.ToString();
-        }
-        if (whiteManaCost != 0)
-        {
-            whiteManaText.transform.parent.gameObject.SetActive(true);
-            whiteManaText.text = whiteManaCost.ToString();
-        }
-        if (redManaCost != 0)
-        {
-            redManaText.transform.parent.gameObject.SetActive(true);
-            redManaText.text = redManaCost.ToString();
-        }
-    }
-
-    void Update()
-    {
-    }
-
-    public virtual void CheckToSeeIfPurchasable(PlayerResources resources)
-    {
-        if (purchasableGlow == null)
-        {
-            purchasableGlow = Instantiate(GameManager.singleton.purchasableGlow, this.transform);
-            purchasableGlow.SetAsFirstSibling();
-            purchasableGlow.gameObject.SetActive(false);
-        }
-        int tempRedMana;
-        int tempGreenMana;
-        int tempWhiteMana;
-        int tempBlackMana;
-        int tempGenericMana;
-
-        tempRedMana = resources.redMana - redManaCost;
-        tempGreenMana = resources.greenMana - greenManaCost;
-        tempWhiteMana = resources.whiteMana - whiteManaCost;
-        tempBlackMana = resources.blackMana - blackManaCost;
-
-        if (tempRedMana < 0)
-        {
-
-            SetToNotPurchasable();
-            return;
-        }
-        if (tempGreenMana < 0)
-        {
-
-            SetToNotPurchasable();
-            return;
-        }
-        if (tempWhiteMana < 0)
-        {
-
-            SetToNotPurchasable();
-            return;
-        }
-        if (tempBlackMana < 0)
-        {
-
-            SetToNotPurchasable();
-            return;
-        }
-        tempGenericMana = tempBlackMana + tempGreenMana + tempWhiteMana + tempRedMana;
-        if (tempGenericMana < genericManaCost)
-        {
-            SetToNotPurchasable();
-            return;
-        }
-
-        SetToPurchasable();
-
-        /*remainingMana = tempBlueMana + tempRedMana + tempGreenMana + tempWhiteMana + tempBlackMana;
-        if (remainingMana >= genericManaCost)
-        {
-        }*/
-    }
-
-    private void SetToPurchasable()
-    {
-        if (purchasableGlow != null)
-        {
-            purchasableGlow.gameObject.SetActive(true);
-        }
-        isPurchasable = true;
-    }
-
-    private void SetToNotPurchasable()
-    {
-        if (purchasableGlow != null)
-        {
-            purchasableGlow.gameObject.SetActive(false);
-        }
-        isPurchasable = false;
-    }
-    GameObject visualVersion;
     private void OnMouseOver()
     {
         if (purchasableGlow != null)
@@ -298,22 +88,198 @@ public class CardInHand : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Initialization Methods
+
+    private void InitializePurchasableGlow()
+    {
+        if (purchasableGlow == null)
+        {
+            purchasableGlow = Instantiate(GameManager.singleton.purchasableGlow, this.transform);
+            purchasableGlow.SetAsFirstSibling();
+            purchasableGlow.gameObject.SetActive(false);
+        }
+    }
+
+    #endregion
+
+    #region Update Methods
+
+    public void UpdateAttack()
+    {
+        if (cardData.cardType == SpellSiegeData.CardType.Spell || cardData.cardType == SpellSiegeData.CardType.Structure)
+        {
+            attackText.transform.parent.gameObject.SetActive(false);
+            healthText.transform.parent.gameObject.SetActive(false);
+        }
+        else if (cardData.cardType == SpellSiegeData.CardType.Creature)
+        {
+            attackText.transform.parent.gameObject.SetActive(true);
+            healthText.transform.parent.gameObject.SetActive(true);
+            attackText.text = cardData.currentAttack.ToString();
+            healthText.text = cardData.currentHealth.ToString();
+        }
+    }
+
+    public void UpdateRarity()
+    {
+        foreach (Image i in raritySymbols)
+        {
+            switch (cardData.rarity)
+            {
+                case SpellSiegeData.cardRarity.common:
+                    i.sprite = cardData.commonRarityImage;
+                    break;
+                case SpellSiegeData.cardRarity.uncommon:
+                    i.sprite = cardData.uncommonImage;
+                    break;
+                case SpellSiegeData.cardRarity.rare:
+                    i.sprite = cardData.rareImage;
+                    break;
+                case SpellSiegeData.cardRarity.mythic:
+                    i.sprite = cardData.mythicImage;
+                    break;
+                case SpellSiegeData.cardRarity.Legendary:
+                    i.sprite = cardData.legendaryImage;
+                    break;
+            }
+        }
+    }
+
+    public void UpdateMana()
+    {
+        SetManaTextVisibility(genericManaText, cardData.genericManaCost);
+        SetManaTextVisibility(greenManaText, cardData.greenManaCost);
+        SetManaTextVisibility(blackManaText, cardData.blackManaCost);
+        SetManaTextVisibility(whiteManaText, cardData.whiteManaCost);
+        SetManaTextVisibility(redManaText, cardData.redManaCost);
+    }
+
+    private void SetManaTextVisibility(TextMeshProUGUI manaText, int manaCost)
+    {
+        if (manaText != null)
+        {
+            manaText.transform.parent.gameObject.SetActive(manaCost != 0);
+            if (manaCost != 0)
+            {
+                manaText.text = manaCost.ToString();
+            }
+        }
+    }
+
+    #endregion
+
+    #region Purchase Methods
+
+    public virtual void CheckToSeeIfPurchasable(PlayerResources resources)
+    {
+        InitializePurchasableGlow();
+
+        int tempRedMana = resources.redMana - cardData.redManaCost;
+        int tempGreenMana = resources.greenMana - cardData.greenManaCost;
+        int tempWhiteMana = resources.whiteMana - cardData.whiteManaCost;
+        int tempBlackMana = resources.blackMana - cardData.blackManaCost;
+        int tempGenericMana = tempBlackMana + tempGreenMana + tempWhiteMana + tempRedMana;
+
+        if (tempRedMana < 0 || tempGreenMana < 0 || tempWhiteMana < 0 || tempBlackMana < 0 || tempGenericMana < cardData.genericManaCost)
+        {
+            SetToNotPurchasable();
+            return;
+        }
+
+        SetToPurchasable();
+    }
+
+    private void SetToPurchasable()
+    {
+        purchasableGlow?.gameObject.SetActive(true);
+        isPurchasable = true;
+    }
+
+    private void SetToNotPurchasable()
+    {
+        purchasableGlow?.gameObject.SetActive(false);
+        isPurchasable = false;
+    }
+
+    #endregion
+
+    #region Visual Card Methods
+
+    private void InstantiateVisualCard()
+    {
+        if (visualVersion == null && playerOwningCard?.locallySelectedCard != null)
+        {
+            visualVersion = Instantiate(this.gameObject, GameManager.singleton.canvasMain.transform);
+            visualVersion.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + 0.525f);
+            visualVersion.transform.localEulerAngles = Vector3.zero;
+            visualVersion.transform.localScale *= 2.5f;
+            visualVersion.GetComponentInChildren<Collider>().enabled = false;
+        }
+    }
 
     internal void TurnOffVisualCard()
     {
-        if (purchasableGlow != null)
-        {
-            purchasableGlow.gameObject.SetActive(false);
-        }
+        purchasableGlow?.gameObject.SetActive(false);
         if (visualVersion != null)
         {
             Destroy(visualVersion);
         }
     }
 
+    #endregion
+
+    #region Animation Methods
+
     internal void DiscardAnimation()
     {
         this.GetComponent<Collider>().enabled = false;
         this.transform.parent = null;
     }
+
+    #endregion
 }
+
+[Serializable]
+public class CardData
+{
+    // Mana Costs
+    public int greenManaCost;
+    public int whiteManaCost;
+    public int blackManaCost;
+    public int redManaCost;
+    public int genericManaCost;
+
+    public int tier;
+    public int currentAttack;
+    public int currentHealth;
+    public int range;
+
+    // Card Visual Information
+    public string cardTitle;
+    public Sprite cardArtSprite;
+    public Sprite commonRarityImage;
+    public Sprite uncommonImage;
+    public Sprite rareImage;
+    public Sprite mythicImage;
+    public Sprite legendaryImage;
+
+    public SpellSiegeData.ManaType manaType;
+    public SpellSiegeData.Cards cardAssignedToObject;
+    public SpellSiegeData.CardType cardType;
+    public SpellSiegeData.CreatureType creatureType;
+    public SpellSiegeData.cardRarity rarity;
+    public SpellSiegeData.travType traversableType;
+
+    Vector3Int positionOnBoard;
+
+
+    // Constructor to initialize with default values if necessary
+    public CardData()
+    {
+        // Add default initialization if required
+    }
+}
+
+
