@@ -272,9 +272,9 @@ public class CardData
     public SpellSiegeData.cardRarity rarity;
     public SpellSiegeData.travType traversableType;
 
-    Vector3Int positionOnBoard;
+    public Vector3Int positionOnBoard;
     public bool isInHand;
-
+    public int purchaseCost = 3;
     // Constructor to initialize with default values if necessary
     public CardData()
     {

@@ -91,6 +91,8 @@ public class Controller : MonoBehaviour
 
 
     public List<Farmer> farmersOwned = new List<Farmer>();
+
+
     public enum ActionTaken
     {
         LeftClickBaseMap,
@@ -140,7 +142,11 @@ public class Controller : MonoBehaviour
         GameManager.singleton.playerList.Add(this);
         StartGame();
         InstantiateCardsBasedOnPlayerData(playerData);
-
+        goldAmount = playerData.currentRound + 3;
+        if (goldAmount > 10)
+        {
+            goldAmount = 10;
+        }
     }
 
 
@@ -586,11 +592,10 @@ public class Controller : MonoBehaviour
         {
             if (locallySelectedCard == null)
             {
+                SetVisualsToNothingSelectedLocally();
+                SetStateToNothingSelected();
                 if (raycastHitCardInHand.transform.GetComponent<CardInHand>() != null && state != State.CreatureInHandSelected)
                 {
-                    SetVisualsToNothingSelectedLocally();
-                    SetStateToNothingSelected();
-                    SetVisualsToNothingSelectedLocally();
                     //todo
                     locallySelectedCardInHandToTurnOff = raycastHitCardInHand.transform.GetComponent<CardInHand>();
                     locallySelectedCardInHandToTurnOff.TurnOffVisualCard();
@@ -699,17 +704,22 @@ public class Controller : MonoBehaviour
     void HandleCreatureInHandSelected(Vector3Int cellSent)
     {
         CastCreatureOnTile(locallySelectedCard, cellSent);
+        cardsInHand.Remove(locallySelectedCard);
         SetStateToNothingSelected();
     }
     public virtual bool CheckToSeeIfCanSpawnCreature(Vector3Int cellSent)
     {
         if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent) == null)
         {
+            SetVisualsToNothingSelectedLocally();
+            SetStateToNothingSelected();
             //show error
             return false;
         }
         if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent).traverseType == SpellSiegeData.traversableType.SwimmingAndFlying && locallySelectedCard.GameObjectToInstantiate.GetComponent<Creature>().thisTraversableType == SpellSiegeData.travType.Walking)
         {
+            SetVisualsToNothingSelectedLocally();
+            SetStateToNothingSelected();
             return false;
         }
         if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent).playerOwningTile == this)
@@ -720,16 +730,20 @@ public class Controller : MonoBehaviour
                 return true;
             }
         }
+        SetVisualsToNothingSelectedLocally();
+        SetStateToNothingSelected();
         return false;
     }
 
     private void SpawnVisualCreatureOnTile(Vector3Int positionSent)
     {
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(positionSent);
-
+        cardsInHand.Remove(locallySelectedCard);
         Destroy(locallySelectedCard.gameObject);
 
+        cardsInHand.Remove(locallySelectedCardInHandToTurnOff);
         locallySelectedCardInHandToTurnOff.gameObject.SetActive(false);
+        Destroy(locallySelectedCardInHandToTurnOff.gameObject);
     }
 
     public void CastCreatureOnTile(CardInHand cardSelectedSent, Vector3Int cellSent)
@@ -749,6 +763,7 @@ public class Controller : MonoBehaviour
         }
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
+        instantiatedCreature.GetComponent<Creature>().cardData.positionOnBoard = cellSent;
         instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
@@ -769,13 +784,49 @@ public class Controller : MonoBehaviour
 
         RemoveCardFromHand(cardSelectedSent);
 
-        Destroy(locallySelectedCard);
 
         if (!instantiatedCreature.GetComponent<Creature>().garrison)
         {
             //instantiatedCreature.GetComponent<Creature>().SetStructureToFollow(opponent.instantiatedCaste, instantiatedCreature.GetComponent<Creature>().actualPosition);
         }
     }
+
+    public void CastCreatureOnTileGivenCardData(CardData cardDataSent)
+    {
+        Debug.Log("Spawning creature on tile ");
+        Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cardDataSent.positionOnBoard);
+
+        CardInHand cardAssociatedWithType = GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject);
+        GameObject instantiatedCreature = Instantiate(GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject).GameObjectToInstantiate, positionToSpawn, Quaternion.identity);
+        if (environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard))
+        {
+            GameObject instantiatedObject = environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard);
+            if (instantiatedObject.GetComponent<ChangeTransparency>() == null)
+            {
+                instantiatedObject.AddComponent<ChangeTransparency>();
+            }
+            ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
+            instantiatedObjectsChangeTransparency.ChangeTransparent(100);
+        }
+        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
+        instantiatedCreature.GetComponent<Creature>().cardData = cardDataSent;
+        instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
+        creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
+        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardAssociatedWithType);
+
+        #region assignRebirthAbility
+        if (instantiatedCreature.GetComponent<Cat>() != null)
+        {
+            instantiatedCreature.GetComponent<Cat>().numberOfTimesThisCanDie++;
+        }
+        if (instantiatedCreature.GetComponent<Bat>() != null)
+        {
+            instantiatedCreature.GetComponent<Bat>().numberOfTimesThisCanDie++;
+        }
+        #endregion
+    }
+
+
     public void SpawnCreatureOnTileWithoutCard(GameObject animalToSpawn, Vector3Int cellSent, CardInHand cardSelectedSent)
     {
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
@@ -1213,7 +1264,18 @@ public class Controller : MonoBehaviour
 
     public void PurchaseCard()
     {
-        goldAmount -= 3;
+        if (goldAmount >= cardToPurchase.cardData.purchaseCost)
+        {
+            goldAmount -= cardToPurchase.cardData.purchaseCost;
+        }
+        else
+        {
+            SetToDontPurchaseCard();
+            SetVisualsToNothingSelectedLocally();
+            SetStateToNothingSelected();
+            cardToPurchase = null;
+            return;
+        }
         Debug.Log("puchaseCard " + cardToPurchase);
         if (cardToPurchase != null)
         {
@@ -1376,6 +1438,10 @@ public class Controller : MonoBehaviour
                 if (cardData != null && cardData.isInHand)
                 {
                     InstantiateCardInHand(cardData.cardAssignedToObject);
+                }
+                else
+                {
+                    CastCreatureOnTileGivenCardData(cardData);
                 }
             }
         }
