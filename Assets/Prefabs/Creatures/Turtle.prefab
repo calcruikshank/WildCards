@@ -630,6 +630,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0dfa4d1ac30fe340af5e25c83433ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardData:
+    greenManaCost: 0
+    whiteManaCost: 0
+    blackManaCost: 0
+    redManaCost: 0
+    genericManaCost: 0
+    tier: 0
+    currentAttack: 0
+    currentHealth: 0
+    range: 0
+    cardTitle: 
+    cardArtSprite: {fileID: 0}
+    commonRarityImage: {fileID: 0}
+    uncommonImage: {fileID: 0}
+    rareImage: {fileID: 0}
+    mythicImage: {fileID: 0}
+    legendaryImage: {fileID: 0}
+    manaType: 0
+    cardAssignedToObject: 0
+    cardType: 0
+    creatureType: 0
+    rarity: 0
+    traversableType: 0
+    isInHand: 1
   speed: 0.5
   range: 1
   UsageRate: 1

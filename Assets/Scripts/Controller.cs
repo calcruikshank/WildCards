@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -103,6 +104,7 @@ public class Controller : MonoBehaviour
 
 
     public bool hoveringOverSubmit;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -128,7 +130,6 @@ public class Controller : MonoBehaviour
             string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
 
             playerData = GrabPlayerDataByGuid(existingPlayerGuid);
-            allOwnedCardsInScene = playerData.playerRoundConfigurations[playerData.currentRound].allOwnedCards;
             currentGUIDForPlayer = existingPlayerGuid;
             Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
         }
@@ -138,6 +139,7 @@ public class Controller : MonoBehaviour
 
         GameManager.singleton.playerList.Add(this);
         StartGame();
+        InstantiateCardsBasedOnPlayerData(playerData);
 
     }
 
@@ -745,9 +747,9 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
+        instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent);
         instantiatedCreature.GetComponent<Creature>().OnETB();
@@ -766,6 +768,8 @@ public class Controller : MonoBehaviour
 
 
         RemoveCardFromHand(cardSelectedSent);
+
+        Destroy(locallySelectedCard);
 
         if (!instantiatedCreature.GetComponent<Creature>().garrison)
         {
@@ -1251,9 +1255,8 @@ public class Controller : MonoBehaviour
         RoundConfiguration roundConfiguration = new RoundConfiguration
         {
             allOwnedCards = allOwnedCardsInScene,
-            round = playerData.currentRound + 1       // Set the round number to the next round
+            round = playerData.currentRound      // Set the round number to the next round
         };
-
         // Find the RoundConfiguration with the specified round number
         RoundConfiguration existingConfig = playerData.playerRoundConfigurations
             .Find(config => config != null && config.round == roundConfiguration.round);
@@ -1355,6 +1358,50 @@ public class Controller : MonoBehaviour
 
         return allPlayersData;
     }
+
+    public void InstantiateCardsBasedOnPlayerData(PlayerData playerDataSent)
+    {
+        RoundConfiguration roundConfiguration = GrabBuildByCurrentRound(playerDataSent, playerDataSent.currentRound);
+
+        if (roundConfiguration == null)
+        {
+            Debug.LogError("RoundConfiguration is null. Cannot proceed with card instantiation.");
+            return;
+        }
+
+        if (roundConfiguration.allOwnedCards != null && roundConfiguration.allOwnedCards.Count > 0)
+        {
+            foreach (CardData cardData in roundConfiguration.allOwnedCards)
+            {
+                if (cardData != null && cardData.isInHand)
+                {
+                    InstantiateCardInHand(cardData.cardAssignedToObject);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No cards found in roundConfiguration.allOwnedCards.");
+        }
+    }
+    private RoundConfiguration GrabBuildByCurrentRound(PlayerData playerDataSent, int currentRound)
+    {
+        if (playerDataSent.playerRoundConfigurations != null)
+        {
+            RoundConfiguration existingConfig = playerDataSent.playerRoundConfigurations
+                .Find(config => config != null && config.round == currentRound);
+
+            if (existingConfig != null)
+            {
+                return existingConfig;
+            }
+        }
+
+        // If no existing configuration is found, create a new one (if needed).
+        return new RoundConfiguration();
+    }
+
+
 }
 
 

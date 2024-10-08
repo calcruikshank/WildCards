@@ -6,5 +6,5 @@ using UnityEngine;
 public class PlayerData 
 {
     public List<RoundConfiguration> playerRoundConfigurations = new List<RoundConfiguration>();
-    public int currentRound = 0;
+    public int currentRound;
 }

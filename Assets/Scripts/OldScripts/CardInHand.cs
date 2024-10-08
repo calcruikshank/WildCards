@@ -273,7 +273,7 @@ public class CardData
     public SpellSiegeData.travType traversableType;
 
     Vector3Int positionOnBoard;
-
+    public bool isInHand;
 
     // Constructor to initialize with default values if necessary
     public CardData()

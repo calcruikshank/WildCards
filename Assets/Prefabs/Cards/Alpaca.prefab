@@ -436,6 +436,7 @@ MonoBehaviour:
     creatureType: 9
     rarity: 0
     traversableType: 0
+    isInHand: 1
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 365edfb68191ffc45820c0e5a800d51a, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:

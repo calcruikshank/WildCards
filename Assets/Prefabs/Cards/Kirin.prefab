@@ -277,16 +277,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d64a1f6a99f40e4d9d3069f88da2f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardData:
+    greenManaCost: 0
+    whiteManaCost: 0
+    blackManaCost: 0
+    redManaCost: 0
+    genericManaCost: 0
+    tier: 0
+    currentAttack: 0
+    currentHealth: 0
+    range: 0
+    cardTitle: 
+    cardArtSprite: {fileID: 0}
+    commonRarityImage: {fileID: 0}
+    uncommonImage: {fileID: 0}
+    rareImage: {fileID: 0}
+    mythicImage: {fileID: 0}
+    legendaryImage: {fileID: 0}
+    manaType: 0
+    cardAssignedToObject: 0
+    cardType: 0
+    creatureType: 0
+    rarity: 0
+    traversableType: 0
+    isInHand: 1
   GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 6de0f25af600110478a2eae5fd1212d5, type: 3}
-  greenManaCost: 1
-  whiteManaCost: 1
-  blackManaCost: 0
-  redManaCost: 0
-  genericManaCost: 0
-  remainingMana: 0
-  tier: 1
-  currentAttack: 2
-  currentHealth: 2
   cardArt: {fileID: 4963334460245113095}
   raritySymbols:
   - {fileID: 7997023600208299996}
@@ -294,26 +309,16 @@ MonoBehaviour:
   attackText: {fileID: 2159000277371344859}
   healthText: {fileID: 4989718956061158548}
   cardAbilityText: {fileID: 289720810846324823}
-  keywords: {fileID: 0}
   greenManaText: {fileID: 3942240439498114077}
   redManaText: {fileID: 3261233421566180013}
   whiteManaText: {fileID: 8657068047577623380}
   blackManaText: {fileID: 9028380348870153383}
   blueManaText: {fileID: 5289910929424774387}
   genericManaText: {fileID: 645336509212189736}
-  playerOwningCard: {fileID: 0}
   isPurchasable: 0
-  cardAssignedToObject: 12
-  cardTitle: {fileID: 6909827631340219379}
-  cardType: 0
-  creatureType: 0
-  rarity: 2
-  traversableType: 0
-  commonRarityImage: {fileID: 21300000, guid: 9b018ffb1c587804c8fcbcd443eaf627, type: 3}
-  uncommon: {fileID: 21300000, guid: ccdb82b1f41c0ea4b9d28529f02fadd6, type: 3}
-  rare: {fileID: 21300000, guid: 15e1fe999c1b72940b0086a8ba5f9411, type: 3}
-  mythic: {fileID: 21300000, guid: 7fc6d28a9b99b764b86b32764944c7cc, type: 3}
-  legendary: {fileID: 21300000, guid: b57eb2d5ea0bb72489d68182b811be93, type: 3}
+  purchasableGlow: {fileID: 0}
+  visualVersion: {fileID: 0}
+  playerOwningCard: {fileID: 0}
 --- !u!65 &3771660439786086225
 BoxCollider:
   m_ObjectHideFlags: 0
