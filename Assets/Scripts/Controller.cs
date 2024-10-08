@@ -101,6 +101,7 @@ public class Controller : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
+        GrabEverythingFromPlayerData();
         GrabAllObjectsFromGameManager();
         mousePositionScript = GetComponent<MousePositionScript>();
 
@@ -108,6 +109,11 @@ public class Controller : MonoBehaviour
         StartGame();
 
         GrabEverythingFromPlayerData();
+    }
+
+    public void GrabPlayerData()
+    {
+        //todo grab the file path created from saveplayerdata
     }
 
     public List<ulong> gameSceneController = new List<ulong>();
@@ -1201,7 +1207,29 @@ public class Controller : MonoBehaviour
         }
         cardToPurchase = null;
     }
+
+    
+
+    PlayerData playerData;
+    public void SubmitBuild(List<CardInHand> cardsInHand, List<Creature> creaturesOnBoard, List<Farmer> farmersOnBoard) 
+    {
+        SavePlayerConfigLocally(playerData);
+    }
+    private void SavePlayerConfigLocally(PlayerData playerData)
+        {
+            string directoryPath = $"{Application.persistentDataPath}/playerData/";
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+         }
+
+        string filePath = $"{directoryPath}";
+        string json = JsonUtility.ToJson(playerData);
+
+        File.WriteAllText(filePath, json);
+    }
 }
+
 
 
 
