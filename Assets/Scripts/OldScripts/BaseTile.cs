@@ -237,6 +237,20 @@ public class BaseTile : MonoBehaviour
         }
         isBeingHarvested = true;
     }
+    public void SetToNotBeingHarvested()
+    {
+        if (traverseType == SpellSiegeData.traversableType.Untraversable)
+        {
+            return;
+        }
+        if (instantiatedManaSymbol != null)
+        {
+            instantiatedManaSymbol.GetChild(0).gameObject.SetActive(false);
+            instantiatedManaSymbol.GetComponent<Image>().color = opaqueColor;
+            //costText.gameObject.SetActive(true);
+        }
+        isBeingHarvested = false;
+    }
     public void SetNotBeingHarvested()
     {
         isBeingHarvested = false;

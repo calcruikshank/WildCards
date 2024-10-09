@@ -982,7 +982,7 @@ public class Creature : MonoBehaviour
         this.creatureType = cardSelected.creatureType;
         this.numberOfTimesThisCanDie = cardSelected.numberOfTimesThisCanDie;
         Debug.Log("Setting original card to " + cardSelected);
-        originalCard = GameManager.singleton.GetCardAssociatedWithType(cardSelected.cardAssignedToObject);
+        originalCard = GameManager.singleton.GetCardAssociatedWithType(cardSelected.cardAssignedToObject).GetComponent<CardInHand>();
         originalCardTransform = Instantiate(originalCard.transform, GameManager.singleton.scalableUICanvas.transform);
         originalCardTransform.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
         originalCardTransform.transform.localEulerAngles = Vector3.zero;

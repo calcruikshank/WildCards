@@ -332,7 +332,7 @@ public class Controller : MonoBehaviour
                 PurchaseCard();
                 return;
             }
-            if (locallySelectedCard != null)
+            if (locallySelectedCard != null || selectedOnBoardCreature || selectedOnBoardFarmer)
             {
                 if (cellPositionSentToClients != null)
                 {
@@ -348,16 +348,6 @@ public class Controller : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
-            if (currentFarmerHoveringOver)
-            {
-                SetStateToFarmerOnBoardSelected();
-                return;
-            }
-            if (currentCreatureHoveringOver)
-            {
-                SetStateToCreatureOnBoardSelected();
-                return;
-            }
             if (hoveringOverSubmit)
             {
                 SubmitPlayerData();
@@ -373,6 +363,16 @@ public class Controller : MonoBehaviour
             {
                 mousePositionWorldPoint = raycastHit.point;
                 cellPositionSentToClients = grid.WorldToCell(mousePositionWorldPoint);
+            }
+            if (currentFarmerHoveringOver)
+            {
+                SetStateToFarmerOnBoardSelected();
+                return;
+            }
+            if (currentCreatureHoveringOver)
+            {
+                SetStateToCreatureOnBoardSelected();
+                return;
             }
             if (!CheckForRaycast())
             {
@@ -409,11 +409,11 @@ public class Controller : MonoBehaviour
         selectedOnBoardCreature = null;
         selectedOnBoardCreature = currentCreatureHoveringOver;
 
-        selectedOnBoardCreature.HideVisuals();
         foreach (Collider col in selectedOnBoardCreature.GetComponentsInChildren<Collider>())
         {
             col.enabled = false;
         }
+        selectedOnBoardCreature.HideVisuals();
         state = State.CreatureOnBoardSelected;
         ShowViablePlacableTilesDoNotRequireCardInHand();
     }
@@ -428,7 +428,11 @@ public class Controller : MonoBehaviour
         selectedOnBoardCreature = null;
         selectedOnBoardFarmer = currentFarmerHoveringOver;
 
-        selectedOnBoardFarmer.HideVisuals();
+        foreach (Collider col in selectedOnBoardCreature.GetComponentsInChildren<Collider>())
+        {
+            col.enabled = false;
+        }
+        selectedOnBoardFarmer.HideVisuals(); 
         state = State.FarmerOnBoardSelected;
         ShowViablePlacableTilesDoNotRequireCardInHand();
     }
@@ -505,6 +509,16 @@ public class Controller : MonoBehaviour
         {
             LocalLeftClick(positionSent);
             return;
+        }
+
+        if (selectedOnBoardCreature || selectedOnBoardFarmer)
+        {
+            if (CheckToSeeIfCanSpawnCreature(positionSent))
+            {
+                Debug.Log("calling here " + positionSent);
+                LocalLeftClick(positionSent);
+                return;
+            }
         }
     }
 
@@ -598,7 +612,25 @@ public class Controller : MonoBehaviour
             case State.FarmerInHandSelected:
                 HandleFarmerInHandSelected(positionSent);
                 break;
+            case State.FarmerOnBoardSelected:
+                HandleFarmerOnBoardSelected(positionSent);
+                break;
+            case State.CreatureOnBoardSelected:
+                HandleCreatureOnBoardSelected(positionSent);
+                break;
         }
+    }
+
+    private void HandleFarmerOnBoardSelected(Vector3Int cellSent)
+    {
+        SetOwningTile(cellSent);
+        selectedOnBoardFarmer.cardData.positionOnBoard = cellSent;
+        SetStateToNothingSelected();
+    }
+
+    private void HandleCreatureOnBoardSelected(Vector3Int cellSent)
+    {
+        SetStateToNothingSelected();
     }
 
     private void HandleFarmerInHandSelected(Vector3Int cellSent)
@@ -646,7 +678,7 @@ public class Controller : MonoBehaviour
         Debug.Log("Spawning creature on tile ");
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cardDataSent.positionOnBoard);
 
-        CardInHand cardAssociatedWithType = GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject);
+        CardInHand cardAssociatedWithType = GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject).GetComponent<CardInHand>();
         GameObject instantiatedFarmer = Instantiate(cardAssociatedWithType.GameObjectToInstantiate, positionToSpawn, Quaternion.identity);
         if (environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard))
         {
@@ -702,22 +734,22 @@ public class Controller : MonoBehaviour
     {
         if (baseTileSent.manaType == SpellSiegeData.ManaType.Green)
         {
-            resources.greenManaCap = 9;
+            resources.greenManaCap++;
             resources.greenMana++;
         }
         if (baseTileSent.manaType == SpellSiegeData.ManaType.Black)
         {
-            resources.blackManaCap = 9;
+            resources.blackManaCap++;
             resources.blackMana++;
         }
         if (baseTileSent.manaType == SpellSiegeData.ManaType.White)
         {
-            resources.whiteManaCap = 9;
+            resources.whiteManaCap++;
             resources.whiteMana++;
         }
         if (baseTileSent.manaType == SpellSiegeData.ManaType.Red)
         {
-            resources.redManaCap = 9;
+            resources.redManaCap++;
             resources.redMana++;
         }
         if (!harvestedTiles.Contains(baseTileSent))
@@ -726,6 +758,34 @@ public class Controller : MonoBehaviour
             baseTileSent.SetBeingHarvested();
         }
         baseTileSent.ShowHarvestIcon();
+
+        resourcesChanged.Invoke(resources);
+    }
+
+    public virtual void RemoveTileFromHarvestedTilesList(BaseTile baseTileSent)
+    {
+        if (baseTileSent.manaType == SpellSiegeData.ManaType.Green)
+        {
+            resources.greenManaCap--;
+            resources.greenMana--;
+        }
+        if (baseTileSent.manaType == SpellSiegeData.ManaType.Black)
+        {
+            resources.blackManaCap--;
+            resources.blackMana--;
+        }
+        if (baseTileSent.manaType == SpellSiegeData.ManaType.White)
+        {
+            resources.whiteManaCap--;
+            resources.whiteMana--;
+        }
+        if (baseTileSent.manaType == SpellSiegeData.ManaType.Red)
+        {
+            resources.redManaCap--;
+            resources.redMana--;
+        }
+        harvestedTiles.Remove(baseTileSent);
+        baseTileSent.SetToNotBeingHarvested();
 
         resourcesChanged.Invoke(resources);
     }
@@ -955,41 +1015,6 @@ public class Controller : MonoBehaviour
         }
     }
 
-    public void CastCreatureOnTileGivenCardData(CardData cardDataSent)
-    {
-        Debug.Log("Spawning creature on tile ");
-        Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cardDataSent.positionOnBoard);
-
-        CardInHand cardAssociatedWithType = GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject);
-        GameObject instantiatedCreature = Instantiate(GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject).GameObjectToInstantiate, positionToSpawn, Quaternion.identity);
-        if (environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard))
-        {
-            GameObject instantiatedObject = environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard);
-            if (instantiatedObject.GetComponent<ChangeTransparency>() == null)
-            {
-                instantiatedObject.AddComponent<ChangeTransparency>();
-            }
-            ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
-            instantiatedObjectsChangeTransparency.ChangeTransparent(100);
-        }
-        instantiatedCreature.GetComponent<Creature>().cardData = cardDataSent;
-        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
-        instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
-        creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
-        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardDataSent);
-
-        #region assignRebirthAbility
-        if (instantiatedCreature.GetComponent<Cat>() != null)
-        {
-            instantiatedCreature.GetComponent<Cat>().numberOfTimesThisCanDie++;
-        }
-        if (instantiatedCreature.GetComponent<Bat>() != null)
-        {
-            instantiatedCreature.GetComponent<Bat>().numberOfTimesThisCanDie++;
-        }
-        #endregion
-    }
-
 
     public void SpawnCreatureOnTileWithoutCard(GameObject animalToSpawn, Vector3Int cellSent, CardInHand cardSelectedSent)
     {
@@ -1177,16 +1202,19 @@ public class Controller : MonoBehaviour
         }
     }
 
-    public void InstantiateCardInHand(SpellSiegeData.Cards cardSent)
+    public CardInHand InstantiateCardInHand(CardData cardSent)
     {
-        GameObject instantiatedCardInHand = Instantiate(GameManager.singleton.GetCardAssociatedWithType(cardSent), cardParent).gameObject;
+        GameObject instantiatedCardInHand = Instantiate(GameManager.singleton.GetCardAssociatedWithType(cardSent.cardAssignedToObject), cardParent).gameObject;
         CardInHand instantiatedCardInHandBehaviour = instantiatedCardInHand.GetComponent<CardInHand>();
         instantiatedCardInHandBehaviour.playerOwningCard = this;
+        instantiatedCardInHandBehaviour.cardData = cardSent;
         cardsInHand.Add(instantiatedCardInHandBehaviour);
         if (locallySelectedCard != null)
         {
             SetStateToNothingSelected();
         }
+
+        return instantiatedCardInHandBehaviour;
     }
 
 
@@ -1465,7 +1493,7 @@ public class Controller : MonoBehaviour
 
         if (cardToPurchase != null)
         {
-            InstantiateCardInHand(cardToPurchase.cardData.cardAssignedToObject);
+            InstantiateCardInHand(cardToPurchase.cardData);
             if (cardToPurchase.gameObject != null)
             {
                 Destroy(cardToPurchase.gameObject);
@@ -1615,11 +1643,12 @@ public class Controller : MonoBehaviour
             {
                 if (cardData != null && cardData.isInHand)
                 {
-                    InstantiateCardInHand(cardData.cardAssignedToObject);
+                    InstantiateCardInHand(cardData);
                 }
                 else
                 {
-                    CastCreatureOnTileGivenCardData(cardData);
+                    CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
+                    CastCreatureOnTile(cardToImmediatelyPlay, cardData.positionOnBoard);
                 }
             }
         }
