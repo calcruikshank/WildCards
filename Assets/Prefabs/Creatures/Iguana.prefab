@@ -653,12 +653,15 @@ MonoBehaviour:
     creatureType: 0
     rarity: 0
     traversableType: 0
+    positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
+    purchaseCost: 3
+    numberOfTimesThisCanDie: 1
+    keywords: 
   speed: 1
   range: 1
   UsageRate: 1
   highlightForCreatureSelected: {fileID: 0}
-  attack: 0
   currentAttack: 0
   CurrentHealth: 0
   MaxHealth: 2
@@ -685,13 +688,10 @@ MonoBehaviour:
   targetedCellForChoosingTargets: {fileID: 0}
   tempLineRendererBetweenCreaturesGameObject: {fileID: 0}
   canAttackIcon: {fileID: 0}
-  lifelink: 0
-  deathtouch: 0
-  taunt: 0
-  stealth: 0
   garrison: 0
   targetToFollow: {fileID: 0}
   structureToFollow: {fileID: 0}
+  keywords: 
 --- !u!1 &6330952787006823200
 GameObject:
   m_ObjectHideFlags: 0

@@ -504,25 +504,29 @@ MonoBehaviour:
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
+    tier: -4
     currentAttack: 0
     currentHealth: 0
     range: 0
     cardTitle: 
-    cardArtSprite: {fileID: 0}
-    commonRarityImage: {fileID: 0}
+    cardArtSprite: {fileID: 21300000, guid: 401607b02e93f734cb9cabbdb7e4be54, type: 3}
+    commonRarityImage: {fileID: 21300000, guid: 9b018ffb1c587804c8fcbcd443eaf627, type: 3}
     uncommonImage: {fileID: 0}
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
-    cardType: 0
+    manaType: 1
+    cardAssignedToObject: 43
+    cardType: 3
     creatureType: 0
     rarity: 0
     traversableType: 0
+    positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 5273430486cd99d4c810dea6e694db28, type: 3}
+    purchaseCost: 3
+    numberOfTimesThisCanDie: 1
+    keywords: 
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 9e1a2e23a6fa6fe4db28b9d6350edfea, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
   - {fileID: 1087928222838449144}

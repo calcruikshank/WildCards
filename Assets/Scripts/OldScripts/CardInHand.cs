@@ -27,10 +27,10 @@ public class CardInHand : MonoBehaviour
 
     // Purchasable Information
     public bool isPurchasable;
-    public Transform purchasableGlow;
-    public GameObject visualVersion;
+    [HideInInspector]public Transform purchasableGlow;
+    [HideInInspector] public GameObject visualVersion;
 
-    public Controller playerOwningCard;
+    [HideInInspector] public Controller playerOwningCard;
     #endregion
 
     #region Unity Methods

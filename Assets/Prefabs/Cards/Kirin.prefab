@@ -300,7 +300,11 @@ MonoBehaviour:
     creatureType: 0
     rarity: 0
     traversableType: 0
+    positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
+    purchaseCost: 3
+    numberOfTimesThisCanDie: 1
+    keywords: 
   GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 6de0f25af600110478a2eae5fd1212d5, type: 3}
   cardArt: {fileID: 4963334460245113095}
   raritySymbols:

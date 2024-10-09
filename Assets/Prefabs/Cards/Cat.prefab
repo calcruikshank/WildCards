@@ -524,6 +524,8 @@ MonoBehaviour:
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
     purchaseCost: 3
+    numberOfTimesThisCanDie: 1
+    keywords: 
   GameObjectToInstantiate: {fileID: 6239865746917987993, guid: e8303e71b9681b847a75e4453a446cdd, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:

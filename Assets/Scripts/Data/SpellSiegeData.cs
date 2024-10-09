@@ -65,7 +65,8 @@ public struct SpellSiegeData
     {
         Creature,
         Spell,
-        Structure
+        Structure,
+        Farmer
     }
     public enum ManaType
     {
