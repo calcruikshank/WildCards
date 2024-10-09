@@ -422,7 +422,7 @@ MonoBehaviour:
     tier: 1
     currentAttack: 1
     currentHealth: 1
-    range: 1
+    range: 2
     cardTitle: Alpaca
     cardArtSprite: {fileID: 21300000, guid: a282f33b638771f479dbe77e7aba3e71, type: 3}
     commonRarityImage: {fileID: 21300000, guid: 9b018ffb1c587804c8fcbcd443eaf627, type: 3}

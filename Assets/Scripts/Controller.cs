@@ -639,9 +639,12 @@ public class Controller : MonoBehaviour
 
     private void HandleCreatureOnBoardSelected(Vector3Int cellSent)
     {
+        creaturesOwned.Remove(selectedOnBoardCreature);
         selectedOnBoardCreature.cardData.positionOnBoard = cellSent;
-        Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(selectedOnBoardCreature.cardData.positionOnBoard);
-        selectedOnBoardCreature.transform.position = positionToSpawn;
+        CardInHand cardToImmediatelyPlay = InstantiateCardInHand(selectedOnBoardCreature.cardData);
+        CastCreatureOnTile(cardToImmediatelyPlay, selectedOnBoardCreature.cardData.positionOnBoard);
+        Destroy(selectedOnBoardCreature.gameObject);
+
         SetStateToNothingSelected();
     }
 
@@ -939,7 +942,9 @@ public class Controller : MonoBehaviour
 
     void HandleCreatureInHandSelected(Vector3Int cellSent)
     {
-        CastCreatureOnTile(locallySelectedCard, cellSent);
+        Creature creatureToETB = CastCreatureOnTile(locallySelectedCard, cellSent);
+
+        creatureToETB.OnETB();
         cardsInHand.Remove(locallySelectedCard);
         SetStateToNothingSelected();
     }
@@ -989,7 +994,7 @@ public class Controller : MonoBehaviour
         Destroy(locallySelectedCardInHandToTurnOff.gameObject);
     }
 
-    public void CastCreatureOnTile(CardInHand cardSelectedSent, Vector3Int cellSent)
+    public Creature CastCreatureOnTile(CardInHand cardSelectedSent, Vector3Int cellSent)
     {
         Debug.Log("Spawning creature on tile ");
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
@@ -1004,13 +1009,12 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-        instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
-        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData.positionOnBoard = cellSent;
         instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
+        instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
+        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent.cardData);
-        instantiatedCreature.GetComponent<Creature>().OnETB();
 
         #region assignRebirthAbility
         if (instantiatedCreature.GetComponent<Cat>() != null)
@@ -1032,6 +1036,8 @@ public class Controller : MonoBehaviour
         {
             //instantiatedCreature.GetComponent<Creature>().SetStructureToFollow(opponent.instantiatedCaste, instantiatedCreature.GetComponent<Creature>().actualPosition);
         }
+
+        return instantiatedCreature.GetComponent<Creature>();
     }
 
 

@@ -983,7 +983,11 @@ public class Creature : MonoBehaviour
         this.numberOfTimesThisCanDie = cardSelected.numberOfTimesThisCanDie;
         Debug.Log("Setting original card to " + cardSelected);
         originalCard = GameManager.singleton.GetCardAssociatedWithType(cardSelected.cardAssignedToObject).GetComponent<CardInHand>();
-        originalCardTransform = Instantiate(originalCard.transform, GameManager.singleton.scalableUICanvas.transform);
+
+        if (originalCardTransform == null)
+        {
+            originalCardTransform = Instantiate(originalCard.transform, GameManager.singleton.scalableUICanvas.transform);
+        }
         originalCardTransform.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
         originalCardTransform.transform.localEulerAngles = Vector3.zero;
         originalCardTransform.transform.localScale = originalCardTransform.transform.localScale * 2f;
@@ -1078,6 +1082,7 @@ public class Creature : MonoBehaviour
 
     private void OnDestroy()
     {
+        Destroy(canAttackIcon.gameObject);
         OnMouseExit();
     }
     public virtual void OnDeath()
