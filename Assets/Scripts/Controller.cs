@@ -338,6 +338,10 @@ public class Controller : MonoBehaviour
                 {
                     if (cellPositionSentToClients != grid.WorldToCell(mousePosition))
                     {
+                        if (selectedOnBoardCreature || selectedOnBoardFarmer)
+                        {
+                            LeftClickQueue(grid.WorldToCell(mousePosition));
+                        }
                         if (!CheckForRaycast())
                         {
                             LeftClickQueue(grid.WorldToCell(mousePosition));
@@ -364,12 +368,16 @@ public class Controller : MonoBehaviour
                 mousePositionWorldPoint = raycastHit.point;
                 cellPositionSentToClients = grid.WorldToCell(mousePositionWorldPoint);
             }
-            if (currentFarmerHoveringOver)
+            if (selectedOnBoardCreature || selectedOnBoardFarmer)
+            {
+                LeftClickQueue(cellPositionSentToClients);
+            }
+            if (currentFarmerHoveringOver && state != State.FarmerOnBoardSelected)
             {
                 SetStateToFarmerOnBoardSelected();
                 return;
             }
-            if (currentCreatureHoveringOver)
+            if (currentCreatureHoveringOver && state != State.CreatureOnBoardSelected)
             {
                 SetStateToCreatureOnBoardSelected();
                 return;
@@ -428,7 +436,7 @@ public class Controller : MonoBehaviour
         selectedOnBoardCreature = null;
         selectedOnBoardFarmer = currentFarmerHoveringOver;
 
-        foreach (Collider col in selectedOnBoardCreature.GetComponentsInChildren<Collider>())
+        foreach (Collider col in selectedOnBoardFarmer.GetComponentsInChildren<Collider>())
         {
             col.enabled = false;
         }
@@ -491,6 +499,14 @@ public class Controller : MonoBehaviour
     public bool ShowingPurchasableHarvestTiles = false;
     void LeftClickQueue(Vector3Int positionSent)
     {
+        if (selectedOnBoardCreature || selectedOnBoardFarmer)
+        {
+            if (CheckToSeeIfCanSpawnCreature(positionSent))
+            {
+                LocalLeftClick(positionSent);
+                return;
+            }
+        }
         if (locallySelectedCard != null && locallySelectedCard.cardData.cardType == SpellSiegeData.CardType.Creature && locallySelectedCard.playerOwningCard != null)
         {
             if (CheckToSeeIfCanSpawnCreature(positionSent))
@@ -511,15 +527,6 @@ public class Controller : MonoBehaviour
             return;
         }
 
-        if (selectedOnBoardCreature || selectedOnBoardFarmer)
-        {
-            if (CheckToSeeIfCanSpawnCreature(positionSent))
-            {
-                Debug.Log("calling here " + positionSent);
-                LocalLeftClick(positionSent);
-                return;
-            }
-        }
     }
 
     public void SetVisualsToNothingSelectedLocally()
@@ -594,6 +601,7 @@ public class Controller : MonoBehaviour
 
     void LocalLeftClick(Vector3Int positionSent)
     {
+        Debug.Log(state + " state before farm check");
         switch (state)
         {
             case State.PlacingCastle:
@@ -623,13 +631,17 @@ public class Controller : MonoBehaviour
 
     private void HandleFarmerOnBoardSelected(Vector3Int cellSent)
     {
-        SetOwningTile(cellSent);
+        PurchaseHarvestTile(cellSent);
+        RemoveTileFromHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(selectedOnBoardFarmer.cardData.positionOnBoard));
         selectedOnBoardFarmer.cardData.positionOnBoard = cellSent;
         SetStateToNothingSelected();
     }
 
     private void HandleCreatureOnBoardSelected(Vector3Int cellSent)
     {
+        selectedOnBoardCreature.cardData.positionOnBoard = cellSent;
+        Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(selectedOnBoardCreature.cardData.positionOnBoard);
+        selectedOnBoardCreature.transform.position = positionToSpawn;
         SetStateToNothingSelected();
     }
 
@@ -933,6 +945,13 @@ public class Controller : MonoBehaviour
     }
     public virtual bool CheckToSeeIfCanSpawnCreature(Vector3Int cellSent)
     {
+        if (harvestedTiles.Contains(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent)))
+        {
+            SetVisualsToNothingSelectedLocally();
+            SetStateToNothingSelected();
+            //show error
+            return false;
+        }
         if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent) == null)
         {
             SetVisualsToNothingSelectedLocally();

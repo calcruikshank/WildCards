@@ -245,6 +245,7 @@ public class BaseTile : MonoBehaviour
         }
         if (instantiatedManaSymbol != null)
         {
+            instantiatedManaSymbol.gameObject.SetActive(false);
             instantiatedManaSymbol.GetChild(0).gameObject.SetActive(false);
             instantiatedManaSymbol.GetComponent<Image>().color = opaqueColor;
             //costText.gameObject.SetActive(true);
