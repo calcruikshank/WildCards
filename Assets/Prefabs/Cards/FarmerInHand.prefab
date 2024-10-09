@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 8490984263599025761}
   - component: {fileID: 9141729900352354612}
   m_Layer: 5
-  m_Name: Farmer
+  m_Name: FarmerInHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1012,6 +1012,10 @@ public class Creature : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if (playerOwningCreature.state == Controller.State.NothingSelected)
+        {
+            playerOwningCreature.currentCreatureHoveringOver = this;
+        }
         rangeLr.enabled = true;
         if (playerOwningCreature.locallySelectedCard != null)
         {
@@ -1038,6 +1042,14 @@ public class Creature : MonoBehaviour
 
     private void OnMouseExit()
     {
+        HideVisuals();
+        //}
+    }
+
+    public void HideVisuals()
+    {
+
+        playerOwningCreature.currentCreatureHoveringOver = null;
         //if (playerOwningCreature.locallySelectedCreature != this)
         //{
         if (originalCardTransform != null)
@@ -1052,8 +1064,6 @@ public class Creature : MonoBehaviour
         {
             playerOwningCreature.locallySelectedCard.gameObject.SetActive(true);
         }
-
-        //}
     }
 
 

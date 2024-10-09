@@ -21,6 +21,8 @@ public class Controller : MonoBehaviour
         PlacingCastle,
         SelectingDeck,
         FarmerInHandSelected,
+        FarmerOnBoardSelected,
+        CreatureOnBoardSelected,
         Waiting
     }
 
@@ -108,6 +110,9 @@ public class Controller : MonoBehaviour
 
     public bool hoveringOverSubmit;
 
+    public Creature currentCreatureHoveringOver;
+    public Farmer currentFarmerHoveringOver;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -177,7 +182,7 @@ public class Controller : MonoBehaviour
     }
 
     [SerializeField] GameObject castlePrefab;
-    
+
     private void SpawnCastleForPlayer(Vector3 position)
     {
 
@@ -252,7 +257,8 @@ public class Controller : MonoBehaviour
         }
     }
 
-
+    public Farmer selectedOnBoardFarmer;
+    public Creature selectedOnBoardCreature;
 
     // Update is called once per frame
     protected virtual void Update()
@@ -292,6 +298,18 @@ public class Controller : MonoBehaviour
             Vector3 cardPosition = Camera.main.ScreenToWorldPoint(screenPoint);
             locallySelectedCard.transform.position = new Vector3(cardPosition.x, cardPosition.y, cardPosition.z);
         }
+
+        if (state == State.CreatureOnBoardSelected)
+        {
+            if (selectedOnBoardCreature != null)
+            {
+                var screenPoint = Input.mousePosition;
+                screenPoint.z = Camera.main.transform.position.y - 3; //distance of the plane from the camera
+                Vector3 positionToMoveCreatureTo = Camera.main.ScreenToWorldPoint(screenPoint);
+                selectedOnBoardCreature.transform.position = new Vector3(positionToMoveCreatureTo.x, positionToMoveCreatureTo.y, positionToMoveCreatureTo.z);
+            }
+        }
+
         if (Input.GetMouseButtonDown(1))
         {
             SetVisualsToNothingSelectedLocally();
@@ -320,6 +338,16 @@ public class Controller : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
+            if (currentFarmerHoveringOver)
+            {
+                SetStateToFarmerOnBoardSelected();
+                return;
+            }
+            if (currentCreatureHoveringOver)
+            {
+                SetStateToCreatureOnBoardSelected();
+                return;
+            }
             if (hoveringOverSubmit)
             {
                 SubmitPlayerData();
@@ -360,6 +388,37 @@ public class Controller : MonoBehaviour
         }
 
     }
+
+    private void SetStateToCreatureOnBoardSelected()
+    {
+        if (state != State.NothingSelected)
+        {
+            return;
+        }
+        selectedOnBoardFarmer = null;
+        selectedOnBoardCreature = null;
+        selectedOnBoardCreature = currentCreatureHoveringOver;
+
+        selectedOnBoardCreature.HideVisuals();
+        foreach (Collider col in selectedOnBoardCreature.GetComponentsInChildren<Collider>())
+        {
+            col.enabled = false;
+        }
+        state = State.CreatureOnBoardSelected;
+    }
+
+    private void SetStateToFarmerOnBoardSelected()
+    {
+        if (state != State.NothingSelected)
+        {
+            return;
+        }
+        selectedOnBoardFarmer = null;
+        selectedOnBoardCreature = null;
+        selectedOnBoardFarmer = currentFarmerHoveringOver;
+        state = State.FarmerOnBoardSelected;
+    }
+
     private bool CheckToSeeIfClickedHarvestTileCanBePurchased(Vector3Int tilePositionSent)
     {
         if (!harvestedTiles.Contains(BaseMapTileState.singleton.GetBaseTileAtCellPosition(tilePositionSent)))
@@ -554,17 +613,16 @@ public class Controller : MonoBehaviour
                 }
 
                 SetOwningTile(cellSent);
-
+                locallySelectedCard.GetComponent<CardInHand>().cardData.positionOnBoard = cellSent;
                 CastFarmerOnTile(locallySelectedCard.GetComponent<CardInHand>().cardData);
                 SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
 
                 AddTileToHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent));
                 RemoveCardFromHand(locallySelectedCard);
                 RemoveCardFromHand(locallySelectedCardInHandToTurnOff);
-                Destroy(locallySelectedCardInHandToTurnOff);
+                Destroy(locallySelectedCardInHandToTurnOff.gameObject);
                 SetVisualsToNothingSelectedLocally();
                 SetStateToNothingSelected();
-
                 return;
             }
         }
@@ -575,7 +633,7 @@ public class Controller : MonoBehaviour
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cardDataSent.positionOnBoard);
 
         CardInHand cardAssociatedWithType = GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject);
-        GameObject instantiatedFarmer = Instantiate(GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject).GameObjectToInstantiate, positionToSpawn, Quaternion.identity);
+        GameObject instantiatedFarmer = Instantiate(cardAssociatedWithType.GameObjectToInstantiate, positionToSpawn, Quaternion.identity);
         if (environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard))
         {
             GameObject instantiatedObject = environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard);
@@ -587,8 +645,8 @@ public class Controller : MonoBehaviour
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
         instantiatedFarmer.GetComponent<Farmer>().cardData = cardDataSent;
-        instantiatedFarmer.GetComponent<Farmer>().SetToPlayerOwningFarmer(this);
         instantiatedFarmer.GetComponent<Farmer>().cardData.isInHand = false;
+        instantiatedFarmer.GetComponent<Farmer>().SetToPlayerOwningFarmer(this);
         farmersOwned.Add(instantiatedFarmer.GetComponent<Farmer>());
     }
 
@@ -1194,6 +1252,26 @@ public class Controller : MonoBehaviour
 
     public void SetStateToNothingSelected()
     {
+        if (selectedOnBoardFarmer != null)
+        {
+            foreach (Collider col in selectedOnBoardFarmer.GetComponentsInChildren<Collider>())
+            {
+                col.enabled = true;
+            }
+            Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(selectedOnBoardFarmer.cardData.positionOnBoard);
+            selectedOnBoardFarmer.transform.position = positionToSpawn;
+        }
+        if (selectedOnBoardCreature != null)
+        {
+            foreach (Collider col in selectedOnBoardCreature.GetComponentsInChildren<Collider>())
+            {
+                col.enabled = true;
+            }
+            Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(selectedOnBoardCreature.cardData.positionOnBoard);
+            selectedOnBoardCreature.transform.position = positionToSpawn;
+        }
+        selectedOnBoardFarmer = null;
+        selectedOnBoardCreature = null;
         if (locallySelectedCard != null)
         {
             locallySelectedCard = null;
@@ -1360,7 +1438,7 @@ public class Controller : MonoBehaviour
             cardToPurchase = null;
             return;
         }
-        
+
         if (cardToPurchase != null)
         {
             InstantiateCardInHand(cardToPurchase.cardData.cardAssignedToObject);
@@ -1401,9 +1479,9 @@ public class Controller : MonoBehaviour
         RoundConfiguration roundConfiguration = new RoundConfiguration
         {
             allOwnedCards = allOwnedCardsInScene,
-            round = playerData.currentRound      
+            round = playerData.currentRound
         };
-        
+
         RoundConfiguration existingConfig = playerData.playerRoundConfigurations
             .Find(config => config != null && config.round == roundConfiguration.round);
 
@@ -1441,7 +1519,7 @@ public class Controller : MonoBehaviour
             Directory.CreateDirectory(directoryPath);
         }
 
-        string filePath = $"{directoryPath}{playerGuid}.txt"; 
+        string filePath = $"{directoryPath}{playerGuid}.txt";
         string json = JsonUtility.ToJson(playerData);
 
         File.WriteAllText(filePath, json);
