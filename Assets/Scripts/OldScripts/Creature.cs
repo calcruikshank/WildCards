@@ -971,7 +971,7 @@ public class Creature : MonoBehaviour
         rangeLr.SetPositions(rangePositionsSent.ToArray());
     }
 
-    CardInHand originalCard;
+    public CardInHand originalCard;
     Transform originalCardTransform;
     internal void SetOriginalCard(CardData cardSelected)
     {

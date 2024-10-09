@@ -7,7 +7,7 @@ public class Farmer : MonoBehaviour
 {
     public CardData cardData;
     public Controller playerOwningFarmer;
-    CardInHand originalCard;
+    public CardInHand originalCard;
     Transform originalCardTransform;
 
 
@@ -78,6 +78,21 @@ public class Farmer : MonoBehaviour
             Color imageColor = tmp.color;
             imageColor.a = 1f;
             tmp.color = imageColor;
+        }
+    }
+    public void HideVisuals()
+    {
+
+        playerOwningFarmer.currentCreatureHoveringOver = null;
+        //if (playerOwningCreature.locallySelectedCreature != this)
+        //{
+        if (originalCardTransform != null)
+        {
+            originalCardTransform.gameObject.SetActive(false);
+        }
+        if (playerOwningFarmer.locallySelectedCard != null)
+        {
+            playerOwningFarmer.locallySelectedCard.gameObject.SetActive(true);
         }
     }
 }

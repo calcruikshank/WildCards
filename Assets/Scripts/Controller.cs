@@ -309,6 +309,16 @@ public class Controller : MonoBehaviour
                 selectedOnBoardCreature.transform.position = new Vector3(positionToMoveCreatureTo.x, positionToMoveCreatureTo.y, positionToMoveCreatureTo.z);
             }
         }
+        if (state == State.FarmerOnBoardSelected)
+        {
+            if (selectedOnBoardFarmer != null)
+            {
+                var screenPoint = Input.mousePosition;
+                screenPoint.z = Camera.main.transform.position.y - 3; //distance of the plane from the camera
+                Vector3 positionToMoveCreatureTo = Camera.main.ScreenToWorldPoint(screenPoint);
+                selectedOnBoardFarmer.transform.position = new Vector3(positionToMoveCreatureTo.x, positionToMoveCreatureTo.y, positionToMoveCreatureTo.z);
+            }
+        }
 
         if (Input.GetMouseButtonDown(1))
         {
@@ -405,6 +415,7 @@ public class Controller : MonoBehaviour
             col.enabled = false;
         }
         state = State.CreatureOnBoardSelected;
+        ShowViablePlacableTilesDoNotRequireCardInHand();
     }
 
     private void SetStateToFarmerOnBoardSelected()
@@ -416,7 +427,10 @@ public class Controller : MonoBehaviour
         selectedOnBoardFarmer = null;
         selectedOnBoardCreature = null;
         selectedOnBoardFarmer = currentFarmerHoveringOver;
+
+        selectedOnBoardFarmer.HideVisuals();
         state = State.FarmerOnBoardSelected;
+        ShowViablePlacableTilesDoNotRequireCardInHand();
     }
 
     private bool CheckToSeeIfClickedHarvestTileCanBePurchased(Vector3Int tilePositionSent)
@@ -793,7 +807,17 @@ public class Controller : MonoBehaviour
 
         return false;
     }
-
+    private void ShowViablePlacableTilesDoNotRequireCardInHand()
+    {
+        foreach (KeyValuePair<Vector3Int, BaseTile> kvp in tilesOwned)
+        {
+            if (kvp.Value.CreatureOnTile() == null && !harvestedTiles.Contains(kvp.Value))
+            {
+                kvp.Value.HighlightTile();
+                highlightedTiles.Add(kvp.Value);
+            }
+        }
+    }
     List<BaseTile> highlightedTiles = new List<BaseTile>();
     private void ShowViablePlacableTiles(CardInHand locallySelectedCardInHandToTurnOff)
     {
@@ -1254,7 +1278,7 @@ public class Controller : MonoBehaviour
     {
         if (selectedOnBoardFarmer != null)
         {
-            foreach (Collider col in selectedOnBoardFarmer.GetComponentsInChildren<Collider>())
+            foreach (Collider col in selectedOnBoardFarmer.GetComponents<Collider>())
             {
                 col.enabled = true;
             }
@@ -1263,7 +1287,7 @@ public class Controller : MonoBehaviour
         }
         if (selectedOnBoardCreature != null)
         {
-            foreach (Collider col in selectedOnBoardCreature.GetComponentsInChildren<Collider>())
+            foreach (Collider col in selectedOnBoardCreature.GetComponents<Collider>())
             {
                 col.enabled = true;
             }
