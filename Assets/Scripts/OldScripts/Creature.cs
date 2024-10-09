@@ -1082,7 +1082,10 @@ public class Creature : MonoBehaviour
 
     private void OnDestroy()
     {
-        Destroy(canAttackIcon.gameObject);
+        if (canAttackIcon != null)
+        {
+            Destroy(canAttackIcon.gameObject);
+        }
         OnMouseExit();
     }
     public virtual void OnDeath()

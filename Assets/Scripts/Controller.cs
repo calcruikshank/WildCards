@@ -68,7 +68,7 @@ public class Controller : MonoBehaviour
     public CardInHand locallySelectedCard;
     public List<Vector3> allVertextPointsInTilesOwned = new List<Vector3>();
 
-    [SerializeField] Transform instantiatedPlayerUI;
+    [SerializeField] public Transform instantiatedPlayerUI;
     protected Transform cardParent;
 
     protected Canvas canvasMain;
@@ -155,12 +155,15 @@ public class Controller : MonoBehaviour
         }
 
         SpawnAFarmerUnderFarmerParent();
+
+        GameManager.singleton.opponentInScene.GetComponent<Opponent>().StartFromGameManager();
+
     }
 
     [SerializeField] Transform farmerParent;
 
     [SerializeField] CardInHand farmerCardInHand;
-    private void SpawnAFarmerUnderFarmerParent()
+    protected void SpawnAFarmerUnderFarmerParent()
     {
         Instantiate(farmerCardInHand, farmerParent);
     }
@@ -174,16 +177,16 @@ public class Controller : MonoBehaviour
     {
     }
     private bool gameStarted = false;
-    private void StartGame()
+    protected virtual void StartGame()
     {
         StartGameCoroutine();
         SpawnCastleForPlayer(new Vector3(-9, 0, 0));
         OnTurn();
     }
 
-    [SerializeField] GameObject castlePrefab;
+    [SerializeField] protected GameObject castlePrefab;
 
-    private void SpawnCastleForPlayer(Vector3 position)
+    protected virtual void SpawnCastleForPlayer(Vector3 position)
     {
 
         GameObject castleInstance = Instantiate(castlePrefab, position, Quaternion.identity);
@@ -194,7 +197,7 @@ public class Controller : MonoBehaviour
         LocalPlaceCastle(new Vector3Int(-7, 0, 0));
 
     }
-    public void StartGameCoroutine()
+    public virtual void StartGameCoroutine()
     {
         col.a = 1;
         transparentCol = col;
@@ -220,7 +223,7 @@ public class Controller : MonoBehaviour
         grid = GameManager.singleton.grid;
         castle = GameManager.singleton.castleTransform;
     }
-    protected void SpawnHUD()
+    protected virtual void SpawnHUD()
     {
         //instantiatedPlayerUI = Instantiate(playerHud, canvasMain.transform);
         cardParent = instantiatedPlayerUI.GetComponentInChildren<CustomHorizontalLayoutGroup>().transform;
@@ -631,8 +634,8 @@ public class Controller : MonoBehaviour
 
     private void HandleFarmerOnBoardSelected(Vector3Int cellSent)
     {
-        PurchaseHarvestTile(cellSent);
         RemoveTileFromHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(selectedOnBoardFarmer.cardData.positionOnBoard));
+        PurchaseHarvestTile(cellSent);
         selectedOnBoardFarmer.cardData.positionOnBoard = cellSent;
         SetStateToNothingSelected();
     }
@@ -675,7 +678,7 @@ public class Controller : MonoBehaviour
 
                 SetOwningTile(cellSent);
                 locallySelectedCard.GetComponent<CardInHand>().cardData.positionOnBoard = cellSent;
-                CastFarmerOnTile(locallySelectedCard.GetComponent<CardInHand>().cardData);
+                CastFarmerOnTile(locallySelectedCard.GetComponent<CardInHand>());
                 SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
 
                 AddTileToHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent));
@@ -688,16 +691,16 @@ public class Controller : MonoBehaviour
             }
         }
     }
-    public void CastFarmerOnTile(CardData cardDataSent)
+    public void CastFarmerOnTile(CardInHand cardInHandSent)
     {
         Debug.Log("Spawning creature on tile ");
-        Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cardDataSent.positionOnBoard);
+        Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cardInHandSent.cardData.positionOnBoard);
 
-        CardInHand cardAssociatedWithType = GameManager.singleton.GetCardAssociatedWithType(cardDataSent.cardAssignedToObject).GetComponent<CardInHand>();
+        CardInHand cardAssociatedWithType = GameManager.singleton.GetCardAssociatedWithType(cardInHandSent.cardData.cardAssignedToObject).GetComponent<CardInHand>();
         GameObject instantiatedFarmer = Instantiate(cardAssociatedWithType.GameObjectToInstantiate, positionToSpawn, Quaternion.identity);
-        if (environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard))
+        if (environmentMap.GetInstantiatedObject(cardInHandSent.cardData.positionOnBoard))
         {
-            GameObject instantiatedObject = environmentMap.GetInstantiatedObject(cardDataSent.positionOnBoard);
+            GameObject instantiatedObject = environmentMap.GetInstantiatedObject(cardInHandSent.cardData.positionOnBoard);
             if (instantiatedObject.GetComponent<ChangeTransparency>() == null)
             {
                 instantiatedObject.AddComponent<ChangeTransparency>();
@@ -705,13 +708,15 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-        instantiatedFarmer.GetComponent<Farmer>().cardData = cardDataSent;
+        instantiatedFarmer.GetComponent<Farmer>().cardData = cardInHandSent.cardData;
         instantiatedFarmer.GetComponent<Farmer>().cardData.isInHand = false;
         instantiatedFarmer.GetComponent<Farmer>().SetToPlayerOwningFarmer(this);
+
         farmersOwned.Add(instantiatedFarmer.GetComponent<Farmer>());
+        RemoveCardFromHand(cardInHandSent);
     }
 
-    void LocalPlaceCastle(Vector3Int positionSent)
+    protected virtual void LocalPlaceCastle(Vector3Int positionSent)
     {
         foreach (KeyValuePair<Vector3Int, BaseTile> bt in BaseMapTileState.singleton.baseTiles)
         {
@@ -719,11 +724,18 @@ public class Controller : MonoBehaviour
         }
 
         placedCellPosition = positionSent;
+        if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(positionSent) == null){
+
+            Debug.LogError("tile at " + positionSent + " is null");
+            return;
+        }
         if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(positionSent).traverseType == SpellSiegeData.traversableType.Untraversable)
         {
             return;
         }
+        //Vector3 positionToSpawn = baseMap.GetCellCenterWorld(placedCellPosition);
         SetOwningTile(placedCellPosition);
+
 
         foreach (BaseTile neighbor in BaseMapTileState.singleton.GetBaseTileAtCellPosition(positionSent).neighborTiles)
         {
@@ -736,6 +748,7 @@ public class Controller : MonoBehaviour
             }
         }
     }
+
 
     protected void AddStructureToTile(Structure structure, Vector3Int positionSent)
     {
@@ -1586,9 +1599,13 @@ public class Controller : MonoBehaviour
         {
             allOwnedCardsInScene.Add(creaturesOwned[i].cardData);
         }
+        for (int i = 0; i < farmersOwned.Count; i++)
+        {
+            allOwnedCardsInScene.Add(farmersOwned[i].cardData);
+        }
     }
 
-    private void SavePlayerConfigLocally(PlayerData playerData, string playerGuid)
+    protected virtual void SavePlayerConfigLocally(PlayerData playerData, string playerGuid)
     {
         string directoryPath = $"{Application.persistentDataPath}/playerData/";
         if (!Directory.Exists(directoryPath))
@@ -1673,7 +1690,15 @@ public class Controller : MonoBehaviour
                 else
                 {
                     CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
-                    CastCreatureOnTile(cardToImmediatelyPlay, cardData.positionOnBoard);
+                    if (cardData.cardType == SpellSiegeData.CardType.Creature)
+                    {
+                        CastCreatureOnTile(cardToImmediatelyPlay, cardData.positionOnBoard);
+                    }
+                    if (cardData.cardType == SpellSiegeData.CardType.Farmer)
+                    {
+                        CastFarmerOnTile(cardToImmediatelyPlay);
+                        PurchaseHarvestTile(cardData.positionOnBoard);
+                    }
                 }
             }
         }

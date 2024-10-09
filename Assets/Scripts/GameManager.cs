@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
     }
 
     public Controller playerInScene;
+    public Controller opponentInScene;
 
     [SerializeField]public List<GameObject> allCardsInGame;
 
@@ -180,6 +181,11 @@ public class GameManager : MonoBehaviour
     }
     public SpellSiegeData.Cards GetCardAssociatedWithTier(int tierSent)
     {
+
+        //temp todo remove next line
+        tierSent = 1;
+
+
         GameObject selectedObject;
 
         List<GameObject> shuffledListOfAllCards = Shuffle(allCardsInGame);
