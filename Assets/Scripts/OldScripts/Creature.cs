@@ -512,6 +512,7 @@ public class Creature : MonoBehaviour
         {
             tileCurrentlyOn = BaseMapTileState.singleton.GetBaseTileAtCellPosition(currentCellPosition);
         }
+
         if (previousTilePosition != tileCurrentlyOn)
         {
             CalculateAllTilesWithinRange();
@@ -519,32 +520,46 @@ public class Creature : MonoBehaviour
             previousTilePosition = tileCurrentlyOn;
             tileCurrentlyOn.AddCreatureToTile(this);
         }
+
         if (currentTargetedStructure != null)
         {
             targetedCell = BaseMapTileState.singleton.GetBaseTileAtCellPosition(currentCellPosition);
             targetedCellForChoosingTargets = BaseMapTileState.singleton.GetBaseTileAtCellPosition(currentCellPosition);
+
+            // Determine the direction of movement
+            Vector3Int nextCellPosition;
             if (currentTargetedStructure.currentCellPosition.x < this.currentCellPosition.x)
             {
-                targetedCell = BaseMapTileState.singleton.GetBaseTileAtCellPosition(new Vector3Int(currentCellPosition.x - 1, currentCellPosition.y, currentCellPosition.z));
-                targetedCellForChoosingTargets = BaseMapTileState.singleton.GetBaseTileAtCellPosition(new Vector3Int(currentCellPosition.x - 1, currentCellPosition.y, currentCellPosition.z));
-
+                nextCellPosition = new Vector3Int(currentCellPosition.x - 1, currentCellPosition.y, currentCellPosition.z);
                 animatorForObject.transform.localEulerAngles = new Vector3(0, -90, 0);
             }
             else
             {
-                targetedCell = BaseMapTileState.singleton.GetBaseTileAtCellPosition(new Vector3Int(currentCellPosition.x + 1, currentCellPosition.y, currentCellPosition.z));
-                targetedCellForChoosingTargets = BaseMapTileState.singleton.GetBaseTileAtCellPosition(new Vector3Int(currentCellPosition.x + 1, currentCellPosition.y, currentCellPosition.z));
-
+                nextCellPosition = new Vector3Int(currentCellPosition.x + 1, currentCellPosition.y, currentCellPosition.z);
                 animatorForObject.transform.localEulerAngles = new Vector3(0, 90, 0);
             }
-            //animatorForObject.SetTrigger("Run");
-            actualPosition = new Vector3(targetedCell.transform.position.x, this.transform.position.y, targetedCell.transform.position.z);
-            currentCellPosition = grid.WorldToCell(new Vector3(actualPosition.x, 0, actualPosition.z));
-            SetStateToIdle();
-            CheckForCreaturesWithinRange();
-            ChooseTarget();
+
+            // Check if the next targeted cell contains a creature
+            if (BaseMapTileState.singleton.GetCreatureAtTile(nextCellPosition) == null)
+            {
+                targetedCell = BaseMapTileState.singleton.GetBaseTileAtCellPosition(nextCellPosition);
+                targetedCellForChoosingTargets = BaseMapTileState.singleton.GetBaseTileAtCellPosition(nextCellPosition);
+
+                actualPosition = new Vector3(targetedCell.transform.position.x, this.transform.position.y, targetedCell.transform.position.z);
+                currentCellPosition = grid.WorldToCell(new Vector3(actualPosition.x, 0, actualPosition.z));
+
+                SetStateToIdle();
+                CheckForCreaturesWithinRange();
+                ChooseTarget();
+            }
+            else
+            {
+                // Handle case where the targeted cell contains a creature (e.g., stay in place or choose another action)
+                SetStateToIdle();
+            }
         }
     }
+
 
     void DrawLine()
     {
