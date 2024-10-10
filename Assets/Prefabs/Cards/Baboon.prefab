@@ -417,13 +417,13 @@ MonoBehaviour:
     greenManaCost: 0
     whiteManaCost: 0
     blackManaCost: 0
-    redManaCost: 0
+    redManaCost: 1
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
-    range: 0
-    cardTitle: 
+    tier: 1
+    currentAttack: 2
+    currentHealth: 1
+    range: 1
+    cardTitle: Baboon
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
@@ -431,17 +431,17 @@ MonoBehaviour:
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
     manaType: 0
-    cardAssignedToObject: 0
+    cardAssignedToObject: 42
     cardType: 0
-    creatureType: 0
-    rarity: 0
+    creatureType: 9
+    rarity: 2
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
     purchaseCost: 3
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: a106e344cbfa7a2448e2b3edca3563b9, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: a106e344cbfa7a2448e2b3edca3563b9, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:
   - {fileID: 1865930526497011896}
