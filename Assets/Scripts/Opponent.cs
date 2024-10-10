@@ -135,9 +135,17 @@ public class Opponent : Controller
         
     }
     public static Vector3Int MirrorVector(Vector3Int input, int center = 0)
+{
+    // Calculate the mirrored position using the center point
+    int mirroredX = 2 * center - input.x;
+    
+    // Add one to mirroredX only if y is even
+    if (input.y % 2 == 0)
     {
-        // Calculate the mirrored position using the center point
-        int mirroredX = 2 * center - input.x;
-        return new Vector3Int(mirroredX + 1, input.y, input.z);
+        mirroredX += 1;
     }
+
+    return new Vector3Int(mirroredX, input.y, input.z);
+}
+
 }
