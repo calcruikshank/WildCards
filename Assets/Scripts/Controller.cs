@@ -555,9 +555,9 @@ public class Controller : MonoBehaviour
         }
     }
 
-    protected void TiggerCreatureTurn()
+    protected virtual void TiggerCreatureTurn()
     {
-        foreach (Creature kp in creaturesOwned)
+        foreach (Creature kp in creaturesOwned.OrderByDescending(kp => kp.currentCellPosition.x))
         {
             if (kp.AttackIfCreature())
             {
@@ -571,9 +571,9 @@ public class Controller : MonoBehaviour
         }
     }
 
-    public void TriggerCreatureMove()
+    public virtual void TriggerCreatureMove()
     {
-        foreach (Creature kp in creaturesOwned)
+        foreach (Creature kp in creaturesOwned.OrderByDescending(kp => kp.currentCellPosition.x))
         {
             if (!kp.didAttack)
             {

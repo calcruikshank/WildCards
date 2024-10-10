@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class Opponent : Controller
@@ -52,6 +53,34 @@ public class Opponent : Controller
         }
 
     }
+
+    public override void TriggerCreatureMove()
+    {
+        foreach (Creature kp in creaturesOwned.OrderBy(kp => kp.currentCellPosition.x))
+        {
+            if (!kp.didAttack)
+            {
+                kp.OnTurnMoveIfNoCreatures();
+            }
+        }
+    }
+    protected override void TiggerCreatureTurn()
+    {
+        foreach (Creature kp in creaturesOwned.OrderBy(kp => kp.currentCellPosition.x))
+        {
+            if (kp.AttackIfCreature())
+            {
+                kp.didAttack = true;
+                Debug.Log(kp + " attacking");
+            }
+            else
+            {
+                kp.didAttack = false;
+            }
+        }
+    }
+
+
 
 
     public override void InstantiateCardsBasedOnPlayerData(PlayerData playerDataSent)
