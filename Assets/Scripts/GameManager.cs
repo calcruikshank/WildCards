@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Canvas scalableUICanvas;
 
     public bool hasStartedGame = false;
-    public int turnTimer;
 
 
     public VisualAttackParticle rangedVisualAttackParticle;
@@ -79,11 +78,17 @@ public class GameManager : MonoBehaviour
     public List<CardInHand> cardChoices;
 
     public int currentMaxCardChoices = 3;
+
+
+    public float turnTimer;
+    public float turnThreshold = 1f;
+
     private void Awake()
     {
         if (singleton != null) Destroy(this);
         singleton = this;
         state = State.Setup;
+        turnTimer = 0;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -117,7 +122,15 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        
+        if (state == State.Game)
+        {
+
+        }
+        turnTimer += Time.deltaTime;
+        if (turnTimer >= turnThreshold)
+        {
+            TriggerTurn();
+        }
     }
 
     internal void CreatureDied(int creatureID)
@@ -216,5 +229,16 @@ public class GameManager : MonoBehaviour
         {
             creature.Value.StartFighting();
         }
+        state = State.Game;
+        TriggerTurn();
+    }
+
+    private void TriggerTurn()
+    {
+        playerInScene.OnTurn();
+        opponentInScene.OnTurn();
+        playerInScene.OnMove();
+        opponentInScene.OnMove();
+        turnTimer = 0;
     }
 }

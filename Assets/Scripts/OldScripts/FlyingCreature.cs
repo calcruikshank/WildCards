@@ -10,16 +10,8 @@ public class FlyingCreature : Creature
 
     protected override void Update()
     {
-        switch (creatureState)
-        {
-            case CreatureState.Moving:
-                VisualMove();
-                HandleFlyingAnimation();
-                break;
-            case CreatureState.Idle:
-                transform.position = new Vector3(transform.position.x, .1f, transform.position.z);
-                break;
-        }
+        VisualMove();
+        transform.position = new Vector3(transform.position.x, .1f, transform.position.z);
         if (targetToFollow != null)
         {
             Vector3 targetRotation = new Vector3(targetToFollow.transform.position.x, transform.position.y, targetToFollow.transform.position.z) - this.transform.position;

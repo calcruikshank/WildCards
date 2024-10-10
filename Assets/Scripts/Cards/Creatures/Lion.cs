@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Lion : Creature
 {
-    public override void OnTurn()
+    public override void OnTurnMoveIfNoCreatures()
     {
-        base.OnTurn();
+        base.OnTurnMoveIfNoCreatures();
 
         foreach (Creature kvp in playerOwningCreature.creaturesOwned)
         {

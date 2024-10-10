@@ -102,12 +102,7 @@ public class Creature : MonoBehaviour
     }
     protected virtual void Update()
     {
-        switch (creatureState)
-        {
-            case CreatureState.Moving:
-                VisualMove();
-                break;
-        }
+        VisualMove();
         if (targetToFollow != null)
         {
             Vector3 targetRotation = new Vector3(targetToFollow.transform.position.x, transform.position.y, targetToFollow.transform.position.z) - this.transform.position;
@@ -127,28 +122,14 @@ public class Creature : MonoBehaviour
         switch (creatureState)
         {
             case CreatureState.Moving:
-
-                if (garrison)
-                {
-                    SetStateToIdle();
-                }
-                Move();
                 //ChooseTarget();
-                HandleAttackRate();
-                CheckForCreaturesWithinRange();
-                HandleAbilityRate();
                 //DrawLine();
-                ChooseTarget();
                 //HandleFriendlyCreaturesList();
                 //HandleAttack();
                 break;
             case CreatureState.Idle:
                 animatorForObject.SetTrigger("Idle");
-                ChooseTarget();
                 //DrawLine();
-                CheckForCreaturesWithinRange();
-                HandleAttackRate();
-                HandleAbilityRate();
                 if (currentTargetedCreature != null)
                 {
                     // Calculate the direction vector
@@ -164,11 +145,7 @@ public class Creature : MonoBehaviour
                 //HandleAttack();
                 break;
             case CreatureState.Summoned:
-                ChooseTarget();
                 //DrawLine();
-                CheckForCreaturesWithinRange();
-                HandleAttackRate();
-                HandleAbilityRate();
                 //HandleFriendlyCreaturesList();
                 //HandleAttack();
                 break;
@@ -209,10 +186,7 @@ public class Creature : MonoBehaviour
         {
             if (baseTile.CreatureOnTile() != null)
             {
-                if (!creaturesWithinRange.Contains(baseTile.CreatureOnTile()))
-                {
-                    creaturesWithinRange.Add(baseTile.CreatureOnTile());
-                }
+                creaturesWithinRange.Add(baseTile.CreatureOnTile());
                 if (baseTile.CreatureOnTile().playerOwningCreature == this.playerOwningCreature)
                 {
                     if (baseTile.CreatureOnTile() != this)
@@ -238,21 +212,17 @@ public class Creature : MonoBehaviour
 
     }
     public bool tauntFound = false;
-    public virtual void ChooseTarget()
+    public virtual Creature ChooseTarget()
     {
         float lowestHealthCreatureWithinRange = -1;
 
         Creature closestCreature = null;
         float minDistance = float.MaxValue;
+
+        currentTargetedCreature = null;
         tauntFound = false;
         foreach (Creature creatureWithinRange in creaturesWithinRange)
         {
-            if (creatureWithinRange == null)
-            {
-                creaturesWithinRange.Remove(creatureWithinRange);
-                return;
-            }
-
             if (creatureWithinRange.playerOwningCreature != this.playerOwningCreature)
             {
                 // Skip creatures with stealth
@@ -281,42 +251,8 @@ public class Creature : MonoBehaviour
         {
             currentTargetedCreature = closestCreature;
         }
-        if (currentTargetedCreature != null)
-        {
-            if (!IsCreatureWithinRange(currentTargetedCreature))
-            {
-                currentTargetedCreature = null;
-            }
-        }
-        if (targetToFollow != null && targetToFollow.playerOwningCreature != this.playerOwningCreature)
-        {
-            currentTargetedCreature = targetToFollow;
-        }
 
-
-
-
-        if (currentTargetedCreature != null && IsCreatureWithinRange(currentTargetedCreature) && Vector3.Distance(new Vector3(actualPosition.x, this.transform.position.y, actualPosition.z), new Vector3(tileCurrentlyOn.transform.position.x, this.transform.position.y, tileCurrentlyOn.transform.position.z)) < .1f)
-        {
-            creatureState = CreatureState.Idle;
-            return;
-        }
-        if (currentTargetedStructure != null && IsStructureInRange(currentTargetedStructure) && Vector3.Distance(new Vector3(actualPosition.x, this.transform.position.y, actualPosition.z), new Vector3(tileCurrentlyOn.transform.position.x, this.transform.position.y, tileCurrentlyOn.transform.position.z)) < .1f)
-        {
-            creatureState = CreatureState.Idle;
-            return;
-        }
-
-        if (currentTargetedCreature != null && !IsCreatureWithinRange(currentTargetedCreature))
-        {
-            //creatureState = CreatureState.Moving;
-        }
-        if (currentTargetedStructure != null && !IsStructureInRange(currentTargetedStructure) && targetedCellForChoosingTargets.traverseType != SpellSiegeData.traversableType.Untraversable && targetedCellForChoosingTargets.CreatureOnTile() == null && targetedCellForChoosingTargets.structureOnTile == null)
-        {
-            //&&
-            creatureState = CreatureState.Moving;
-        }
-
+        return closestCreature;
     }
 
 
@@ -330,9 +266,6 @@ public class Creature : MonoBehaviour
 
     public virtual void HandleAttack()
     {
-        CheckForCreaturesWithinRange();
-        ChooseTarget();
-
         if (currentTargetedCreature != null)
         {
             if (IsCreatureWithinRange(currentTargetedCreature))
@@ -471,20 +404,7 @@ public class Creature : MonoBehaviour
         }
     }
 
-    void HandleAttackRate()
-    {
-        if (canAttack)
-        {
-            HandleAttack();
-        }
 
-    }
-
-
-    void HandleAbilityRate()
-    {
-        abilityRateTimer += Time.fixedDeltaTime;
-    }
     public void UpdateCreatureHUD()
     {
         this.healthText.text = CurrentHealth.ToString();
@@ -511,7 +431,7 @@ public class Creature : MonoBehaviour
         this.attackText.text = currentAttack.ToString();
     }
 
-    public virtual void OnTurn()
+    public virtual void OnTurnMoveIfNoCreatures()
     {
         if (turnStealthOff == true)
         {
@@ -520,10 +440,25 @@ public class Creature : MonoBehaviour
                 keywords.Remove(SpellSiegeData.Keywords.Stealth);
             }
         }
-        canAttack = true;
-        canAttackIcon.gameObject.SetActive(true);
+
+
+        Move();
         HandleFriendlyCreaturesList();
     }
+    internal bool AttackIfCreature()
+    {
+        CheckForCreaturesWithinRange();
+        canAttack = true;
+        canAttackIcon.gameObject.SetActive(true);
+        if (ChooseTarget() != null)
+        {
+            HandleAttack();
+            return true;
+        }
+        return false;
+    }
+
+
     public void GiveCounter(int numOfCounters)
     {
         if (this != null && this.transform != null)
@@ -573,7 +508,6 @@ public class Creature : MonoBehaviour
     public BaseTile targetedCellForChoosingTargets;
     public virtual void Move()
     {
-        currentCellPosition = grid.WorldToCell(new Vector3(actualPosition.x, 0, actualPosition.z));
         if (BaseMapTileState.singleton.GetCreatureAtTile(currentCellPosition) == null)
         {
             tileCurrentlyOn = BaseMapTileState.singleton.GetBaseTileAtCellPosition(currentCellPosition);
@@ -603,32 +537,12 @@ public class Creature : MonoBehaviour
 
                 animatorForObject.transform.localEulerAngles = new Vector3(0, 90, 0);
             }
-
-
-
-            if (targetedCell.CreatureOnTile() != null || targetedCell.structureOnTile != null || targetedCell.traverseType == SpellSiegeData.traversableType.Untraversable)
-            {
-                targetedCell = tileCurrentlyOn;
-
-                bool creatureCanMove = false;
-                if (Vector3.Distance(actualPosition, new Vector3(targetedCell.transform.position.x, this.transform.position.y, targetedCell.transform.position.z)) < .05f)
-                {
-                    if (targetedCell.CreatureOnTile() != null)
-                    {
-                        if (targetedCell.CreatureOnTile().playerOwningCreature == this.playerOwningCreature && targetedCell.CreatureOnTile().creatureState == CreatureState.Moving)
-                        {
-                            creatureCanMove = true;
-                        }
-                    }
-                    if (!creatureCanMove)
-                    {
-                        //SetStateToIdle();
-                    }
-                    SetStateToIdle();
-                }
-            }
-            animatorForObject.SetTrigger("Run");
-            actualPosition = Vector3.MoveTowards(actualPosition, new Vector3(targetedCell.transform.position.x, this.transform.position.y, targetedCell.transform.position.z), speed * Time.fixedDeltaTime *.7f);
+            //animatorForObject.SetTrigger("Run");
+            actualPosition = new Vector3(targetedCell.transform.position.x, this.transform.position.y, targetedCell.transform.position.z);
+            currentCellPosition = grid.WorldToCell(new Vector3(actualPosition.x, 0, actualPosition.z));
+            SetStateToIdle();
+            CheckForCreaturesWithinRange();
+            ChooseTarget();
         }
     }
 
@@ -696,7 +610,7 @@ public class Creature : MonoBehaviour
 
     protected void VisualMove()
     {
-        this.transform.position = actualPosition;
+        this.transform.position = Vector3.MoveTowards(this.transform.position, actualPosition, 10 * Time.deltaTime);
         //Vector3 targetRotation = targetedPosition - this.transform.position;
         //creatureImage.forward = Vector3.RotateTowards(creatureImage.forward, targetRotation, 10 * Time.deltaTime, 0);
 
@@ -766,12 +680,12 @@ public class Creature : MonoBehaviour
 
         HidePathfinderLR();
         this.actualPosition = BaseMapTileState.singleton.GetWorldPositionOfCell(currentCellPosition);
-        this.transform.position = actualPosition;
         currentCellPosition = grid.WorldToCell(new Vector3(this.actualPosition.x, 0, this.actualPosition.z));
         tileCurrentlyOn = BaseMapTileState.singleton.GetBaseTileAtCellPosition(currentCellPosition);
         tileCurrentlyOn.AddCreatureToTile(this);
         creatureState = CreatureState.Idle;
         animatorForObject.SetTrigger("Idle");
+        CalculateAllTilesWithinRange();
     }
 
     #region range
@@ -1243,6 +1157,8 @@ public class Creature : MonoBehaviour
     }
 
     public List<SpellSiegeData.Keywords> keywords;
+    internal bool didAttack = false;
+
     internal void WriteCurrentDataToCardData()
     {
         cardData.currentAttack = (int)this.currentAttack;
@@ -1257,6 +1173,7 @@ public class Creature : MonoBehaviour
     {
         SetStructureToFollow(playerOwningCreature.opponent.instantiatedCaste, actualPosition);
     }
+
 
 
 

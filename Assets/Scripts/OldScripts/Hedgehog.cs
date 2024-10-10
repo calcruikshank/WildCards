@@ -8,7 +8,7 @@ public class Hedgehog : Creature
     {
         return true;
     }
-    public override void ChooseTarget()
+    public virtual Creature ChooseTarget()
     {
         float lowestHealthCreatureWithinRange = -1;
         currentTargetedCreature = null;
@@ -77,8 +77,9 @@ public class Hedgehog : Creature
         if (currentTargetedCreature != null && IsCreatureWithinRange(currentTargetedCreature) && Vector3.Distance(new Vector3(actualPosition.x, this.transform.position.y, actualPosition.z), new Vector3(tileCurrentlyOn.transform.position.x, this.transform.position.y, tileCurrentlyOn.transform.position.z)) < .1f)
         {
             creatureState = CreatureState.Idle;
-            return;
+            return closestCreature;
         }
+        return closestCreature;
 
     }
 }

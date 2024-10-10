@@ -97,7 +97,6 @@ public class Opponent : Controller
     {
         StartGameCoroutine();
         SpawnCastleForPlayer(MirrorVector(new Vector3Int(-9, 0, 0)));
-        OnTurn();
     }
     public override void StartGameCoroutine()
     {

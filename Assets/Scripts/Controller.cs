@@ -181,7 +181,6 @@ public class Controller : MonoBehaviour
     {
         StartGameCoroutine();
         SpawnCastleForPlayer(new Vector3(-9, 0, 0));
-        OnTurn();
     }
 
     [SerializeField] protected GameObject castlePrefab;
@@ -232,33 +231,15 @@ public class Controller : MonoBehaviour
         instantiatedPlayerUI.gameObject.SetActive(true);
     }
 
-    protected virtual void OnTurn()
+    public  void OnTurn()
     {
-        StartTurnPhase();
+        TiggerCreatureTurn();
+    }
+    public  void OnMove()
+    {
+        TriggerCreatureMove();
     }
 
-
-
-    public virtual void StartTurnPhase()
-    {
-        switch (state)
-        {
-            case State.PlacingCastle:
-                break;
-            case State.NothingSelected:
-                TriggerAllCreatureAbilities();
-                break;
-            case State.CreatureInHandSelected:
-                TriggerAllCreatureAbilities();
-                break;
-            case State.SpellInHandSelected:
-                TriggerAllCreatureAbilities();
-                break;
-            case State.StructureInHandSeleced:
-                TriggerAllCreatureAbilities();
-                break;
-        }
-    }
 
     public Farmer selectedOnBoardFarmer;
     public Creature selectedOnBoardCreature;
@@ -574,18 +555,29 @@ public class Controller : MonoBehaviour
         }
     }
 
-    protected void TriggerAllCreatureAbilities()
+    protected void TiggerCreatureTurn()
     {
         foreach (Creature kp in creaturesOwned)
         {
-            kp.OnTurn();
-            Debug.Log(kp + " triggering");
-        }
-        foreach (KeyValuePair<Vector3Int, BaseTile> kp in tilesOwned)
-        {
-            if (kp.Value.CreatureOnTile() != null && kp.Value.CreatureOnTile().playerOwningCreature == kp.Value.playerOwningTile)
+            if (kp.AttackIfCreature())
             {
-                kp.Value.CreatureOnTile().Garrison();
+                kp.didAttack = true;
+                Debug.Log(kp + " attacking");
+            }
+            else
+            {
+                kp.didAttack = false;
+            }
+        }
+    }
+
+    public void TriggerCreatureMove()
+    {
+        foreach (Creature kp in creaturesOwned)
+        {
+            if (!kp.didAttack)
+            {
+                kp.OnTurnMoveIfNoCreatures();
             }
         }
     }
