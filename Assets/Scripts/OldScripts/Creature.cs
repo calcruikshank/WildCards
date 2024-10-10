@@ -746,7 +746,15 @@ public class Creature : MonoBehaviour
         canAttackIcon.position = new Vector3(0, 0f, 0);
         canAttackIcon.localEulerAngles = new Vector3(0, -45, 0);
         canAttackIcon.gameObject.SetActive(true);
-        animatorForObject.transform.localEulerAngles = new Vector3(0, 90, 0);
+
+        if(playerOwningCreature == GameManager.singleton.playerInScene)
+        {
+            animatorForObject.transform.localEulerAngles = new Vector3(0, 90, 0);
+        }
+        else
+        {
+            animatorForObject.transform.localEulerAngles = new Vector3(0, -90, 0);
+        }
 
         creatureState = CreatureState.Summoned;
     }

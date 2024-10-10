@@ -1007,7 +1007,7 @@ public class Controller : MonoBehaviour
         Destroy(locallySelectedCardInHandToTurnOff.gameObject);
     }
 
-    public Creature CastCreatureOnTile(CardInHand cardSelectedSent, Vector3Int cellSent)
+    public virtual Creature CastCreatureOnTile(CardInHand cardSelectedSent, Vector3Int cellSent)
     {
         Debug.Log("Spawning creature on tile ");
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
@@ -1022,10 +1022,10 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-        instantiatedCreature.GetComponent<Creature>().cardData.positionOnBoard = cellSent;
         instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
+        instantiatedCreature.GetComponent<Creature>().cardData.positionOnBoard = cellSent;
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent.cardData);
 
@@ -1041,7 +1041,7 @@ public class Controller : MonoBehaviour
         #endregion
         cardSelectedSent.transform.parent = null;
 
-
+        cardSelectedSent.cardData.isInHand = false;
         RemoveCardFromHand(cardSelectedSent);
 
 
@@ -1692,6 +1692,7 @@ public class Controller : MonoBehaviour
                     CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
                     if (cardData.cardType == SpellSiegeData.CardType.Creature)
                     {
+                        Debug.Log(cardData.positionOnBoard + " position on board to play" );
                         CastCreatureOnTile(cardToImmediatelyPlay, cardData.positionOnBoard);
                     }
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
