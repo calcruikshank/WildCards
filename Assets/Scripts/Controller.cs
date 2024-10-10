@@ -1586,7 +1586,11 @@ public class Controller : MonoBehaviour
         }
 
         SavePlayerConfigLocally(playerData, currentGUIDForPlayer);
+
+
+        GameManager.singleton.StartGame();
     }
+
 
     public void SaveAllCardsInHandAndOnFieldIntoAllCardsData()
     {

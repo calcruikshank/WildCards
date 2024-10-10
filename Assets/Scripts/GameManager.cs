@@ -209,4 +209,12 @@ public class GameManager : MonoBehaviour
         }
         return alpha;
     }
+
+    internal void StartGame()
+    {
+        foreach (KeyValuePair<int, Creature> creature in allCreaturesOnField)
+        {
+            creature.Value.StartFighting();
+        }
+    }
 }

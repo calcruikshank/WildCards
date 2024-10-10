@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
@@ -1019,6 +1020,7 @@ public class Creature : MonoBehaviour
         }
 
         UpdateCreatureHUD();
+        CalculateAllTilesWithinRange();
 
     }
 
@@ -1090,6 +1092,10 @@ public class Creature : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (GameManager.singleton.allCreaturesOnField.ContainsValue(this))
+        {
+            GameManager.singleton.allCreaturesOnField.Remove(this.creatureID);
+        }
         if (canAttackIcon != null)
         {
             Destroy(canAttackIcon.gameObject);
@@ -1245,6 +1251,11 @@ public class Creature : MonoBehaviour
         cardData.numberOfTimesThisCanDie = (int)this.numberOfTimesThisCanDie;
         cardData.keywords = this.keywords;
         cardData.SaveCardDataToPlayerData(playerOwningCreature.playerData, playerOwningCreature.playerData.currentRound);
+    }
+
+    internal void StartFighting()
+    {
+        SetStructureToFollow(playerOwningCreature.opponent.instantiatedCaste, actualPosition);
     }
 
 

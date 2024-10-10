@@ -419,7 +419,7 @@ MonoBehaviour:
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
+    tier: 1
     currentAttack: 0
     currentHealth: 0
     range: 0
@@ -441,7 +441,7 @@ MonoBehaviour:
     purchaseCost: 3
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 720420457433826324, guid: 6592a1524eddcf848b0eeaa18f186426, type: 3}
+  GameObjectToInstantiate: {fileID: 720420457433826325, guid: d40256ab78fd42443893e1d929878017, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:
   - {fileID: 1865930526497011896}

@@ -39,7 +39,7 @@ public class CardInHand : MonoBehaviour
     {
         UpdateMana();
         UpdateAttack();
-        UpdateRarity();
+        //UpdateRarity();
     }
 
     void Start()
@@ -130,19 +130,19 @@ public class CardInHand : MonoBehaviour
             switch (cardData.rarity)
             {
                 case SpellSiegeData.cardRarity.common:
-                    i.sprite = cardData.commonRarityImage;
+                    //i.sprite = cardData.commonRarityImage;
                     break;
                 case SpellSiegeData.cardRarity.uncommon:
-                    i.sprite = cardData.uncommonImage;
+                    //i.sprite = cardData.uncommonImage;
                     break;
                 case SpellSiegeData.cardRarity.rare:
-                    i.sprite = cardData.rareImage;
+                    //i.sprite = cardData.rareImage;
                     break;
                 case SpellSiegeData.cardRarity.mythic:
-                    i.sprite = cardData.mythicImage;
+                    //i.sprite = cardData.mythicImage;
                     break;
                 case SpellSiegeData.cardRarity.Legendary:
-                    i.sprite = cardData.legendaryImage;
+                    //i.sprite = cardData.legendaryImage;
                     break;
             }
         }
