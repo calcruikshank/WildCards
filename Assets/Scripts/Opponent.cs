@@ -41,7 +41,10 @@ public class Opponent : Controller
 
         GameManager.singleton.playerList.Add(this);
         StartGame();
-        //InstantiateCardsBasedOnPlayerData(playerData);
+
+
+
+        InstantiateCardsBasedOnPlayerData(playerData);
         goldAmount = playerData.currentRound + 3;
         if (goldAmount > 10)
         {
@@ -49,10 +52,51 @@ public class Opponent : Controller
         }
 
     }
+
+
+    public override void InstantiateCardsBasedOnPlayerData(PlayerData playerDataSent)
+    {
+        RoundConfiguration roundConfiguration = GrabBuildByCurrentRound(playerDataSent, playerDataSent.currentRound);
+
+        if (roundConfiguration == null)
+        {
+            Debug.LogError("RoundConfiguration is null. Cannot proceed with card instantiation.");
+            return;
+        }
+
+        if (roundConfiguration.allOwnedCards != null && roundConfiguration.allOwnedCards.Count > 0)
+        {
+            foreach (CardData cardData in roundConfiguration.allOwnedCards)
+            {
+                if (cardData != null && cardData.isInHand)
+                {
+                    InstantiateCardInHand(cardData);
+                }
+                else
+                {
+                    CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
+                    if (cardData.cardType == SpellSiegeData.CardType.Creature)
+                    {
+                        CastCreatureOnTile(cardToImmediatelyPlay, MirrorVector(cardData.positionOnBoard));
+                    }
+                    if (cardData.cardType == SpellSiegeData.CardType.Farmer)
+                    {
+                        CastFarmerOnTile(cardToImmediatelyPlay);
+                        PurchaseHarvestTile(MirrorVector(cardData.positionOnBoard));
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No cards found in roundConfiguration.allOwnedCards.");
+        }
+    }
+
     protected override void StartGame()
     {
         StartGameCoroutine();
-        SpawnCastleForPlayer(new Vector3(10, 0, 0));
+        SpawnCastleForPlayer(MirrorVector(new Vector3Int(-9, 0, 0)));
         OnTurn();
     }
     public override void StartGameCoroutine()
@@ -83,12 +127,17 @@ public class Opponent : Controller
 
 
         instantiatedCaste = castleInstance.GetComponent<PlayerKeep>();
-
-        LocalPlaceCastle(new Vector3Int(8, 0, 0));
+        LocalPlaceCastle(MirrorVector( new Vector3Int(-7, 0, 0) ));
 
     }
     protected override void Update()
     {
         
+    }
+    public static Vector3Int MirrorVector(Vector3Int input, int center = 0)
+    {
+        // Calculate the mirrored position using the center point
+        int mirroredX = 2 * center - input.x;
+        return new Vector3Int(mirroredX + 1, input.y, input.z);
     }
 }

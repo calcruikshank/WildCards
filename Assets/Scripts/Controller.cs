@@ -1669,7 +1669,7 @@ public class Controller : MonoBehaviour
         return allPlayersData;
     }
 
-    public void InstantiateCardsBasedOnPlayerData(PlayerData playerDataSent)
+    public virtual void InstantiateCardsBasedOnPlayerData(PlayerData playerDataSent)
     {
         RoundConfiguration roundConfiguration = GrabBuildByCurrentRound(playerDataSent, playerDataSent.currentRound);
 
@@ -1707,7 +1707,7 @@ public class Controller : MonoBehaviour
             Debug.LogWarning("No cards found in roundConfiguration.allOwnedCards.");
         }
     }
-    private RoundConfiguration GrabBuildByCurrentRound(PlayerData playerDataSent, int currentRound)
+    public RoundConfiguration GrabBuildByCurrentRound(PlayerData playerDataSent, int currentRound)
     {
         if (playerDataSent.playerRoundConfigurations != null)
         {
