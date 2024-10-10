@@ -441,7 +441,7 @@ public class Creature : MonoBehaviour
             }
         }
 
-
+        animatorForObject.SetTrigger("Attack");
         Move();
         HandleFriendlyCreaturesList();
     }

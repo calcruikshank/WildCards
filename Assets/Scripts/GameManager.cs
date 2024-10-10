@@ -124,12 +124,11 @@ public class GameManager : MonoBehaviour
     {
         if (state == State.Game)
         {
-
-        }
-        turnTimer += Time.deltaTime;
-        if (turnTimer >= turnThreshold)
-        {
-            TriggerTurn();
+            turnTimer += Time.deltaTime;
+            if (turnTimer >= turnThreshold)
+            {
+                TriggerTurn();
+            }
         }
     }
 
