@@ -145,7 +145,7 @@ public class Opponent : Controller
         mirroredX += 1;
     }
 
-    return new Vector3Int(mirroredX, input.y, input.z);
+    return new Vector3Int(mirroredX, -input.y, input.z);
 }
 
 }
