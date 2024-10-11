@@ -118,8 +118,19 @@ public class Controller : MonoBehaviour
     {
         string directoryPath = $"{Application.persistentDataPath}/playerData/";
 
+        // No player data found, so create a new player
+        playerData = new PlayerData();
+        playerData.currentRound = 0;
+        playerData.playerRoundConfigurations = new List<RoundConfiguration>();
+        string newPlayerGuid = GenerateNewPlayerGuid();
+        allOwnedCardsInScene = new List<CardData>();
+        SavePlayerConfigLocally(playerData, newPlayerGuid);
+        Debug.Log($"New player created with GUID: {newPlayerGuid}");
+
+        currentGUIDForPlayer = newPlayerGuid;
         if (!Directory.Exists(directoryPath) || Directory.GetFiles(directoryPath, "*.txt").Length == 0)
         {
+            /*
             // No player data found, so create a new player
             playerData = new PlayerData();
             playerData.currentRound = 0;
@@ -129,17 +140,18 @@ public class Controller : MonoBehaviour
             SavePlayerConfigLocally(playerData, newPlayerGuid);
             Debug.Log($"New player created with GUID: {newPlayerGuid}");
 
-            currentGUIDForPlayer = newPlayerGuid;
+            currentGUIDForPlayer = newPlayerGuid;*/
         }
         else
         {
+            /*
             // Existing player data found, load the first available player's data
             string[] existingFiles = Directory.GetFiles(directoryPath, "*.txt");
             string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
 
             playerData = GrabPlayerDataByGuid(existingPlayerGuid);
             currentGUIDForPlayer = existingPlayerGuid;
-            Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
+            Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");*/
         }
 
         GrabAllObjectsFromGameManager();
@@ -154,9 +166,13 @@ public class Controller : MonoBehaviour
             goldAmount = 10;
         }
 
+
         SpawnAFarmerUnderFarmerParent();
+        InstantiateCardInHand(farmerCardInHand.cardData);
 
         GameManager.singleton.opponentInScene.GetComponent<Opponent>().StartFromGameManager();
+
+        CheckToSeeIfYouHaveEnoughManaForCreature();
 
     }
 
@@ -708,6 +724,7 @@ public class Controller : MonoBehaviour
         RemoveCardFromHand(cardInHandSent);
         RemoveCardFromHand(locallySelectedCard);
         RemoveCardFromHand(locallySelectedCardInHandToTurnOff);
+        CheckToSeeIfYouHaveEnoughManaForCreature();
     }
 
     protected virtual void LocalPlaceCastle(Vector3Int positionSent)
@@ -1044,9 +1061,40 @@ public class Controller : MonoBehaviour
             //instantiatedCreature.GetComponent<Creature>().SetStructureToFollow(opponent.instantiatedCaste, instantiatedCreature.GetComponent<Creature>().actualPosition);
         }
 
+        CheckToSeeIfYouHaveEnoughManaForCreature();
+
         return instantiatedCreature.GetComponent<Creature>();
     }
 
+    public void CheckToSeeIfYouHaveEnoughManaForCreature()
+    {
+        List<Creature> creaturesToReturn = new List<Creature>();
+
+        foreach (Creature creatureSent in creaturesOwned)
+        {
+            if (creatureSent.cardData.blackManaCost < resources.blackMana ||
+                creatureSent.cardData.redManaCost < resources.redMana ||
+                creatureSent.cardData.whiteManaCost < resources.whiteMana ||
+                creatureSent.cardData.greenManaCost < resources.greenMana)
+            {
+                creaturesToReturn.Add(creatureSent);
+            }
+        }
+
+        // Now process the temporary list to return creatures to hand and destroy them
+        foreach (Creature creature in creaturesToReturn)
+        {
+            ReturnToHand(creature);
+        }
+
+    }
+
+    private void ReturnToHand(Creature creatureSent)
+    {
+        creatureSent.DieWithoutDeathTrigger();
+        creaturesOwned.Remove(creatureSent);
+        InstantiateCardInHand(creatureSent.cardData);
+    }
 
     public void SpawnCreatureOnTileWithoutCard(GameObject animalToSpawn, Vector3Int cellSent, CardInHand cardSelectedSent)
     {
@@ -1362,6 +1410,7 @@ public class Controller : MonoBehaviour
         }
         locallySelectedCard = null;
 
+        CheckToSeeIfYouHaveEnoughManaForCreature();
         state = State.NothingSelected;
     }
     protected void SetStateToWaiting()
@@ -1692,8 +1741,14 @@ public class Controller : MonoBehaviour
                     CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
                     if (cardData.cardType == SpellSiegeData.CardType.Creature)
                     {
-                        Debug.Log(cardData.positionOnBoard + " position on board to play" );
-                        CastCreatureOnTile(cardToImmediatelyPlay, cardData.positionOnBoard);
+                        cardToImmediatelyPlay.cardData.positionOnBoard = cardData.positionOnBoard;
+                        CastCreatureOnTile(cardToImmediatelyPlay, cardToImmediatelyPlay.cardData.positionOnBoard);
+                        if (selectedOnBoardCreature != null)
+                        {
+                            Destroy(selectedOnBoardCreature.gameObject);
+                        }
+
+                        SetStateToNothingSelected();
                     }
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {

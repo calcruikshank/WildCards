@@ -51,6 +51,7 @@ public class Opponent : Controller
         {
             goldAmount = 10;
         }
+        CheckToSeeIfYouHaveEnoughManaForCreature();
 
     }
 

@@ -1217,6 +1217,21 @@ public class Creature : MonoBehaviour
         SetStructureToFollow(playerOwningCreature.opponent.instantiatedCaste, actualPosition);
     }
 
+    internal void DieWithoutDeathTrigger()
+    {
+        Instantiate(GameManager.singleton.onDeathEffect, new Vector3(actualPosition.x, .4f, actualPosition.z), Quaternion.identity);
+        rangeLrGO.SetActive(false);
+
+        if (canAttackIcon != null)
+        {
+            canAttackIcon.gameObject.SetActive(false);
+        }
+        if (this.gameObject != null)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
 
 
 
