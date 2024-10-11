@@ -683,6 +683,7 @@ MonoBehaviour:
   currentTargetedStructure: {fileID: 0}
   tauntFound: 0
   visualAttackParticle: {fileID: 6131268248031804042, guid: 58eb57a8db9362b49a2c9d078230ae67, type: 3}
+  canAttackThisTurn: 1
   animatorForObject: {fileID: 0}
   targetedCell: {fileID: 0}
   targetedCellForChoosingTargets: {fileID: 0}

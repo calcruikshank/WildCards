@@ -23,7 +23,7 @@ public class Sacrifice : TargetedSpell
                 hasStartedCasting = false;
                 for (int i = 0; i < 3; i++)
                 {
-                    creatureTargeted.playerOwningCreature.AddSpecificManaToPool(SpellSiegeData.ManaType.Black);
+                    creatureTargeted.playerOwningCreature.AddGoldToThisTurn();
                 }
                 creatureTargeted.Kill();
             }

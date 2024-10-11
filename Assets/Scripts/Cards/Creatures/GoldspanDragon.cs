@@ -6,6 +6,6 @@ public class GoldspanDragon : FlyingCreature
 {
     public override void OnAttack()
     {
-        playerOwningCreature.AddSpecificManaToPool(SpellSiegeData.ManaType.Red);
+        playerOwningCreature.AddGoldToNextTurn();
     }
 }

@@ -7,6 +7,6 @@ public class Baboon : Creature
     public override void OnAttack()
     {
         base.OnAttack();
-        playerOwningCreature.AddSpecificManaToPool(SpellSiegeData.ManaType.Red);
+        playerOwningCreature.AddGoldToNextTurn();
     }
 }

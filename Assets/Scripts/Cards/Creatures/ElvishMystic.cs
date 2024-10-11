@@ -8,7 +8,6 @@ public class ElvishMystic : Creature
     {
         if (playerOwningCreature.tilesOwned.ContainsValue( tileCurrentlyOn ))
         {
-            playerOwningCreature.AddSpecificManaToPool(tileCurrentlyOn.manaType);
         }
     }
 }

@@ -9,7 +9,7 @@ public class FastMana : Spell
         base.SpecificCastEffect();
         for (int i = 0; i < 2; i++)
         {
-            playerCastingSpell.AddSpecificManaToPool(SpellSiegeData.ManaType.Red);
+            playerCastingSpell.AddGoldToThisTurn();
         }
     }
 

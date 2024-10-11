@@ -263,6 +263,7 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+
         currentLocalHoverCellPosition = grid.WorldToCell(mousePosition);
         mousePosition = mousePositionScript.GetMousePositionWorldPoint();
         if (currentLocalHoverCellPosition != previousCellPosition)
@@ -352,6 +353,10 @@ public class Controller : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
+            if (GameManager.singleton.state == GameManager.State.Game)
+            {
+                GameManager.singleton.TriggerTurn();
+            }
             if (hoveringOverSubmit)
             {
                 SubmitPlayerData();
@@ -1274,6 +1279,8 @@ public class Controller : MonoBehaviour
             SetStateToNothingSelected();
         }
 
+        Debug.Log(cardSent.cardType + " instantiating card in hand");
+
         return instantiatedCardInHandBehaviour;
     }
 
@@ -1305,7 +1312,7 @@ public class Controller : MonoBehaviour
         instantiatedCardInHandBehaviour.CheckToSeeIfPurchasable(resources);
     }
 
-    void RemoveCardFromHand(CardInHand cardToRemove)
+    public void RemoveCardFromHand(CardInHand cardToRemove)
     {
         cardsInHand.Remove(cardToRemove);
         if (cardToRemove != null)
@@ -1447,27 +1454,6 @@ public class Controller : MonoBehaviour
                     }
                 }
             }
-        }
-
-        resourcesChanged.Invoke(resources);
-    }
-    public void AddSpecificManaToPool(SpellSiegeData.ManaType manaTypeSent)
-    {
-        if (manaTypeSent == SpellSiegeData.ManaType.Black)
-        {
-            resources.blackMana++;
-        }
-        if (manaTypeSent == SpellSiegeData.ManaType.Red)
-        {
-            resources.redMana++;
-        }
-        if (manaTypeSent == SpellSiegeData.ManaType.Green)
-        {
-            resources.greenMana++;
-        }
-        if (manaTypeSent == SpellSiegeData.ManaType.White)
-        {
-            resources.whiteMana++;
         }
 
         resourcesChanged.Invoke(resources);
@@ -1614,6 +1600,7 @@ public class Controller : MonoBehaviour
         GameManager.singleton.StartGame();
 
         instantiatedPlayerUI.gameObject.SetActive(false);
+        farmerParent.transform.parent.gameObject.SetActive(false);
     }
 
 
@@ -1700,6 +1687,14 @@ public class Controller : MonoBehaviour
 
     public virtual void InstantiateCardsBasedOnPlayerData(PlayerData playerDataSent)
     {
+        foreach (CardInHand cardInHand in cardsInHand)
+        {
+            Destroy(cardInHand.gameObject);
+        }
+        cardsInHand.Clear();
+
+
+        allOwnedCardsInScene.Clear();
         RoundConfiguration roundConfiguration = GrabBuildByCurrentRound(playerDataSent, playerDataSent.currentRound);
 
         if (roundConfiguration == null)
@@ -1715,6 +1710,7 @@ public class Controller : MonoBehaviour
                 if (cardData != null && cardData.isInHand)
                 {
                     InstantiateCardInHand(cardData);
+                    SetStateToNothingSelected();
                 }
                 else
                 {
@@ -1742,6 +1738,8 @@ public class Controller : MonoBehaviour
                         }
                         SetStateToNothingSelected();
                     }
+
+                    RemoveCardFromHand(cardToImmediatelyPlay);
                 }
             }
         }
@@ -1769,6 +1767,7 @@ public class Controller : MonoBehaviour
     internal void StartRound(PlayerData playerData)
     {
         instantiatedPlayerUI.gameObject.SetActive(true);
+        farmerParent.transform.parent.gameObject.SetActive(true);
         string directoryPath = $"{Application.persistentDataPath}/playerData/";
 
         string existingPlayerGuid = currentGUIDForPlayer; // Assuming you want to load the first file found
@@ -1792,7 +1791,17 @@ public class Controller : MonoBehaviour
 
 
         CheckToSeeIfYouHaveEnoughManaForCreature();
+        goldForNextTurn = 0;
+    }
 
+    public int goldForNextTurn;
+    internal void AddGoldToNextTurn()
+    {
+        goldForNextTurn++;
+    }
+
+    internal void AddGoldToThisTurn()
+    {
     }
 }
 

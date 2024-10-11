@@ -251,7 +251,7 @@ public class GameManager : MonoBehaviour
         TriggerTurn();
     }
 
-    private void TriggerTurn()
+    public void TriggerTurn()
     {
         playerInScene.OnTurn();
         opponentInScene.OnTurn();
