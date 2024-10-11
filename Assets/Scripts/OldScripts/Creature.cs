@@ -445,14 +445,26 @@ public class Creature : MonoBehaviour
         Move();
         HandleFriendlyCreaturesList();
     }
+
+    public bool canAttackThisTurn = true;
     internal bool AttackIfCreature()
     {
         CheckForCreaturesWithinRange();
-        canAttack = true;
-        canAttackIcon.gameObject.SetActive(true);
-        if (ChooseTarget() != null)
+
+        if (canAttackThisTurn)
         {
-            HandleAttack();
+            canAttackIcon.gameObject.SetActive(true);
+            if (ChooseTarget() != null)
+            {
+                canAttack = true;
+                canAttackThisTurn = false;
+                HandleAttack();
+                return true;
+            }
+        }
+        else
+        {
+            canAttackThisTurn = true;
             return true;
         }
         return false;
@@ -539,6 +551,7 @@ public class Creature : MonoBehaviour
                 animatorForObject.transform.localEulerAngles = new Vector3(0, 90, 0);
             }
 
+
             // Check if the next targeted cell contains a creature
             if (BaseMapTileState.singleton.GetCreatureAtTile(nextCellPosition) == null)
             {
@@ -557,9 +570,24 @@ public class Creature : MonoBehaviour
                 // Handle case where the targeted cell contains a creature (e.g., stay in place or choose another action)
                 SetStateToIdle();
             }
+
+
+
+
+        }
+
+
+        if (playerOwningCreature.opponent.instantiatedCaste.tileCurrentlyOn.tilePosition.x == this.tileCurrentlyOn.tilePosition.x)
+        {
+            ExplodeOnPlayerKeep();
         }
     }
 
+    private void ExplodeOnPlayerKeep()
+    {
+        VisualAttackAnimationOnStructure(playerOwningCreature.opponent.instantiatedCaste);
+        this.Die();
+    }
 
     void DrawLine()
     {
