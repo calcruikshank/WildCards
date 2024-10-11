@@ -110,7 +110,6 @@ public class Opponent : Controller
                     }
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
-                        CastFarmerOnTile(cardToImmediatelyPlay);
                         PurchaseHarvestTile(MirrorVector(cardData.positionOnBoard));
                     }
                 }

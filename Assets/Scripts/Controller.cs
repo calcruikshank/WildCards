@@ -671,7 +671,6 @@ public class Controller : MonoBehaviour
                 SetOwningTile(cellSent);
                 locallySelectedCard.GetComponent<CardInHand>().cardData.positionOnBoard = cellSent;
                 CastFarmerOnTile(locallySelectedCard.GetComponent<CardInHand>());
-                SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
 
                 AddTileToHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent));
                 RemoveCardFromHand(locallySelectedCard);
@@ -683,6 +682,7 @@ public class Controller : MonoBehaviour
             }
         }
     }
+
     public void CastFarmerOnTile(CardInHand cardInHandSent)
     {
         Debug.Log("Spawning creature on tile ");
@@ -706,6 +706,8 @@ public class Controller : MonoBehaviour
 
         farmersOwned.Add(instantiatedFarmer.GetComponent<Farmer>());
         RemoveCardFromHand(cardInHandSent);
+        RemoveCardFromHand(locallySelectedCard);
+        RemoveCardFromHand(locallySelectedCardInHandToTurnOff);
     }
 
     protected virtual void LocalPlaceCastle(Vector3Int positionSent)
@@ -1581,6 +1583,8 @@ public class Controller : MonoBehaviour
 
 
         GameManager.singleton.StartGame();
+
+        instantiatedPlayerUI.gameObject.SetActive(false);
     }
 
 
@@ -1693,8 +1697,8 @@ public class Controller : MonoBehaviour
                     }
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
-                        CastFarmerOnTile(cardToImmediatelyPlay);
                         PurchaseHarvestTile(cardData.positionOnBoard);
+                        CastFarmerOnTile(cardToImmediatelyPlay);
                     }
                 }
             }
