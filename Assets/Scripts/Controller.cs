@@ -550,26 +550,6 @@ public class Controller : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
-    {
-        if (GameManager.singleton == null)
-        {
-            return;
-        }
-        switch (state)
-        {
-            case State.PlacingCastle:
-                break;
-            case State.NothingSelected:
-                break;
-            case State.CreatureInHandSelected:
-                break;
-            case State.SpellInHandSelected:
-                break;
-            case State.StructureInHandSeleced:
-                break;
-        }
-    }
 
     protected virtual void TiggerCreatureTurn()
     {
@@ -1754,6 +1734,13 @@ public class Controller : MonoBehaviour
                     {
                         PurchaseHarvestTile(cardData.positionOnBoard);
                         CastFarmerOnTile(cardToImmediatelyPlay);
+
+
+                        if (selectedOnBoardFarmer != null)
+                        {
+                            Destroy(selectedOnBoardFarmer.gameObject);
+                        }
+                        SetStateToNothingSelected();
                     }
                 }
             }
@@ -1779,7 +1766,34 @@ public class Controller : MonoBehaviour
         return new RoundConfiguration();
     }
 
+    internal void StartRound(PlayerData playerData)
+    {
+        instantiatedPlayerUI.gameObject.SetActive(true);
+        string directoryPath = $"{Application.persistentDataPath}/playerData/";
 
+        string existingPlayerGuid = currentGUIDForPlayer; // Assuming you want to load the first file found
+
+        playerData = GrabPlayerDataByGuid(existingPlayerGuid);
+        currentGUIDForPlayer = existingPlayerGuid;
+        Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
+
+        GrabAllObjectsFromGameManager();
+        mousePositionScript = GetComponent<MousePositionScript>();
+
+        InstantiateCardsBasedOnPlayerData(playerData);
+        goldAmount = playerData.currentRound + 3;
+        if (goldAmount > 10)
+        {
+            goldAmount = 10;
+        }
+
+
+        SpawnAFarmerUnderFarmerParent();
+
+
+        CheckToSeeIfYouHaveEnoughManaForCreature();
+
+    }
 }
 
 

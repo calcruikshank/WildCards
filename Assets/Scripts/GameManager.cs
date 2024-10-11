@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using static SpellSiegeData;
 
@@ -101,7 +102,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]public List<GameObject> allCardsInGame;
 
-
     public void SpawnCardChoices()
     {
         for (int i = 0; i < currentMaxCardChoices; i++)
@@ -140,6 +140,25 @@ public class GameManager : MonoBehaviour
             {
                 kvp.Value.OtherCreatureDied(allCreaturesOnField[creatureID]);
             }
+        }
+
+        if (state == State.Game)
+        {
+            if (playerInScene.creaturesOwned.Count <= 0 && opponentInScene.creaturesOwned.Count <= 0)
+            {
+                EndRound();
+            }
+        }
+    }
+
+    private void EndRound()
+    {
+        playerInScene.StartRound(playerInScene.playerData);
+        playerInScene.hoveringOverSubmit = false;
+        state = State.Setup;
+        foreach (KeyValuePair<int, Creature> creature in allCreaturesOnField)
+        {
+            creature.Value.StopFighting();
         }
     }
 
@@ -193,7 +212,6 @@ public class GameManager : MonoBehaviour
     }
     public SpellSiegeData.Cards GetCardAssociatedWithTier(int tierSent)
     {
-
         //temp todo remove next line
         tierSent = 1;
 
@@ -224,6 +242,7 @@ public class GameManager : MonoBehaviour
 
     internal void StartGame()
     {
+        playerInScene.hoveringOverSubmit = false;
         foreach (KeyValuePair<int, Creature> creature in allCreaturesOnField)
         {
             creature.Value.StartFighting();

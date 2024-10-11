@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -176,4 +177,43 @@ public class Opponent : Controller
     return new Vector3Int(mirroredX, -input.y, input.z);
 }
 
+    internal void StartRoundFromGameManager()
+    {
+        string directoryPath = $"{Application.persistentDataPath}/playerData/";
+
+        if (!Directory.Exists(directoryPath) || Directory.GetFiles(directoryPath, "*.txt").Length == 0)
+        {
+            // No player data found, so create a new player
+            playerData = new PlayerData();
+            playerData.currentRound = 0;
+            playerData.playerRoundConfigurations = new List<RoundConfiguration>();
+            string newPlayerGuid = GenerateNewPlayerGuid();
+            allOwnedCardsInScene = new List<CardData>();
+            SavePlayerConfigLocally(playerData, newPlayerGuid);
+            Debug.Log($"New player created with GUID: {newPlayerGuid}");
+
+            currentGUIDForPlayer = newPlayerGuid;
+        }
+        else
+        {
+            // Existing player data found, load the first available player's data
+            string[] existingFiles = Directory.GetFiles(directoryPath, "*.txt");
+            string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
+
+            playerData = GrabPlayerDataByGuid(existingPlayerGuid);
+            currentGUIDForPlayer = existingPlayerGuid;
+            Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
+        }
+
+        GrabAllObjectsFromGameManager();
+        mousePositionScript = GetComponent<MousePositionScript>();
+
+        InstantiateCardsBasedOnPlayerData(playerData);
+        goldAmount = playerData.currentRound + 3;
+        if (goldAmount > 10)
+        {
+            goldAmount = 10;
+        }
+        CheckToSeeIfYouHaveEnoughManaForCreature();
+    }
 }

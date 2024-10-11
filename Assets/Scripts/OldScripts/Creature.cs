@@ -1216,6 +1216,9 @@ public class Creature : MonoBehaviour
     {
         SetStructureToFollow(playerOwningCreature.opponent.instantiatedCaste, actualPosition);
     }
+    internal void StopFighting()
+    {
+    }
 
     internal void DieWithoutDeathTrigger()
     {
@@ -1231,6 +1234,7 @@ public class Creature : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
 
 
 
