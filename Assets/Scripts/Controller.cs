@@ -166,6 +166,7 @@ public class Controller : MonoBehaviour
 
         CheckToSeeIfYouHaveEnoughManaForCreature();
 
+        playerData.currentRound++;
     }
 
     [SerializeField] Transform farmerParent;
@@ -1809,10 +1810,10 @@ public class Controller : MonoBehaviour
 
 
         SpawnAFarmerUnderFarmerParent();
-        playerData.currentRound++;
 
         CheckToSeeIfYouHaveEnoughManaForCreature();
         goldForNextTurn = 0;
+        playerData.currentRound++;
 
     }
 
