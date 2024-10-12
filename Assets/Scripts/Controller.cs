@@ -29,6 +29,7 @@ public class Controller : MonoBehaviour
     public List<CardData> allOwnedCardsInScene;
 
     public int goldAmount = 0;
+    [SerializeField]public TextMeshProUGUI goldText;
     public int turn = 0;
 
     public Dictionary<Vector3Int, BaseTile> tilesOwned = new Dictionary<Vector3Int, BaseTile>();
@@ -118,19 +119,9 @@ public class Controller : MonoBehaviour
     {
         string directoryPath = $"{Application.persistentDataPath}/playerData/";
 
-        // No player data found, so create a new player
-        playerData = new PlayerData();
-        playerData.currentRound = 0;
-        playerData.playerRoundConfigurations = new List<RoundConfiguration>();
-        string newPlayerGuid = GenerateNewPlayerGuid();
-        allOwnedCardsInScene = new List<CardData>();
-        SavePlayerConfigLocally(playerData, newPlayerGuid);
-        Debug.Log($"New player created with GUID: {newPlayerGuid}");
 
-        currentGUIDForPlayer = newPlayerGuid;
         if (!Directory.Exists(directoryPath) || Directory.GetFiles(directoryPath, "*.txt").Length == 0)
         {
-            /*
             // No player data found, so create a new player
             playerData = new PlayerData();
             playerData.currentRound = 0;
@@ -140,18 +131,18 @@ public class Controller : MonoBehaviour
             SavePlayerConfigLocally(playerData, newPlayerGuid);
             Debug.Log($"New player created with GUID: {newPlayerGuid}");
 
-            currentGUIDForPlayer = newPlayerGuid;*/
+            currentGUIDForPlayer = newPlayerGuid;
         }
         else
         {
-            /*
+           
             // Existing player data found, load the first available player's data
             string[] existingFiles = Directory.GetFiles(directoryPath, "*.txt");
             string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
 
             playerData = GrabPlayerDataByGuid(existingPlayerGuid);
             currentGUIDForPlayer = existingPlayerGuid;
-            Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");*/
+            Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
         }
 
         GrabAllObjectsFromGameManager();
@@ -160,7 +151,8 @@ public class Controller : MonoBehaviour
         GameManager.singleton.playerList.Add(this);
         StartGame();
         InstantiateCardsBasedOnPlayerData(playerData);
-        goldAmount = playerData.currentRound + 3;
+        goldAmount = playerData.currentRound + 1 + goldForNextTurn;
+        goldText.text = goldAmount.ToString();
         if (goldAmount > 10)
         {
             goldAmount = 10;
@@ -181,7 +173,10 @@ public class Controller : MonoBehaviour
     [SerializeField] CardInHand farmerCardInHand;
     protected void SpawnAFarmerUnderFarmerParent()
     {
-        Instantiate(farmerCardInHand, farmerParent);
+        if (farmerParent.childCount == 0)
+        {
+            Instantiate(farmerCardInHand, farmerParent);
+        }
     }
 
     public List<ulong> gameSceneController = new List<ulong>();
@@ -360,6 +355,12 @@ public class Controller : MonoBehaviour
             if (hoveringOverSubmit)
             {
                 SubmitPlayerData();
+
+
+                GameManager.singleton.StartGame();
+
+                instantiatedPlayerUI.gameObject.SetActive(false);
+                farmerParent.transform.parent.gameObject.SetActive(false);
             }
             if (cardToPurchase != null)
             {
@@ -1057,10 +1058,10 @@ public class Controller : MonoBehaviour
 
         foreach (Creature creatureSent in creaturesOwned)
         {
-            if (creatureSent.cardData.blackManaCost < resources.blackMana ||
-                creatureSent.cardData.redManaCost < resources.redMana ||
-                creatureSent.cardData.whiteManaCost < resources.whiteMana ||
-                creatureSent.cardData.greenManaCost < resources.greenMana)
+            if (creatureSent.cardData.blackManaCost > resources.blackMana ||
+                creatureSent.cardData.redManaCost > resources.redMana ||
+                creatureSent.cardData.whiteManaCost > resources.whiteMana ||
+                creatureSent.cardData.greenManaCost > resources.greenMana)
             {
                 creaturesToReturn.Add(creatureSent);
             }
@@ -1528,6 +1529,8 @@ public class Controller : MonoBehaviour
         if (goldAmount >= cardToPurchase.cardData.purchaseCost)
         {
             goldAmount -= cardToPurchase.cardData.purchaseCost;
+
+            goldText.text = goldAmount.ToString();
         }
         else
         {
@@ -1595,12 +1598,6 @@ public class Controller : MonoBehaviour
         }
 
         SavePlayerConfigLocally(playerData, currentGUIDForPlayer);
-
-
-        GameManager.singleton.StartGame();
-
-        instantiatedPlayerUI.gameObject.SetActive(false);
-        farmerParent.transform.parent.gameObject.SetActive(false);
     }
 
 
@@ -1691,8 +1688,17 @@ public class Controller : MonoBehaviour
         {
             Destroy(cardInHand.gameObject);
         }
+        foreach (Creature creature in creaturesOwned)
+        {
+            Destroy(creature.gameObject);
+        }
+        foreach (Farmer farmer in farmersOwned)
+        {
+            Destroy(farmer.gameObject);
+        }
+        creaturesOwned.Clear();
         cardsInHand.Clear();
-
+        farmersOwned.Clear();
 
         allOwnedCardsInScene.Clear();
         RoundConfiguration roundConfiguration = GrabBuildByCurrentRound(playerDataSent, playerDataSent.currentRound);
@@ -1715,17 +1721,6 @@ public class Controller : MonoBehaviour
                 else
                 {
                     CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
-                    if (cardData.cardType == SpellSiegeData.CardType.Creature)
-                    {
-                        cardToImmediatelyPlay.cardData.positionOnBoard = cardData.positionOnBoard;
-                        CastCreatureOnTile(cardToImmediatelyPlay, cardToImmediatelyPlay.cardData.positionOnBoard);
-                        if (selectedOnBoardCreature != null)
-                        {
-                            Destroy(selectedOnBoardCreature.gameObject);
-                        }
-
-                        SetStateToNothingSelected();
-                    }
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
                         PurchaseHarvestTile(cardData.positionOnBoard);
@@ -1738,6 +1733,27 @@ public class Controller : MonoBehaviour
                         }
                         SetStateToNothingSelected();
                     }
+                    RemoveCardFromHand(cardToImmediatelyPlay);
+                }
+            }
+            foreach (CardData cardData in roundConfiguration.allOwnedCards)
+            {
+                if (cardData != null && !cardData.isInHand)
+                {
+                    CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
+
+                    if (cardData.cardType == SpellSiegeData.CardType.Creature)
+                    {
+                        cardToImmediatelyPlay.cardData.positionOnBoard = cardData.positionOnBoard;
+                        CastCreatureOnTile(cardToImmediatelyPlay, cardToImmediatelyPlay.cardData.positionOnBoard);
+                        if (selectedOnBoardCreature != null)
+                        {
+                            Destroy(selectedOnBoardCreature.gameObject);
+                        }
+
+                        SetStateToNothingSelected();
+                    }
+
 
                     RemoveCardFromHand(cardToImmediatelyPlay);
                 }
@@ -1764,13 +1780,17 @@ public class Controller : MonoBehaviour
         return new RoundConfiguration();
     }
 
-    internal void StartRound(PlayerData playerData)
+    internal void StartRound()
     {
         instantiatedPlayerUI.gameObject.SetActive(true);
         farmerParent.transform.parent.gameObject.SetActive(true);
+
+
         string directoryPath = $"{Application.persistentDataPath}/playerData/";
 
-        string existingPlayerGuid = currentGUIDForPlayer; // Assuming you want to load the first file found
+
+        string[] existingFiles = Directory.GetFiles(directoryPath, "*.txt");
+        string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
 
         playerData = GrabPlayerDataByGuid(existingPlayerGuid);
         currentGUIDForPlayer = existingPlayerGuid;
@@ -1780,18 +1800,20 @@ public class Controller : MonoBehaviour
         mousePositionScript = GetComponent<MousePositionScript>();
 
         InstantiateCardsBasedOnPlayerData(playerData);
-        goldAmount = playerData.currentRound + 3;
-        if (goldAmount > 10)
+        goldAmount = playerData.currentRound + 1;
+        if (goldAmount > 5)
         {
-            goldAmount = 10;
+            goldAmount = 5;
         }
+        goldText.text = goldAmount.ToString();
 
 
         SpawnAFarmerUnderFarmerParent();
-
+        playerData.currentRound++;
 
         CheckToSeeIfYouHaveEnoughManaForCreature();
         goldForNextTurn = 0;
+
     }
 
     public int goldForNextTurn;

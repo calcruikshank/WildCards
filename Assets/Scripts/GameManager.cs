@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
 
     public List<CardInHand> cardChoices;
 
-    public int currentMaxCardChoices = 3;
+     int currentMaxCardChoices = 5;
 
 
     public float turnTimer;
@@ -104,10 +104,19 @@ public class GameManager : MonoBehaviour
 
     public void SpawnCardChoices()
     {
+        if (cardChoices.Count > 0)
+        {
+            for (int i = 0; i < cardChoices.Count; i++)
+            {
+                Destroy(cardChoices[i].gameObject);
+            }
+        }
+        cardChoices.Clear();
         for (int i = 0; i < currentMaxCardChoices; i++)
         {
             GameObject cardGrabbed = GrabRandomCard();
             GameObject instantiatedCard = Instantiate(cardGrabbed.gameObject, parentOfCardSelections.transform);
+            cardChoices.Add(instantiatedCard.GetComponent<CardInHand>());
         }
     }
 
@@ -153,13 +162,14 @@ public class GameManager : MonoBehaviour
 
     private void EndRound()
     {
-        playerInScene.StartRound(playerInScene.playerData);
+        playerInScene.StartRound();
         playerInScene.hoveringOverSubmit = false;
         state = State.Setup;
         foreach (KeyValuePair<int, Creature> creature in allCreaturesOnField)
         {
             creature.Value.StopFighting();
         }
+        SpawnCardChoices();
     }
 
     internal void CreatureEntered(int creatureID)

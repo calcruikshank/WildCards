@@ -275,7 +275,7 @@ public class CardData
 
     public Vector3Int positionOnBoard;
     public bool isInHand;
-    public int purchaseCost = 3;
+    public int purchaseCost = 1;
     public int numberOfTimesThisCanDie = 1;
 
     [SerializeField] public List<SpellSiegeData.Keywords> keywords;

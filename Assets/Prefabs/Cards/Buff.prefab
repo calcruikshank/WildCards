@@ -438,7 +438,7 @@ MonoBehaviour:
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
   GameObjectToInstantiate: {fileID: 720420457433826325, guid: 6592a1524eddcf848b0eeaa18f186426, type: 3}

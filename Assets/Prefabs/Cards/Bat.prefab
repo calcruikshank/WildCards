@@ -499,15 +499,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
-    greenManaCost: 0
+    greenManaCost: 1
     whiteManaCost: 0
-    blackManaCost: 0
+    blackManaCost: 1
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
-    range: 0
+    tier: 4
+    currentAttack: 1
+    currentHealth: 1
+    range: 2
     cardTitle: 
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
@@ -523,10 +523,10 @@ MonoBehaviour:
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: ec67ad1df1cbc8f4882294a41bbfd2ef, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: ec67ad1df1cbc8f4882294a41bbfd2ef, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
   - {fileID: 1087928222838449144}
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Poison, Flying, Stealth, Rebirth: 1, Range: 3'
+  m_text: 'Poison, Flying, Stealth, Rebirth: 1, Range: 2'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
