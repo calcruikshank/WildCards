@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject parentOfCardSelections;
 
-    public List<CardInHand> cardChoices;
+    public List<GameObject> cardChoices = new List<GameObject>();
 
      int currentMaxCardChoices = 5;
 
@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < cardChoices.Count; i++)
             {
-                Destroy(cardChoices[i].gameObject);
+                Destroy(cardChoices[i]);
             }
         }
         cardChoices.Clear();
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject cardGrabbed = GrabRandomCard();
             GameObject instantiatedCard = Instantiate(cardGrabbed.gameObject, parentOfCardSelections.transform);
-            cardChoices.Add(instantiatedCard.GetComponent<CardInHand>());
+            cardChoices.Add(instantiatedCard);
         }
     }
 
