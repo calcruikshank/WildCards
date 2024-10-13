@@ -97,6 +97,8 @@ public class Controller : MonoBehaviour
     public List<Farmer> farmersOwned = new List<Farmer>();
 
 
+    [SerializeField] TextMeshProUGUI currentRoundText;
+
     public enum ActionTaken
     {
         LeftClickBaseMap,
@@ -152,21 +154,28 @@ public class Controller : MonoBehaviour
         StartGame();
         InstantiateCardsBasedOnPlayerData(playerData);
         goldAmount = playerData.currentRound + 1 + goldForNextTurn;
-        goldText.text = goldAmount.ToString();
-        if (goldAmount > 10)
+        if (goldAmount > 3)
         {
-            goldAmount = 10;
+            goldAmount = 3;
         }
+        goldText.text = goldAmount.ToString();
 
 
         SpawnAFarmerUnderFarmerParent();
-        InstantiateCardInHand(farmerCardInHand.cardData);
+
+        if (playerData.currentRound == 0)
+        {
+            InstantiateCardInHand(farmerCardInHand.cardData);
+        }
+
 
         GameManager.singleton.opponentInScene.GetComponent<Opponent>().StartFromGameManager();
 
         CheckToSeeIfYouHaveEnoughManaForCreature();
 
         playerData.currentRound++;
+
+        currentRoundText.text = "Current Round: " + playerData.currentRound;
     }
 
     [SerializeField] Transform farmerParent;
@@ -1802,9 +1811,9 @@ public class Controller : MonoBehaviour
 
         InstantiateCardsBasedOnPlayerData(playerData);
         goldAmount = playerData.currentRound + 1;
-        if (goldAmount > 5)
+        if (goldAmount > 3)
         {
-            goldAmount = 5;
+            goldAmount = 3;
         }
         goldText.text = goldAmount.ToString();
 
@@ -1815,6 +1824,7 @@ public class Controller : MonoBehaviour
         goldForNextTurn = 0;
         playerData.currentRound++;
 
+        currentRoundText.text = "Current Round: " + playerData.currentRound;
     }
 
     public int goldForNextTurn;
