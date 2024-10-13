@@ -19,11 +19,11 @@ public class Opponent : Controller
         StartGame();
         Debug.Log("Starting from game manager ");
 
-        InstantiateCardsBasedOnRoundConfig(GrabRandomOpponentBuildByCurrentRound(playerData.currentRound + 1));
+        InstantiateCardsBasedOnRoundConfig(GrabRandomOpponentBuildByCurrentRound(GameManager.singleton.playerInScene.playerData.currentRound));
         goldAmount = playerData.currentRound + 1;
-        if (goldAmount > 10)
+        if (goldAmount > 3)
         {
-            goldAmount = 10;
+            goldAmount = 3;
         }
         CheckToSeeIfYouHaveEnoughManaForCreature();
 
@@ -37,11 +37,15 @@ public class Opponent : Controller
         {
             string roundConfigJson = File.ReadAllText(roundConfigFilePath);
             Debug.LogError(roundConfigJson);
-            return JsonUtility.FromJson<RoundConfiguration>(roundConfigJson);
+            RoundConfiguration roundConfiguration = JsonUtility.FromJson<RoundConfiguration>(roundConfigJson);
+            if (roundConfiguration.allOwnedCards.Count <= 0)
+            {
+
+            }
+            return roundConfiguration;
         }
         else
         {
-            GameManager.singleton.playerInScene.EndRun();
             Debug.LogWarning($"Round config for round {currentRound} not found.");
             return null;
         }
@@ -115,8 +119,7 @@ public class Opponent : Controller
                     CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
-                        PurchaseHarvestTile(cardData.positionOnBoard);
-                        CastFarmerOnTile(cardToImmediatelyPlay);
+                        PurchaseHarvestTile(MirrorVector(cardToImmediatelyPlay.cardData.positionOnBoard));
 
 
                         if (selectedOnBoardFarmer != null)
@@ -137,7 +140,7 @@ public class Opponent : Controller
                     if (cardData.cardType == SpellSiegeData.CardType.Creature)
                     {
                         cardToImmediatelyPlay.cardData.positionOnBoard = cardData.positionOnBoard;
-                        CastCreatureOnTile(cardToImmediatelyPlay, cardToImmediatelyPlay.cardData.positionOnBoard);
+                        CastCreatureOnTile(cardToImmediatelyPlay, MirrorVector( cardToImmediatelyPlay.cardData.positionOnBoard ));
                         if (selectedOnBoardCreature != null)
                         {
                             Destroy(selectedOnBoardCreature.gameObject);
@@ -211,21 +214,20 @@ public class Opponent : Controller
     return new Vector3Int(mirroredX, -input.y, input.z);
 }
 
-    internal void StartRoundFromGameManager()
+    public void StartRoundFromGameManager()
     {
-        string directoryPath = $"{Application.persistentDataPath}/playerData/";
-
-
-        InstantiateCardsBasedOnRoundConfig(GrabRandomOpponentBuildByCurrentRound(playerData.currentRound));
-
         GrabAllObjectsFromGameManager();
         mousePositionScript = GetComponent<MousePositionScript>();
 
-        InstantiateCardsBasedOnPlayerData(playerData);
-        goldAmount = playerData.currentRound + 3;
-        if (goldAmount > 10)
+        GameManager.singleton.playerList.Add(this);
+        StartGame();
+        Debug.Log("Starting from game manager ");
+
+        InstantiateCardsBasedOnRoundConfig(GrabRandomOpponentBuildByCurrentRound(GameManager.singleton.playerInScene.playerData.currentRound));
+        goldAmount = playerData.currentRound + 1;
+        if (goldAmount > 3)
         {
-            goldAmount = 10;
+            goldAmount = 3;
         }
         CheckToSeeIfYouHaveEnoughManaForCreature();
     }

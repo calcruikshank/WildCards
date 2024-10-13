@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
@@ -130,7 +132,6 @@ public class Controller : MonoBehaviour
             playerData.playerRoundConfigurations = new List<RoundConfiguration>();
             string newPlayerGuid = GenerateNewPlayerGuid();
             allOwnedCardsInScene = new List<CardData>();
-            SavePlayerConfigLocally(playerData, newPlayerGuid);
             Debug.Log($"New player created with GUID: {newPlayerGuid}");
 
             currentGUIDForPlayer = newPlayerGuid;
@@ -1642,9 +1643,11 @@ public class Controller : MonoBehaviour
 
         // Save Opponent Data with Round and RoundConfig
         string roundDirectoryPath = $"{Application.persistentDataPath}/opponentData/round/{playerData.currentRound}/";
+
+        bool endRunAfter = false;
         if (!Directory.Exists(roundDirectoryPath))
         {
-            Directory.CreateDirectory(roundDirectoryPath);
+            Directory.CreateDirectory(roundDirectoryPath); endRunAfter = true;
         }
 
         // Save RoundConfig for the specific round
@@ -1652,6 +1655,10 @@ public class Controller : MonoBehaviour
         RoundConfiguration roundConfig = GrabBuildByCurrentRound(playerData, playerData.currentRound);
         string roundConfigJson = JsonUtility.ToJson(roundConfig);
         File.WriteAllText(roundConfigFilePath, roundConfigJson);
+        if (endRunAfter)
+        {
+            EndRun();
+        }
     }
 
     public PlayerData GrabPlayerDataByGuid(string playerGuid)
@@ -1837,6 +1844,8 @@ public class Controller : MonoBehaviour
         playerData.currentRound++;
 
         currentRoundText.text = "Current Round: " + playerData.currentRound;
+
+        GameManager.singleton.opponentInScene.GetComponent<Opponent>().StartRoundFromGameManager();
     }
 
     public int goldForNextTurn;
@@ -1889,6 +1898,16 @@ public class Controller : MonoBehaviour
         {
             Debug.LogWarning("No player data found to move to lostRuns.");
         }
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        // Reload the active scene using its name
+        //SceneManager.LoadScene(currentScene.name);
+
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#endif
+
+
     }
 
 }
