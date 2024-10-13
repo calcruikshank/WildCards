@@ -169,11 +169,11 @@ public class Controller : MonoBehaviour
         }
 
 
-        GameManager.singleton.opponentInScene.GetComponent<Opponent>().StartFromGameManager();
 
         CheckToSeeIfYouHaveEnoughManaForCreature();
 
         playerData.currentRound++;
+        GameManager.singleton.opponentInScene.GetComponent<Opponent>().StartFromGameManager();
 
         currentRoundText.text = "Current Round: " + playerData.currentRound;
     }
@@ -1629,17 +1629,29 @@ public class Controller : MonoBehaviour
     }
 
     protected virtual void SavePlayerConfigLocally(PlayerData playerData, string playerGuid)
-    {
-        string directoryPath = $"{Application.persistentDataPath}/playerData/";
-        if (!Directory.Exists(directoryPath))
+    {// Save Player Data
+        string playerDirectoryPath = $"{Application.persistentDataPath}/playerData/";
+        if (!Directory.Exists(playerDirectoryPath))
         {
-            Directory.CreateDirectory(directoryPath);
+            Directory.CreateDirectory(playerDirectoryPath);
         }
 
-        string filePath = $"{directoryPath}{playerGuid}.txt";
-        string json = JsonUtility.ToJson(playerData);
+        string playerFilePath = $"{playerDirectoryPath}{playerGuid}.txt";
+        string playerJson = JsonUtility.ToJson(playerData);
+        File.WriteAllText(playerFilePath, playerJson);
 
-        File.WriteAllText(filePath, json);
+        // Save Opponent Data with Round and RoundConfig
+        string roundDirectoryPath = $"{Application.persistentDataPath}/opponentData/round/{playerData.currentRound}/";
+        if (!Directory.Exists(roundDirectoryPath))
+        {
+            Directory.CreateDirectory(roundDirectoryPath);
+        }
+
+        // Save RoundConfig for the specific round
+        string roundConfigFilePath = $"{roundDirectoryPath}roundConfig.txt";
+        RoundConfiguration roundConfig = GrabBuildByCurrentRound(playerData, playerData.currentRound);
+        string roundConfigJson = JsonUtility.ToJson(roundConfig);
+        File.WriteAllText(roundConfigFilePath, roundConfigJson);
     }
 
     public PlayerData GrabPlayerDataByGuid(string playerGuid)
@@ -1836,6 +1848,49 @@ public class Controller : MonoBehaviour
     internal void AddGoldToThisTurn()
     {
     }
+
+    internal void EndRun()
+    {
+        // Define the directory for lost runs
+        string lostRunsDirectoryPath = $"{Application.persistentDataPath}/lostRuns/";
+
+        // Make sure the lostRuns directory exists
+        if (!Directory.Exists(lostRunsDirectoryPath))
+        {
+            Directory.CreateDirectory(lostRunsDirectoryPath);
+        }
+
+        // Define the playerData directory
+        string playerDataDirectoryPath = $"{Application.persistentDataPath}/playerData/";
+
+        // Get the list of existing player data files
+        string[] existingFiles = Directory.GetFiles(playerDataDirectoryPath, "*.txt");
+
+        // Check if there are any files to move
+        if (existingFiles.Length > 0)
+        {
+            // Grab the first player's data file
+            string existingPlayerFilePath = existingFiles[0];
+            string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingPlayerFilePath);
+
+            // Define the new file path in the lostRuns directory
+            string newLostRunFilePath = $"{lostRunsDirectoryPath}{existingPlayerGuid}.txt";
+
+            // Move the player's data file to the lostRuns folder
+            File.Move(existingPlayerFilePath, newLostRunFilePath);
+
+            // Optionally, you can load the moved player's data (as you seem to want to do)
+            PlayerData playerData = GrabPlayerDataByGuid(existingPlayerGuid);
+            currentGUIDForPlayer = existingPlayerGuid;
+
+            Debug.Log($"Moved player data with GUID: {existingPlayerGuid} to lostRuns folder.");
+        }
+        else
+        {
+            Debug.LogWarning("No player data found to move to lostRuns.");
+        }
+    }
+
 }
 
 

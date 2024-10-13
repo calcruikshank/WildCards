@@ -12,48 +12,39 @@ public class Opponent : Controller
 
     public void StartFromGameManager()
     {
-        string directoryPath = $"{Application.persistentDataPath}/playerData/";
-
-        if (!Directory.Exists(directoryPath) || Directory.GetFiles(directoryPath, "*.txt").Length == 0)
-        {
-            // No player data found, so create a new player
-            playerData = new PlayerData();
-            playerData.currentRound = 0;
-            playerData.playerRoundConfigurations = new List<RoundConfiguration>();
-            string newPlayerGuid = GenerateNewPlayerGuid();
-            allOwnedCardsInScene = new List<CardData>();
-            SavePlayerConfigLocally(playerData, newPlayerGuid);
-            Debug.Log($"New player created with GUID: {newPlayerGuid}");
-
-            currentGUIDForPlayer = newPlayerGuid;
-        }
-        else
-        {
-            // Existing player data found, load the first available player's data
-            string[] existingFiles = Directory.GetFiles(directoryPath, "*.txt");
-            string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
-
-            playerData = GrabPlayerDataByGuid(existingPlayerGuid);
-            currentGUIDForPlayer = existingPlayerGuid;
-            Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
-        }
-
         GrabAllObjectsFromGameManager();
         mousePositionScript = GetComponent<MousePositionScript>();
 
         GameManager.singleton.playerList.Add(this);
         StartGame();
+        Debug.Log("Starting from game manager ");
 
-
-
-        InstantiateCardsBasedOnPlayerData(playerData);
-        goldAmount = playerData.currentRound + 3;
+        InstantiateCardsBasedOnRoundConfig(GrabRandomOpponentBuildByCurrentRound(playerData.currentRound + 1));
+        goldAmount = playerData.currentRound + 1;
         if (goldAmount > 10)
         {
             goldAmount = 10;
         }
         CheckToSeeIfYouHaveEnoughManaForCreature();
 
+    }
+
+    private RoundConfiguration GrabRandomOpponentBuildByCurrentRound(int currentRound)
+    {
+        string roundConfigFilePath = $"{Application.persistentDataPath}/opponentData/round/{currentRound}/roundConfig.txt";
+
+        if (File.Exists(roundConfigFilePath))
+        {
+            string roundConfigJson = File.ReadAllText(roundConfigFilePath);
+            Debug.LogError(roundConfigJson);
+            return JsonUtility.FromJson<RoundConfiguration>(roundConfigJson);
+        }
+        else
+        {
+            GameManager.singleton.playerInScene.EndRun();
+            Debug.LogWarning($"Round config for round {currentRound} not found.");
+            return null;
+        }
     }
 
     public override void TriggerCreatureMove()
@@ -84,10 +75,25 @@ public class Opponent : Controller
 
 
 
-
-    public override void InstantiateCardsBasedOnPlayerData(PlayerData playerDataSent)
+    public void InstantiateCardsBasedOnRoundConfig(RoundConfiguration roundConfiguration)
     {
-        RoundConfiguration roundConfiguration = GrabBuildByCurrentRound(playerDataSent, playerDataSent.currentRound);
+        foreach (CardInHand cardInHand in cardsInHand)
+        {
+            Destroy(cardInHand.gameObject);
+        }
+        foreach (Creature creature in creaturesOwned)
+        {
+            Destroy(creature.gameObject);
+        }
+        foreach (Farmer farmer in farmersOwned)
+        {
+            Destroy(farmer.gameObject);
+        }
+        creaturesOwned.Clear();
+        cardsInHand.Clear();
+        farmersOwned.Clear();
+
+        allOwnedCardsInScene.Clear();
 
         if (roundConfiguration == null)
         {
@@ -102,18 +108,46 @@ public class Opponent : Controller
                 if (cardData != null && cardData.isInHand)
                 {
                     InstantiateCardInHand(cardData);
+                    SetStateToNothingSelected();
                 }
                 else
                 {
                     CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
-                    if (cardData.cardType == SpellSiegeData.CardType.Creature)
-                    {
-                        CastCreatureOnTile(cardToImmediatelyPlay, MirrorVector(cardData.positionOnBoard));
-                    }
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
-                        PurchaseHarvestTile(MirrorVector(cardData.positionOnBoard));
+                        PurchaseHarvestTile(cardData.positionOnBoard);
+                        CastFarmerOnTile(cardToImmediatelyPlay);
+
+
+                        if (selectedOnBoardFarmer != null)
+                        {
+                            Destroy(selectedOnBoardFarmer.gameObject);
+                        }
+                        SetStateToNothingSelected();
                     }
+                    RemoveCardFromHand(cardToImmediatelyPlay);
+                }
+            }
+            foreach (CardData cardData in roundConfiguration.allOwnedCards)
+            {
+                if (cardData != null && !cardData.isInHand)
+                {
+                    CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
+
+                    if (cardData.cardType == SpellSiegeData.CardType.Creature)
+                    {
+                        cardToImmediatelyPlay.cardData.positionOnBoard = cardData.positionOnBoard;
+                        CastCreatureOnTile(cardToImmediatelyPlay, cardToImmediatelyPlay.cardData.positionOnBoard);
+                        if (selectedOnBoardCreature != null)
+                        {
+                            Destroy(selectedOnBoardCreature.gameObject);
+                        }
+
+                        SetStateToNothingSelected();
+                    }
+
+
+                    RemoveCardFromHand(cardToImmediatelyPlay);
                 }
             }
         }
@@ -181,29 +215,8 @@ public class Opponent : Controller
     {
         string directoryPath = $"{Application.persistentDataPath}/playerData/";
 
-        if (!Directory.Exists(directoryPath) || Directory.GetFiles(directoryPath, "*.txt").Length == 0)
-        {
-            // No player data found, so create a new player
-            playerData = new PlayerData();
-            playerData.currentRound = 0;
-            playerData.playerRoundConfigurations = new List<RoundConfiguration>();
-            string newPlayerGuid = GenerateNewPlayerGuid();
-            allOwnedCardsInScene = new List<CardData>();
-            SavePlayerConfigLocally(playerData, newPlayerGuid);
-            Debug.Log($"New player created with GUID: {newPlayerGuid}");
 
-            currentGUIDForPlayer = newPlayerGuid;
-        }
-        else
-        {
-            // Existing player data found, load the first available player's data
-            string[] existingFiles = Directory.GetFiles(directoryPath, "*.txt");
-            string existingPlayerGuid = Path.GetFileNameWithoutExtension(existingFiles[0]); // Assuming you want to load the first file found
-
-            playerData = GrabPlayerDataByGuid(existingPlayerGuid);
-            currentGUIDForPlayer = existingPlayerGuid;
-            Debug.Log($"Loaded existing player data with GUID: {existingPlayerGuid}");
-        }
+        InstantiateCardsBasedOnRoundConfig(GrabRandomOpponentBuildByCurrentRound(playerData.currentRound));
 
         GrabAllObjectsFromGameManager();
         mousePositionScript = GetComponent<MousePositionScript>();
