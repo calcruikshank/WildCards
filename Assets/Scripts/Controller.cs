@@ -1650,11 +1650,24 @@ public class Controller : MonoBehaviour
             Directory.CreateDirectory(roundDirectoryPath); endRunAfter = true;
         }
 
-        // Save RoundConfig for the specific round
-        string roundConfigFilePath = $"{roundDirectoryPath}roundConfig.txt";
+        // Save RoundConfig for the specific round in a folder named by playerGuid
+        string playerFolderPath = $"{roundDirectoryPath}{playerGuid}/";
+
+        // Ensure the player's folder exists
+        if (!Directory.Exists(playerFolderPath))
+        {
+            Directory.CreateDirectory(playerFolderPath);
+        }
+
+        // Save RoundConfig file in the player's folder
+        string roundConfigFilePath = $"{playerFolderPath}roundConfig.txt";
+
         RoundConfiguration roundConfig = GrabBuildByCurrentRound(playerData, playerData.currentRound);
         string roundConfigJson = JsonUtility.ToJson(roundConfig);
+
+        // Write the round config to a new file inside the player's folder
         File.WriteAllText(roundConfigFilePath, roundConfigJson);
+
         if (endRunAfter)
         {
             EndRun();

@@ -31,25 +31,62 @@ public class Opponent : Controller
 
     private RoundConfiguration GrabRandomOpponentBuildByCurrentRound(int currentRound)
     {
-        string roundConfigFilePath = $"{Application.persistentDataPath}/opponentData/round/{currentRound}/roundConfig.txt";
+        // Path to the round folder
+        string roundDirectoryPath = $"{Application.persistentDataPath}/opponentData/round/{currentRound}/";
 
-        if (File.Exists(roundConfigFilePath))
+        // Check if the directory exists
+        if (Directory.Exists(roundDirectoryPath))
         {
-            string roundConfigJson = File.ReadAllText(roundConfigFilePath);
-            Debug.LogError(roundConfigJson);
-            RoundConfiguration roundConfiguration = JsonUtility.FromJson<RoundConfiguration>(roundConfigJson);
-            if (roundConfiguration.allOwnedCards.Count <= 0)
-            {
+            // Get all directories (playerGuid folders) inside the round directory
+            string[] playerFolders = Directory.GetDirectories(roundDirectoryPath);
 
+            // Check if any player folders exist
+            if (playerFolders.Length > 0)
+            {
+                // Select a random player's folder (assuming you want a random opponent build)
+                System.Random random = new System.Random();
+                string randomPlayerFolder = playerFolders[random.Next(playerFolders.Length)];
+
+                // Path to the roundConfig.txt in the selected player's folder
+                string roundConfigFilePath = $"{randomPlayerFolder}/roundConfig.txt";
+
+                // Check if the roundConfig.txt exists
+                if (File.Exists(roundConfigFilePath))
+                {
+                    // Read and parse the round config JSON
+                    string roundConfigJson = File.ReadAllText(roundConfigFilePath);
+                    Debug.LogError(roundConfigJson);
+
+                    RoundConfiguration roundConfiguration = JsonUtility.FromJson<RoundConfiguration>(roundConfigJson);
+
+                    // Check if the round configuration has valid data
+                    if (roundConfiguration.allOwnedCards.Count > 0)
+                    {
+                        return roundConfiguration;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Round configuration contains no owned cards.");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"Round config for player in folder {randomPlayerFolder} not found.");
+                }
             }
-            return roundConfiguration;
+            else
+            {
+                Debug.LogWarning($"No player folders found for round {currentRound}.");
+            }
         }
         else
         {
-            Debug.LogWarning($"Round config for round {currentRound} not found.");
-            return null;
+            Debug.LogWarning($"Round directory for round {currentRound} not found.");
         }
+
+        return null;
     }
+
 
     public override void TriggerCreatureMove()
     {
