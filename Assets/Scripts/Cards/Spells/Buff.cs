@@ -6,6 +6,6 @@ public class Buff : TargetedSpell
 {
     protected override void SpecificSpellAbility()
     {
-        creatureTargeted.GiveCounter(3);
+        creatureTargeted.GiveCounter(1);
     }
 }

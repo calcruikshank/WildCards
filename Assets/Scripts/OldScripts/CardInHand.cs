@@ -312,6 +312,7 @@ public class CardData
             // Add the new card data to the list
             roundConfig.allOwnedCards.Add(this);
         }
+        
     }
 }
 

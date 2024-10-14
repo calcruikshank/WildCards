@@ -423,7 +423,7 @@ MonoBehaviour:
     currentAttack: 0
     currentHealth: 0
     range: 0
-    cardTitle: 
+    cardTitle: Attack
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
@@ -431,8 +431,8 @@ MonoBehaviour:
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
     manaType: 0
-    cardAssignedToObject: 0
-    cardType: 0
+    cardAssignedToObject: 41
+    cardType: 1
     creatureType: 0
     rarity: 0
     traversableType: 0

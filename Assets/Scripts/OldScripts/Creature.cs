@@ -25,6 +25,7 @@ public class Creature : MonoBehaviour
     protected Transform creatureImage;
 
     public float currentAttack;
+    public float baseAttack;
     float AttackRate = 4;
     protected float abilityRate = 4;
 
@@ -450,7 +451,8 @@ public class Creature : MonoBehaviour
     internal bool AttackIfCreature()
     {
         CheckForCreaturesWithinRange();
-
+        
+        HandleFriendlyCreaturesList();
         if (canAttackThisTurn)
         {
             canAttackIcon.gameObject.SetActive(true);
@@ -476,6 +478,7 @@ public class Creature : MonoBehaviour
         if (this != null && this.transform != null)
         {
             MaxHealth += numOfCounters;
+            baseAttack += numOfCounters;
             CurrentHealth += numOfCounters;
             currentAttack += numOfCounters;
             cardData.currentAttack += numOfCounters;
@@ -483,10 +486,15 @@ public class Creature : MonoBehaviour
 
             UpdateCreatureHUD();
         }
+        WriteCurrentDataToCardData();
+        if (playerOwningCreature == GameManager.singleton.playerInScene)
+        {
+            playerOwningCreature.SavePlayerConfigLocallyInRoundGUID(playerOwningCreature.playerData, playerOwningCreature.currentGUIDForPlayer);
+        }
     }
 
     public virtual void SetMove(Vector3 positionToTarget, Vector3 originalPosition)
-    {
+    {  
         actualPosition = originalPosition;
         HidePathfinderLR();
         rangeLr.enabled = false;
@@ -586,6 +594,7 @@ public class Creature : MonoBehaviour
     private void ExplodeOnPlayerKeep()
     {
         VisualAttackAnimationOnStructure(playerOwningCreature.opponent.instantiatedCaste);
+        this.numberOfTimesThisCanDie = 0;
         this.Die();
     }
 
@@ -892,8 +901,6 @@ public class Creature : MonoBehaviour
     }
 
 
-    public bool garrison = false;
-
     GameObject rangeLrGO;
     LineRenderer rangeLr;
     private void SetRangeLineRenderer()
@@ -943,6 +950,7 @@ public class Creature : MonoBehaviour
     {
         this.MaxHealth = cardSelected.currentHealth;
         this.currentAttack = cardSelected.currentAttack;
+        this.baseAttack = cardSelected.currentAttack;
         this.CurrentHealth = cardSelected.currentHealth;
         this.range = cardSelected.range;
         this.creatureType = cardSelected.creatureType;
@@ -1205,7 +1213,7 @@ public class Creature : MonoBehaviour
     internal void WriteCurrentDataToCardData()
     {
         cardData.currentAttack = (int)this.currentAttack;
-        cardData.currentHealth = (int)this.CurrentHealth;
+        cardData.currentHealth = (int)this.baseAttack;
         cardData.range = (int)this.range;
         cardData.numberOfTimesThisCanDie = (int)this.numberOfTimesThisCanDie;
         cardData.keywords = this.keywords;
@@ -1215,6 +1223,13 @@ public class Creature : MonoBehaviour
     internal void StartFighting()
     {
         SetStructureToFollow(playerOwningCreature.opponent.instantiatedCaste, actualPosition);
+
+        OnCombatStart();
+    }
+
+    public virtual void OnCombatStart()
+    {
+
     }
     internal void StopFighting()
     {

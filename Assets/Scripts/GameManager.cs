@@ -222,10 +222,6 @@ public class GameManager : MonoBehaviour
     }
     public SpellSiegeData.Cards GetCardAssociatedWithTier(int tierSent)
     {
-        //temp todo remove next line
-        tierSent = 1;
-
-
         GameObject selectedObject;
 
         List<GameObject> shuffledListOfAllCards = Shuffle(allCardsInGame);
@@ -233,6 +229,7 @@ public class GameManager : MonoBehaviour
 
         if (selectedObject == null)
         {
+            selectedObject = shuffledListOfAllCards.FirstOrDefault(s => s.GetComponent<CardInHand>().cardData.tier == 1);
             Debug.LogError("Could not find rarity associated with -> " + tierSent + " defaulting to null");
         }
         return selectedObject.GetComponent<CardInHand>().cardData.cardAssignedToObject;

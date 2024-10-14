@@ -1114,32 +1114,32 @@ MonoBehaviour:
   cardData:
     greenManaCost: 0
     whiteManaCost: 0
-    blackManaCost: 0
+    blackManaCost: 2
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
-    range: 0
-    cardTitle: 
+    tier: 2
+    currentAttack: 1
+    currentHealth: 1
+    range: 1
+    cardTitle: Cerberus
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
+    manaType: 3
+    cardAssignedToObject: 3
     cardType: 0
-    creatureType: 0
-    rarity: 0
+    creatureType: 9
+    rarity: 3
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 2bb5b7051606cb04f88b04baced47ac1, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 2bb5b7051606cb04f88b04baced47ac1, type: 3}
   cardArt: {fileID: 9092829066342199977}
   raritySymbols:
   - {fileID: 1183032668063131393}

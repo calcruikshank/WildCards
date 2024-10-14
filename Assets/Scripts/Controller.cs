@@ -1049,22 +1049,18 @@ public class Controller : MonoBehaviour
         #endregion
         cardSelectedSent.transform.parent = null;
 
-        cardSelectedSent.cardData.isInHand = false;
+
         RemoveCardFromHand(cardSelectedSent);
-
-
-        if (!instantiatedCreature.GetComponent<Creature>().garrison)
-        {
-            //instantiatedCreature.GetComponent<Creature>().SetStructureToFollow(opponent.instantiatedCaste, instantiatedCreature.GetComponent<Creature>().actualPosition);
-        }
 
         CheckToSeeIfYouHaveEnoughManaForCreature();
 
+        cardSelectedSent.cardData.isInHand = false;
         return instantiatedCreature.GetComponent<Creature>();
     }
 
     public void CheckToSeeIfYouHaveEnoughManaForCreature()
     {
+        ResetMana();
         List<Creature> creaturesToReturn = new List<Creature>();
 
         foreach (Creature creatureSent in creaturesOwned)
@@ -1076,8 +1072,11 @@ public class Controller : MonoBehaviour
             {
                 creaturesToReturn.Add(creatureSent);
             }
+            else
+            {
+                SpendManaToCast(creatureSent.cardData);
+            }
         }
-
         // Now process the temporary list to return creatures to hand and destroy them
         foreach (Creature creature in creaturesToReturn)
         {
@@ -1091,6 +1090,9 @@ public class Controller : MonoBehaviour
         creatureSent.DieWithoutDeathTrigger();
         creaturesOwned.Remove(creatureSent);
         InstantiateCardInHand(creatureSent.cardData);
+        creatureSent.cardData.isInHand = true;
+        ResetMana();
+        CheckToSeeIfYouHaveEnoughManaForCreature();
     }
 
     public void SpawnCreatureOnTileWithoutCard(GameObject animalToSpawn, Vector3Int cellSent, CardInHand cardSelectedSent)
@@ -1139,7 +1141,6 @@ public class Controller : MonoBehaviour
                 }
 
                 RemoveCardFromHand(locallySelectedCard);
-                SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
                 GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
                 instantiatedSpell.GetComponent<Spell>().InjectDependencies(cellSent, this);
                 OnSpellCast();
@@ -1152,7 +1153,6 @@ public class Controller : MonoBehaviour
                 Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
 
                 RemoveCardFromHand(locallySelectedCard);
-                SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
                 GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
                 instantiatedSpell.GetComponent<Spell>().InjectDependencies(cellSent, this);
                 OnSpellCast();
@@ -1167,7 +1167,6 @@ public class Controller : MonoBehaviour
                     Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
 
                     RemoveCardFromHand(locallySelectedCard);
-                    SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
                     GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
                     instantiatedSpell.GetComponent<Spell>().InjectDependencies(cellSent, this);
                     OnSpellCast();
@@ -1204,7 +1203,6 @@ public class Controller : MonoBehaviour
 
                 SetOwningTile(cellSent);
 
-                SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
 
                 foreach (BaseTile bt in BaseMapTileState.singleton.GetBaseTileAtCellPosition(cellSent).neighborTiles)
                 {
@@ -1222,13 +1220,14 @@ public class Controller : MonoBehaviour
 
 
 
-    protected void SpendManaToCast(CardInHand cardSelectedSent)
+    protected void SpendManaToCast(CardData cardSelectedSent)
     {
-        /*resources.redMana -= cardSelectedSent.redManaCost;
+        resources.redMana -= cardSelectedSent.redManaCost;
         resources.whiteMana -= cardSelectedSent.whiteManaCost;
         resources.blackMana -= cardSelectedSent.blackManaCost;
         resources.greenMana -= cardSelectedSent.greenManaCost;
-        SpendGenericMana(cardSelectedSent.genericManaCost);*/
+
+
         resourcesChanged.Invoke(resources);
     }
 
@@ -1371,7 +1370,6 @@ public class Controller : MonoBehaviour
     private void CastSpellOnTargetedCreature(Creature creatureSelectedSent)
     {
         Debug.Log(locallySelectedCard + " card selected send to casting spell on target creature");
-        SpendManaToCast(locallySelectedCard.GetComponent<CardInHand>());
         GameObject instantiatedSpell = Instantiate(locallySelectedCard.GameObjectToInstantiate.gameObject, creatureSelectedSent.tileCurrentlyOn.tilePosition, Quaternion.identity);
         instantiatedSpell.GetComponent<TargetedSpell>().InjectDependencies(creatureSelectedSent, this);
         OnSpellCast();
@@ -1629,7 +1627,7 @@ public class Controller : MonoBehaviour
         }
     }
 
-    protected virtual void SavePlayerConfigLocally(PlayerData playerData, string playerGuid)
+    public virtual void SavePlayerConfigLocally(PlayerData playerData, string playerGuid)
     {// Save Player Data
         string playerDirectoryPath = $"{Application.persistentDataPath}/playerData/";
         if (!Directory.Exists(playerDirectoryPath))
@@ -1671,6 +1669,20 @@ public class Controller : MonoBehaviour
         if (endRunAfter)
         {
             EndRun();
+        }
+    }
+    public virtual void SavePlayerConfigLocallyInRoundGUID(PlayerData playerData, string playerGuid)
+    {// Save Player Data
+
+        if (this == GameManager.singleton.playerInScene)
+        {
+            string playerDirectoryPath = $"{Application.persistentDataPath}/playerData/";
+
+
+
+            string playerFilePath = $"{playerDirectoryPath}{playerGuid}.txt";
+            string playerJson = JsonUtility.ToJson(playerData);
+            File.WriteAllText(playerFilePath, playerJson);
         }
     }
 
@@ -1763,6 +1775,7 @@ public class Controller : MonoBehaviour
                 else
                 {
                     CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
+                    cardToImmediatelyPlay.cardData = cardData;
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
                         PurchaseHarvestTile(cardData.positionOnBoard);
@@ -1778,6 +1791,8 @@ public class Controller : MonoBehaviour
                     RemoveCardFromHand(cardToImmediatelyPlay);
                 }
             }
+
+            ResetMana();
             foreach (CardData cardData in roundConfiguration.allOwnedCards)
             {
                 if (cardData != null && !cardData.isInHand)
@@ -1806,6 +1821,18 @@ public class Controller : MonoBehaviour
             Debug.LogWarning("No cards found in roundConfiguration.allOwnedCards.");
         }
     }
+
+    private void ResetMana()
+    {
+        resources.redMana = resources.redManaCap;
+        resources.whiteMana = resources.whiteManaCap;
+        resources.blackMana = resources.blackManaCap;
+        resources.greenMana = resources.greenManaCap;
+
+
+        resourcesChanged.Invoke(resources);
+    }
+
     public RoundConfiguration GrabBuildByCurrentRound(PlayerData playerDataSent, int currentRound)
     {
         if (playerDataSent.playerRoundConfigurations != null)
@@ -1898,13 +1925,8 @@ public class Controller : MonoBehaviour
             // Define the new file path in the lostRuns directory
             string newLostRunFilePath = $"{lostRunsDirectoryPath}{existingPlayerGuid}.txt";
 
-            // Move the player's data file to the lostRuns folder
-            File.Move(existingPlayerFilePath, newLostRunFilePath);
-
-            // Optionally, you can load the moved player's data (as you seem to want to do)
-            PlayerData playerData = GrabPlayerDataByGuid(existingPlayerGuid);
-            currentGUIDForPlayer = existingPlayerGuid;
-
+            File.Delete(existingPlayerFilePath); // Delete the file if it already exists
+           
             Debug.Log($"Moved player data with GUID: {existingPlayerGuid} to lostRuns folder.");
         }
         else

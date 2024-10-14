@@ -55,7 +55,6 @@ public class Opponent : Controller
                 {
                     // Read and parse the round config JSON
                     string roundConfigJson = File.ReadAllText(roundConfigFilePath);
-                    Debug.LogError(roundConfigJson);
 
                     RoundConfiguration roundConfiguration = JsonUtility.FromJson<RoundConfiguration>(roundConfigJson);
 
@@ -138,7 +137,7 @@ public class Opponent : Controller
 
         if (roundConfiguration == null)
         {
-            Debug.LogError("RoundConfiguration is null. Cannot proceed with card instantiation.");
+            Debug.Log("RoundConfiguration is null. Cannot proceed with card instantiation.");
             return;
         }
 
