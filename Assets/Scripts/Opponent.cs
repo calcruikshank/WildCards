@@ -257,7 +257,6 @@ public class Opponent : Controller
         mousePositionScript = GetComponent<MousePositionScript>();
 
         GameManager.singleton.playerList.Add(this);
-        StartGame();
         Debug.Log("Starting from game manager ");
 
         InstantiateCardsBasedOnRoundConfig(GrabRandomOpponentBuildByCurrentRound(GameManager.singleton.playerInScene.playerData.currentRound));
