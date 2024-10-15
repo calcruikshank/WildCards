@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoldspanDragon : FlyingCreature
+public class GoldspanDragon : Creature
 {
     public override void OnAttack()
     {

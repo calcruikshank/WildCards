@@ -230,7 +230,6 @@ public class GameManager : MonoBehaviour
         if (selectedObject == null)
         {
             selectedObject = shuffledListOfAllCards.FirstOrDefault(s => s.GetComponent<CardInHand>().cardData.tier == 1);
-            Debug.LogError("Could not find rarity associated with -> " + tierSent + " defaulting to null");
         }
         return selectedObject.GetComponent<CardInHand>().cardData.cardAssignedToObject;
     }

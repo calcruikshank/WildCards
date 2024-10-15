@@ -2565,8 +2565,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.18761}
-  m_SizeDelta: {x: 12.11955, y: 3.07628}
+  m_AnchoredPosition: {x: 0, y: -0.07242}
+  m_SizeDelta: {x: 11.13887, y: 3.59635}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3050500304256246919
 CanvasRenderer:
@@ -2596,7 +2596,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: When this animal enters lower the cost of dragons in your hand by one red.
+  m_text: Lower the cost of red animals by one red.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
@@ -2623,7 +2623,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.8
+  m_fontSize: 0.9
   m_fontSizeBase: 0.66
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -1114,10 +1114,10 @@ MonoBehaviour:
   cardData:
     greenManaCost: 0
     whiteManaCost: 0
-    blackManaCost: 2
+    blackManaCost: 4
     redManaCost: 0
     genericManaCost: 0
-    tier: 2
+    tier: 4
     currentAttack: 1
     currentHealth: 1
     range: 1

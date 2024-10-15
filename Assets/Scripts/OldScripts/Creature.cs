@@ -489,7 +489,7 @@ public class Creature : MonoBehaviour
         WriteCurrentDataToCardData();
         if (playerOwningCreature == GameManager.singleton.playerInScene)
         {
-            playerOwningCreature.SavePlayerConfigLocallyInRoundGUID(playerOwningCreature.playerData, playerOwningCreature.currentGUIDForPlayer);
+           playerOwningCreature.SavePlayerConfigLocallyInRoundGUID(playerOwningCreature.playerData, playerOwningCreature.currentGUIDForPlayer);
         }
     }
 

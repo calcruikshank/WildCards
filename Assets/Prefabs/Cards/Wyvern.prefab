@@ -600,7 +600,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0.18761}
-  m_SizeDelta: {x: 12.11955, y: 3.07628}
+  m_SizeDelta: {x: 11.03215, y: 4.10691}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &198032678743028451
 CanvasRenderer:
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Double the attack of all creatures in range.
+  m_text: 'Start of combat: Double the attack of all animals in range.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}

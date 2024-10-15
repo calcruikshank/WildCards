@@ -362,6 +362,7 @@ public class Controller : MonoBehaviour
             if (GameManager.singleton.state == GameManager.State.Game)
             {
                 GameManager.singleton.TriggerTurn();
+                return;
             }
             if (hoveringOverSubmit)
             {
@@ -1620,6 +1621,7 @@ public class Controller : MonoBehaviour
         for (int i = 0; i < creaturesOwned.Count; i++)
         {
             allOwnedCardsInScene.Add(creaturesOwned[i].cardData);
+            Debug.Log(creaturesOwned[i].cardData.positionOnBoard + " position on board");
         }
         for (int i = 0; i < farmersOwned.Count; i++)
         {
@@ -1774,10 +1776,10 @@ public class Controller : MonoBehaviour
                 }
                 else
                 {
-                    CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
-                    cardToImmediatelyPlay.cardData = cardData;
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
+                        CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
+                        cardToImmediatelyPlay.cardData = cardData;
                         PurchaseHarvestTile(cardData.positionOnBoard);
                         CastFarmerOnTile(cardToImmediatelyPlay);
 
@@ -1786,33 +1788,33 @@ public class Controller : MonoBehaviour
                         {
                             Destroy(selectedOnBoardFarmer.gameObject);
                         }
+                        RemoveCardFromHand(cardToImmediatelyPlay);
                         SetStateToNothingSelected();
                     }
-                    RemoveCardFromHand(cardToImmediatelyPlay);
                 }
             }
 
             ResetMana();
-            foreach (CardData cardData in roundConfiguration.allOwnedCards)
+            foreach (CardData cardDataInAllOwnedCards in roundConfiguration.allOwnedCards)
             {
-                if (cardData != null && !cardData.isInHand)
+                if (cardDataInAllOwnedCards != null && !cardDataInAllOwnedCards.isInHand)
                 {
-                    CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
-
-                    if (cardData.cardType == SpellSiegeData.CardType.Creature)
+                    if (cardDataInAllOwnedCards.cardType == SpellSiegeData.CardType.Creature)
                     {
-                        cardToImmediatelyPlay.cardData.positionOnBoard = cardData.positionOnBoard;
+                        CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardDataInAllOwnedCards);
+                        cardToImmediatelyPlay.cardData = cardDataInAllOwnedCards;
+                        Debug.Log(cardToImmediatelyPlay.cardData.positionOnBoard + " position on board when instantiating");
+                        cardToImmediatelyPlay.cardData.positionOnBoard = cardDataInAllOwnedCards.positionOnBoard;
                         CastCreatureOnTile(cardToImmediatelyPlay, cardToImmediatelyPlay.cardData.positionOnBoard);
                         if (selectedOnBoardCreature != null)
                         {
                             Destroy(selectedOnBoardCreature.gameObject);
                         }
-
+                        RemoveCardFromHand(cardToImmediatelyPlay);
                         SetStateToNothingSelected();
                     }
 
-
-                    RemoveCardFromHand(cardToImmediatelyPlay);
+;
                 }
             }
         }

@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Hamster : Creature
 {
-    public override void OnDeath()
+    public override void OnAttack()
     {
-        base.OnDeath();
+        base.OnAttack();
+        GiveCounter(1);
     }
 }

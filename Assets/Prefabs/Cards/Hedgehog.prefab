@@ -414,14 +414,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
-    greenManaCost: 0
+    greenManaCost: 2
     whiteManaCost: 0
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
+    tier: 2
+    currentAttack: 1
+    currentHealth: 1
     range: 0
     cardTitle: 
     cardArtSprite: {fileID: 0}
@@ -430,18 +430,18 @@ MonoBehaviour:
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
+    manaType: 1
+    cardAssignedToObject: 40
     cardType: 0
     creatureType: 0
     rarity: 0
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 36f1bbffdc7263e4d8eb59eb18a25493, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 36f1bbffdc7263e4d8eb59eb18a25493, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:
   - {fileID: 1865930526497011896}
@@ -2596,7 +2596,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Garrison, Inifite Range, Does not attack structures.
+  m_text: Inifite Range, Does not attack structures.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}

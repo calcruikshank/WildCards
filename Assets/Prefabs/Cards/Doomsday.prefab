@@ -420,20 +420,20 @@ MonoBehaviour:
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
+    tier: 8
     currentAttack: 0
     currentHealth: 0
     range: 0
-    cardTitle: 
+    cardTitle: Doomsday
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
-    cardType: 0
+    manaType: 3
+    cardAssignedToObject: 34
+    cardType: 1
     creatureType: 0
     rarity: 0
     traversableType: 0
@@ -442,7 +442,7 @@ MonoBehaviour:
     purchaseCost: 3
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 720420457433826324, guid: 0869d3a4ea1ce2d4db090c2d9189b0e0, type: 3}
+  GameObjectToInstantiate: {fileID: 720420457433826325, guid: 0869d3a4ea1ce2d4db090c2d9189b0e0, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:
   - {fileID: 1865930526497011896}
@@ -2616,7 +2616,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Destroy all creatures
+  m_text: Give all of your animals rebirth 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}

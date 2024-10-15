@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Phoenix : FlyingCreature
+public class Phoenix : Creature
 {
     public override void OnOwnerCastSpell()
     {

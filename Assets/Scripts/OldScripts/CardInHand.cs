@@ -299,7 +299,7 @@ public class CardData
         }
 
         // Check if the card already exists in the round's owned cards list
-        CardData existingCard = roundConfig.allOwnedCards.Find(card => card.cardTitle == this.cardTitle);
+        CardData existingCard = roundConfig.allOwnedCards.Find(card => card.positionOnBoard == this.positionOnBoard);
 
         if (existingCard != null)
         {

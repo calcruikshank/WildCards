@@ -151,7 +151,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -709,6 +709,7 @@ MonoBehaviour:
   UsageRate: 1
   highlightForCreatureSelected: {fileID: 4353893006797176972}
   currentAttack: 0
+  baseAttack: 0
   CurrentHealth: 0
   MaxHealth: 4
   attackText: {fileID: 3298186682565764544}
@@ -735,7 +736,6 @@ MonoBehaviour:
   targetedCellForChoosingTargets: {fileID: 0}
   tempLineRendererBetweenCreaturesGameObject: {fileID: 0}
   canAttackIcon: {fileID: 0}
-  garrison: 0
   originalCard: {fileID: 0}
   targetToFollow: {fileID: 0}
   structureToFollow: {fileID: 0}
@@ -978,7 +978,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1084,15 +1084,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2881032626793173799, guid: 8d5d70b8547d4814b93de2d774d8848d, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2881032626793173799, guid: 8d5d70b8547d4814b93de2d774d8848d, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2881032626793173799, guid: 8d5d70b8547d4814b93de2d774d8848d, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2881032626793173799, guid: 8d5d70b8547d4814b93de2d774d8848d, type: 3}
       propertyPath: m_LocalPosition.x

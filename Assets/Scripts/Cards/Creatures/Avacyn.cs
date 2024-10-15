@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Avacyn : FlyingCreature
+public class Avacyn : Creature
 {
     List<Creature> creaturesDoubled = new List<Creature>();
     protected override void CheckForCreaturesWithinRange()
     {
         base.CheckForCreaturesWithinRange();
 
-        MakeIndestructible();
+        //MakeIndestructible();
 
     }
 
