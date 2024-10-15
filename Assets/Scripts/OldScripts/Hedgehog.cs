@@ -8,7 +8,7 @@ public class Hedgehog : Creature
     {
         return true;
     }
-    public virtual Creature ChooseTarget()
+    public override Creature ChooseTarget()
     {
         float lowestHealthCreatureWithinRange = -1;
         currentTargetedCreature = null;

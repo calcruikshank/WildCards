@@ -305,7 +305,7 @@ MonoBehaviour:
     purchaseCost: 3
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 6de0f25af600110478a2eae5fd1212d5, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 6de0f25af600110478a2eae5fd1212d5, type: 3}
   cardArt: {fileID: 4963334460245113095}
   raritySymbols:
   - {fileID: 7997023600208299996}
@@ -2030,7 +2030,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Whenver you buy an animal give this +1/+1
+  m_text: Whenver you buy an animal give this +5/+5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}

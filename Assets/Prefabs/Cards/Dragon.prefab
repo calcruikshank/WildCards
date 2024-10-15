@@ -504,7 +504,7 @@ MonoBehaviour:
     blackManaCost: 0
     redManaCost: 5
     genericManaCost: 0
-    tier: 5
+    tier: 3
     currentAttack: 5
     currentHealth: 5
     range: 5
