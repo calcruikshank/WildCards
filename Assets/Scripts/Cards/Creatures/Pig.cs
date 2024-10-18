@@ -6,5 +6,6 @@ public class Pig : Creature
 {
     public override void OnAttack()
     {
+        base.OnAttack();
     }
 }

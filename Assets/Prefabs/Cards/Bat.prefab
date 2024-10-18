@@ -504,23 +504,23 @@ MonoBehaviour:
     blackManaCost: 1
     redManaCost: 0
     genericManaCost: 0
-    tier: 4
+    tier: 2
     currentAttack: 1
     currentHealth: 1
     range: 2
-    cardTitle: 
+    cardTitle: Bat
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
+    manaType: 3
+    cardAssignedToObject: 33
     cardType: 0
     creatureType: 0
-    rarity: 0
-    traversableType: 0
+    rarity: 3
+    traversableType: 3
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
     purchaseCost: 1

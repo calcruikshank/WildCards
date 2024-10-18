@@ -414,12 +414,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
-    greenManaCost: 2
+    greenManaCost: 3
     whiteManaCost: 0
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 2
+    tier: 3
     currentAttack: 1
     currentHealth: 1
     range: 0
@@ -433,7 +433,7 @@ MonoBehaviour:
     manaType: 1
     cardAssignedToObject: 40
     cardType: 0
-    creatureType: 0
+    creatureType: 9
     rarity: 4
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}

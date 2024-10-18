@@ -663,6 +663,7 @@ MonoBehaviour:
   UsageRate: 1
   highlightForCreatureSelected: {fileID: 4769756027410212970}
   currentAttack: 0
+  baseAttack: 0
   CurrentHealth: 0
   MaxHealth: 3
   attackText: {fileID: 3298186682565764544}
@@ -689,7 +690,6 @@ MonoBehaviour:
   targetedCellForChoosingTargets: {fileID: 0}
   tempLineRendererBetweenCreaturesGameObject: {fileID: 0}
   canAttackIcon: {fileID: 0}
-  garrison: 1
   originalCard: {fileID: 0}
   targetToFollow: {fileID: 0}
   structureToFollow: {fileID: 0}

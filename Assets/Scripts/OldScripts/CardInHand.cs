@@ -314,6 +314,51 @@ public class CardData
         }
         
     }
+
+    public CardData Clone()
+    {
+        return new CardData
+        {
+            // Mana Costs
+            greenManaCost = this.greenManaCost,
+            whiteManaCost = this.whiteManaCost,
+            blackManaCost = this.blackManaCost,
+            redManaCost = this.redManaCost,
+            genericManaCost = this.genericManaCost,
+
+            // Other numeric and enum fields
+            tier = this.tier,
+            currentAttack = this.currentAttack,
+            currentHealth = this.currentHealth,
+            range = this.range,
+
+            // Card Visual Information (reference types like sprites are simply referenced unless you need to deep copy them)
+            cardTitle = this.cardTitle,
+            cardArtSprite = this.cardArtSprite, // Assuming you just want to reference the same sprite
+            commonRarityImage = this.commonRarityImage,
+            uncommonImage = this.uncommonImage,
+            rareImage = this.rareImage,
+            mythicImage = this.mythicImage,
+            legendaryImage = this.legendaryImage,
+
+            // Enums and value types
+            manaType = this.manaType,
+            cardAssignedToObject = this.cardAssignedToObject,
+            cardType = this.cardType,
+            creatureType = this.creatureType,
+            rarity = this.rarity,
+            traversableType = this.traversableType,
+
+            // Position and boolean values
+            positionOnBoard = this.positionOnBoard,
+            isInHand = this.isInHand,
+            purchaseCost = this.purchaseCost,
+            numberOfTimesThisCanDie = this.numberOfTimesThisCanDie,
+
+            // Deep copy for the keywords list
+            keywords = new List<SpellSiegeData.Keywords>(this.keywords)
+        };
+    }
 }
 
 

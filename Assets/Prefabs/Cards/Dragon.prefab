@@ -502,7 +502,7 @@ MonoBehaviour:
     greenManaCost: 0
     whiteManaCost: 0
     blackManaCost: 0
-    redManaCost: 5
+    redManaCost: 3
     genericManaCost: 0
     tier: 3
     currentAttack: 5

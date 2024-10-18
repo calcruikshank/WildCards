@@ -417,13 +417,13 @@ MonoBehaviour:
     greenManaCost: 0
     whiteManaCost: 0
     blackManaCost: 0
-    redManaCost: 0
+    redManaCost: 2
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
-    range: 0
-    cardTitle: 
+    tier: 2
+    currentAttack: 2
+    currentHealth: 2
+    range: 2
+    cardTitle: Iguana
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
@@ -431,17 +431,17 @@ MonoBehaviour:
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
     manaType: 0
-    cardAssignedToObject: 0
+    cardAssignedToObject: 17
     cardType: 0
     creatureType: 0
-    rarity: 0
+    rarity: 1
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: f30b09062e755c042acbf5b6d985b488, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: f30b09062e755c042acbf5b6d985b488, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:
   - {fileID: 1865930526497011896}
@@ -2596,7 +2596,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lower the cost of red animals by one red.
+  m_text: Whenever a friendly animal attacks give it +3 attack.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}

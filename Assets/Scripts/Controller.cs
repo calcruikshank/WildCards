@@ -714,7 +714,7 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-        instantiatedFarmer.GetComponent<Farmer>().cardData = cardInHandSent.cardData;
+        instantiatedFarmer.GetComponent<Farmer>().cardData = cardInHandSent.cardData.Clone();
         instantiatedFarmer.GetComponent<Farmer>().cardData.isInHand = false;
         instantiatedFarmer.GetComponent<Farmer>().SetToPlayerOwningFarmer(this);
 
@@ -1032,11 +1032,11 @@ public class Controller : MonoBehaviour
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
         instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
-        instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
+        instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData.Clone();
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData.positionOnBoard = cellSent;
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
-        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent.cardData);
+        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(instantiatedCreature.GetComponent<Creature>().cardData);
 
         #region assignRebirthAbility
         if (instantiatedCreature.GetComponent<Cat>() != null)
@@ -1055,7 +1055,7 @@ public class Controller : MonoBehaviour
 
         CheckToSeeIfYouHaveEnoughManaForCreature();
 
-        cardSelectedSent.cardData.isInHand = false;
+        instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         return instantiatedCreature.GetComponent<Creature>();
     }
 
@@ -1091,7 +1091,6 @@ public class Controller : MonoBehaviour
         creatureSent.DieWithoutDeathTrigger();
         creaturesOwned.Remove(creatureSent);
         InstantiateCardInHand(creatureSent.cardData);
-        creatureSent.cardData.isInHand = true;
         ResetMana();
         CheckToSeeIfYouHaveEnoughManaForCreature();
     }
@@ -1110,10 +1109,10 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
-        instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData;
+        instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData.Clone();
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
-        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(cardSelectedSent.cardData);
+        instantiatedCreature.GetComponent<Creature>().SetOriginalCard(instantiatedCreature.GetComponent<Creature>().cardData);
         instantiatedCreature.GetComponent<Creature>().OnETB();
 
         instantiatedCreature.GetComponent<Creature>().SetStructureToFollow(opponent.instantiatedCaste, instantiatedCreature.GetComponent<Creature>().actualPosition);
@@ -1284,7 +1283,9 @@ public class Controller : MonoBehaviour
         GameObject instantiatedCardInHand = Instantiate(GameManager.singleton.GetCardAssociatedWithType(cardSent.cardAssignedToObject), cardParent).gameObject;
         CardInHand instantiatedCardInHandBehaviour = instantiatedCardInHand.GetComponent<CardInHand>();
         instantiatedCardInHandBehaviour.playerOwningCard = this;
-        instantiatedCardInHandBehaviour.cardData = cardSent;
+        instantiatedCardInHandBehaviour.cardData = cardSent.Clone();
+
+        instantiatedCardInHandBehaviour.cardData.isInHand = true;
         cardsInHand.Add(instantiatedCardInHandBehaviour);
         if (locallySelectedCard != null)
         {
@@ -1614,6 +1615,7 @@ public class Controller : MonoBehaviour
     public void SaveAllCardsInHandAndOnFieldIntoAllCardsData()
     {
         allOwnedCardsInScene = new List<CardData>();
+        GameManager.singleton.CreaturesOnFieldWhenSubmitted.Clear();
         for (int i = 0; i < cardsInHand.Count; i++)
         {
             allOwnedCardsInScene.Add(cardsInHand[i].cardData);
@@ -1621,7 +1623,7 @@ public class Controller : MonoBehaviour
         for (int i = 0; i < creaturesOwned.Count; i++)
         {
             allOwnedCardsInScene.Add(creaturesOwned[i].cardData);
-            Debug.Log(creaturesOwned[i].cardData.positionOnBoard + " position on board");
+            GameManager.singleton.CreaturesOnFieldWhenSubmitted.Add(creaturesOwned[i].cardData);
         }
         for (int i = 0; i < farmersOwned.Count; i++)
         {
@@ -1779,7 +1781,7 @@ public class Controller : MonoBehaviour
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
                         CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
-                        cardToImmediatelyPlay.cardData = cardData;
+                        cardToImmediatelyPlay.cardData = cardData.Clone();
                         PurchaseHarvestTile(cardData.positionOnBoard);
                         CastFarmerOnTile(cardToImmediatelyPlay);
 
@@ -1802,7 +1804,7 @@ public class Controller : MonoBehaviour
                     if (cardDataInAllOwnedCards.cardType == SpellSiegeData.CardType.Creature)
                     {
                         CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardDataInAllOwnedCards);
-                        cardToImmediatelyPlay.cardData = cardDataInAllOwnedCards;
+                        cardToImmediatelyPlay.cardData = cardDataInAllOwnedCards.Clone();
                         Debug.Log(cardToImmediatelyPlay.cardData.positionOnBoard + " position on board when instantiating");
                         cardToImmediatelyPlay.cardData.positionOnBoard = cardDataInAllOwnedCards.positionOnBoard;
                         CastCreatureOnTile(cardToImmediatelyPlay, cardToImmediatelyPlay.cardData.positionOnBoard);

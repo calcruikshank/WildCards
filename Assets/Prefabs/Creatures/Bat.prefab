@@ -151,7 +151,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -693,12 +693,12 @@ MonoBehaviour:
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
+    manaType: 3
     cardAssignedToObject: 0
     cardType: 0
     creatureType: 0
-    rarity: 0
-    traversableType: 0
+    rarity: 3
+    traversableType: 3
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
     purchaseCost: 3
@@ -709,6 +709,7 @@ MonoBehaviour:
   UsageRate: 1
   highlightForCreatureSelected: {fileID: 0}
   currentAttack: 1
+  baseAttack: 0
   CurrentHealth: 0
   MaxHealth: 1
   attackText: {fileID: 3298186682565764544}
@@ -735,7 +736,6 @@ MonoBehaviour:
   targetedCellForChoosingTargets: {fileID: 0}
   tempLineRendererBetweenCreaturesGameObject: {fileID: 0}
   canAttackIcon: {fileID: 0}
-  garrison: 0
   originalCard: {fileID: 0}
   targetToFollow: {fileID: 0}
   structureToFollow: {fileID: 0}
@@ -978,7 +978,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1

@@ -6,6 +6,7 @@ public class Squirell : Creature
 {
     public override void OnAttack()
     {
+        base.OnAttack();
         this.GiveCounter(1);
     }
 }

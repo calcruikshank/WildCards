@@ -1118,6 +1118,7 @@ public class Creature : MonoBehaviour
     public virtual void OnAttack()
     {
         turnStealthOff = true;
+        GameManager.singleton.CreatureAttacked(creatureID);
     }
 
     void SetStateToDead()
@@ -1212,12 +1213,18 @@ public class Creature : MonoBehaviour
 
     internal void WriteCurrentDataToCardData()
     {
-        cardData.currentAttack = (int)this.currentAttack;
-        cardData.currentHealth = (int)this.baseAttack;
-        cardData.range = (int)this.range;
-        cardData.numberOfTimesThisCanDie = (int)this.numberOfTimesThisCanDie;
-        cardData.keywords = this.keywords;
-        cardData.SaveCardDataToPlayerData(playerOwningCreature.playerData, playerOwningCreature.playerData.currentRound);
+        if (playerOwningCreature == GameManager.singleton.playerInScene)
+        {
+            if (GameManager.singleton.CreaturesOnFieldWhenSubmitted.Contains(this.cardData))
+            {
+                cardData.currentAttack = (int)this.baseAttack;
+                cardData.currentHealth = (int)this.MaxHealth;
+                cardData.range = (int)this.range;
+                cardData.numberOfTimesThisCanDie = (int)this.numberOfTimesThisCanDie;
+                cardData.keywords = this.keywords;
+                cardData.SaveCardDataToPlayerData(playerOwningCreature.playerData, playerOwningCreature.playerData.currentRound);
+            }
+        }
     }
 
     internal void StartFighting()
@@ -1248,6 +1255,11 @@ public class Creature : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    public virtual void OtherCreatureAttacked(Creature creature)
+    {
+        Debug.Log(creature + " attacked");
     }
 
 

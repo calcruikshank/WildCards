@@ -6,6 +6,7 @@ public class GoldspanDragon : Creature
 {
     public override void OnAttack()
     {
+        base.OnAttack();
         playerOwningCreature.AddGoldToNextTurn();
     }
 }

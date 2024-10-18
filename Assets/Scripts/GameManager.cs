@@ -141,13 +141,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public List<CardData> CreaturesOnFieldWhenSubmitted;
+
     internal void CreatureDied(int creatureID)
     {
         if (allCreaturesOnField[creatureID] != null)
         {
             foreach (KeyValuePair<int, Creature> kvp in allCreaturesOnField)
             {
-                kvp.Value.OtherCreatureDied(allCreaturesOnField[creatureID]);
+                if (kvp.Value.creatureID != creatureID)
+                {
+                    kvp.Value.OtherCreatureDied(allCreaturesOnField[creatureID]);
+                }
             }
         }
 
@@ -264,5 +269,19 @@ public class GameManager : MonoBehaviour
         playerInScene.OnMove();
         opponentInScene.OnMove();
         turnTimer = 0;
+    }
+
+    internal void CreatureAttacked(int creatureID)
+    {
+        if (allCreaturesOnField[creatureID] != null)
+        {
+            foreach (KeyValuePair<int, Creature> kvp in allCreaturesOnField)
+            {
+                if (kvp.Value.creatureID != creatureID)
+                {
+                    kvp.Value.OtherCreatureAttacked(allCreaturesOnField[creatureID]);
+                }
+            }
+        }
     }
 }
