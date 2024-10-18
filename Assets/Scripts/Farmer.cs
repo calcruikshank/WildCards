@@ -95,4 +95,8 @@ public class Farmer : MonoBehaviour
             playerOwningFarmer.locallySelectedCard.gameObject.SetActive(true);
         }
     }
+    private void OnDestroy()
+    {
+        OnMouseExit();
+    }
 }

@@ -329,6 +329,14 @@ public class Controller : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            if (currentCreatureHoveringOver && state == State.NothingSelected)
+            {
+                ReturnToHand(currentCreatureHoveringOver);
+            }
+            if (currentFarmerHoveringOver && state == State.NothingSelected)
+            {
+                ReturnToHand(currentFarmerHoveringOver);
+            }
             SetVisualsToNothingSelectedLocally();
             SetStateToNothingSelected();
         }
@@ -752,7 +760,16 @@ public class Controller : MonoBehaviour
             {
                 foreach (BaseTile neighborOfNeighbor2 in neighborOfNeighbor.neighborTiles)
                 {
-                    SetOwningTile(neighborOfNeighbor2.tilePosition);
+                    foreach (BaseTile neighborOfNeighbor3 in neighborOfNeighbor2.neighborTiles)
+                    {
+                        foreach (BaseTile neighborOfNeighbor4 in neighborOfNeighbor3.neighborTiles)
+                        {
+                            foreach (BaseTile neighborOfNeighbor5 in neighborOfNeighbor4.neighborTiles)
+                            {
+                                SetOwningTile(neighborOfNeighbor5.tilePosition);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1090,6 +1107,15 @@ public class Controller : MonoBehaviour
     {
         creatureSent.DieWithoutDeathTrigger();
         creaturesOwned.Remove(creatureSent);
+        InstantiateCardInHand(creatureSent.cardData);
+        ResetMana();
+        CheckToSeeIfYouHaveEnoughManaForCreature();
+    }
+    private void ReturnToHand(Farmer creatureSent)
+    {
+        RemoveTileFromHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(creatureSent.cardData.positionOnBoard));
+        Destroy(creatureSent.gameObject);
+        farmersOwned.Remove(creatureSent);
         InstantiateCardInHand(creatureSent.cardData);
         ResetMana();
         CheckToSeeIfYouHaveEnoughManaForCreature();

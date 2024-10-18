@@ -955,6 +955,7 @@ public class Creature : MonoBehaviour
         this.range = cardSelected.range;
         this.creatureType = cardSelected.creatureType;
         this.numberOfTimesThisCanDie = cardSelected.numberOfTimesThisCanDie;
+        this.keywords = cardSelected.keywords;
         Debug.Log("Setting original card to " + cardSelected);
         originalCard = GameManager.singleton.GetCardAssociatedWithType(cardSelected.cardAssignedToObject).GetComponent<CardInHand>();
 

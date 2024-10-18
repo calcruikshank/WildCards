@@ -501,32 +501,32 @@ MonoBehaviour:
   cardData:
     greenManaCost: 0
     whiteManaCost: 0
-    blackManaCost: 0
+    blackManaCost: 2
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
-    range: 0
-    cardTitle: 
+    tier: 2
+    currentAttack: 5
+    currentHealth: 3
+    range: 1
+    cardTitle: Lynx
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
+    manaType: 3
+    cardAssignedToObject: 29
     cardType: 0
-    creatureType: 0
-    rarity: 0
+    creatureType: 9
+    rarity: 1
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
-    keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: a7b44a386d066b941960c3d5147f9f4f, type: 3}
+    keywords: 05000000
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: a7b44a386d066b941960c3d5147f9f4f, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
   - {fileID: 1087928222838449144}
