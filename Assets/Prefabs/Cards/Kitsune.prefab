@@ -1851,14 +1851,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData:
     greenManaCost: 0
-    whiteManaCost: 0
+    whiteManaCost: 1
     blackManaCost: 0
-    redManaCost: 0
+    redManaCost: 2
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
-    range: 0
+    tier: 3
+    currentAttack: 2
+    currentHealth: 2
+    range: 1
     cardTitle: 
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
@@ -1867,17 +1867,17 @@ MonoBehaviour:
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
     manaType: 0
-    cardAssignedToObject: 0
+    cardAssignedToObject: 11
     cardType: 0
     creatureType: 0
-    rarity: 0
+    rarity: 4
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 7899edc11f716694cba842dd1ac3ef81, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 7899edc11f716694cba842dd1ac3ef81, type: 3}
   cardArt: {fileID: 909150264706722250}
   raritySymbols:
   - {fileID: 898409077788490174}

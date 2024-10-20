@@ -477,9 +477,9 @@ public class Creature : MonoBehaviour
     {
         if (this != null && this.transform != null)
         {
-            MaxHealth += numOfCounters;
             baseAttack += numOfCounters;
             CurrentHealth += numOfCounters;
+            MaxHealth += numOfCounters;
             currentAttack += numOfCounters;
             cardData.currentAttack += numOfCounters;
 
@@ -948,10 +948,10 @@ public class Creature : MonoBehaviour
     Transform originalCardTransform;
     internal void SetOriginalCard(CardData cardSelected)
     {
-        this.MaxHealth = cardSelected.currentHealth;
         this.currentAttack = cardSelected.currentAttack;
         this.baseAttack = cardSelected.currentAttack;
         this.CurrentHealth = cardSelected.currentHealth;
+        this.MaxHealth = cardSelected.currentHealth;
         this.range = cardSelected.range;
         this.creatureType = cardSelected.creatureType;
         this.numberOfTimesThisCanDie = cardSelected.numberOfTimesThisCanDie;
@@ -1216,10 +1216,11 @@ public class Creature : MonoBehaviour
     {
         if (playerOwningCreature == GameManager.singleton.playerInScene)
         {
-            if (GameManager.singleton.CreaturesOnFieldWhenSubmitted.Contains(this.cardData))
+            if (GameManager.singleton.CreaturesOnFieldWhenSubmitted.Contains(this.cardData) || GameManager.singleton.state == GameManager.State.Setup)
             {
                 cardData.currentAttack = (int)this.baseAttack;
                 cardData.currentHealth = (int)this.MaxHealth;
+                Debug.LogError("Writing to current health " + MaxHealth);
                 cardData.range = (int)this.range;
                 cardData.numberOfTimesThisCanDie = (int)this.numberOfTimesThisCanDie;
                 cardData.keywords = this.keywords;
@@ -1231,7 +1232,6 @@ public class Creature : MonoBehaviour
     internal void StartFighting()
     {
         SetStructureToFollow(playerOwningCreature.opponent.instantiatedCaste, actualPosition);
-
         OnCombatStart();
     }
 

@@ -1531,23 +1531,35 @@ public class Controller : MonoBehaviour
 
     internal CardInHand GetRandomCreatureInHand()
     {
+        if (cardsInHand.Count == 0)
+        {
+            return null; // Return null if no cards are in hand
+        }
+
         List<int> numbersChosen = new List<int>();
-        CardInHand creatureSelectedInHand = new CardInHand();
+        CardInHand creatureSelectedInHand = null; // Initialize as null
         while (creatureSelectedInHand == null)
         {
-            int randomNumber = UnityEngine.Random.Range(0, cardsInHand.Count - 1);
+            int randomNumber = UnityEngine.Random.Range(0, cardsInHand.Count);
             if (numbersChosen.Contains(randomNumber))
             {
-                break;
+                if (numbersChosen.Count == cardsInHand.Count) // Break if all cards are checked
+                {
+                    break;
+                }
+                continue; // Continue if this number was already chosen
             }
             numbersChosen.Add(randomNumber);
+
             if (cardsInHand[randomNumber].cardData.cardType == SpellSiegeData.CardType.Creature)
             {
                 creatureSelectedInHand = cardsInHand[randomNumber];
+                Debug.LogError(" Grabbing " + creatureSelectedInHand);
             }
         }
         return creatureSelectedInHand;
     }
+
 
 
     public CardInHand cardToPurchase = null;

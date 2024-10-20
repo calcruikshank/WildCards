@@ -278,15 +278,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
-    greenManaCost: 0
-    whiteManaCost: 0
+    greenManaCost: 1
+    whiteManaCost: 1
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
-    range: 0
+    tier: 2
+    currentAttack: 3
+    currentHealth: 3
+    range: 2
     cardTitle: 
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
@@ -294,15 +294,15 @@ MonoBehaviour:
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
+    manaType: 1
+    cardAssignedToObject: 12
     cardType: 0
     creatureType: 0
     rarity: 0
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 6de0f25af600110478a2eae5fd1212d5, type: 3}
@@ -2030,7 +2030,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Whenver you buy an animal give this +5/+5
+  m_text: At the beginning of combat double this animal's stats.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}

@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class SymbioticOoze : Creature
 {
-    public override void OtherCreatureEntered(Creature creatureThatETB)
+    public override void OnCombatStart()
     {
-        base.OtherCreatureEntered(creatureThatETB);
-        if (this != null)
-        {
-            if (creatureThatETB.playerOwningCreature == this.playerOwningCreature && creatureThatETB != this)
-            {
-                GiveCounter(1);
-            }
-        }
+        base.OnCombatStart();
+        this.currentAttack *= 2;
+        this.CurrentHealth *= 2;
+        UpdateCreatureHUD();
     }
 }
