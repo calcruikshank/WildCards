@@ -1035,7 +1035,7 @@ public class Controller : MonoBehaviour
 
     public virtual Creature CastCreatureOnTile(CardInHand cardSelectedSent, Vector3Int cellSent)
     {
-        Debug.Log("Spawning creature on tile ");
+        Debug.LogError("Spawning creature on tile ");
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
         GameObject instantiatedCreature = Instantiate(cardSelectedSent.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
         if (environmentMap.GetInstantiatedObject(cellSent))
@@ -1070,7 +1070,6 @@ public class Controller : MonoBehaviour
 
         RemoveCardFromHand(cardSelectedSent);
 
-        CheckToSeeIfYouHaveEnoughManaForCreature();
 
         instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         return instantiatedCreature.GetComponent<Creature>();
