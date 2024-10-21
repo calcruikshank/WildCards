@@ -500,13 +500,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData:
     greenManaCost: 0
-    whiteManaCost: 0
+    whiteManaCost: 3
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
+    tier: 3
+    currentAttack: 2
+    currentHealth: 2
     range: 0
     cardTitle: 
     cardArtSprite: {fileID: 0}
@@ -515,18 +515,18 @@ MonoBehaviour:
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
+    manaType: 4
+    cardAssignedToObject: 27
     cardType: 0
-    creatureType: 0
-    rarity: 0
+    creatureType: 9
+    rarity: 2
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: ec11230e65f10354ea13aaa92df23a08, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: ec11230e65f10354ea13aaa92df23a08, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
   - {fileID: 1087928222838449144}
@@ -630,8 +630,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: At the beginning of combat double the number of counters on all of your
-    animals
+  m_text: At the beginning of combat give counters to all friendly animals equal
+    to this attack.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
@@ -658,7 +658,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.8
+  m_fontSize: 0.85
   m_fontSizeBase: 0.66
   m_fontWeight: 400
   m_enableAutoSizing: 1

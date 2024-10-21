@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Lion : Creature
 {
-    public override void OnTurnMoveIfNoCreatures()
+    public override void OnCombatStart()
     {
         base.OnTurnMoveIfNoCreatures();
 
         foreach (Creature kvp in playerOwningCreature.creaturesOwned)
         {
-            kvp.GiveCounter(1);
+            if (kvp != this)
+            {
+                kvp.GiveCounter((int)this.currentAttack);
+            }
         }
     }
 }

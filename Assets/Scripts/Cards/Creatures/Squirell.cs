@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class Squirell : Creature
 {
-    public override void OnAttack()
+    public override void OnCombatStart()
     {
-        base.OnAttack();
-        this.GiveCounter(1);
+        base.OnCombatStart();
+        foreach (Creature creature in playerOwningCreature.creaturesOwned)
+        {
+            if (creature.cardData.cardAssignedToObject == SpellSiegeData.Cards.Squirell)
+            {
+                if (!creature.cardData.isInHand)
+                {
+                    this.GiveCounter(1);
+                }
+            }
+        }
     }
 }
