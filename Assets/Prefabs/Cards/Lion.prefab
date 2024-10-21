@@ -507,7 +507,7 @@ MonoBehaviour:
     tier: 3
     currentAttack: 2
     currentHealth: 2
-    range: 0
+    range: 3
     cardTitle: 
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}

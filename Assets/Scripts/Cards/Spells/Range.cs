@@ -6,7 +6,7 @@ public class Range : TargetedSpell
 {
     protected override void SpecificSpellAbility()
     {
-        creatureTargeted.range = 3;
+        creatureTargeted.maxRange = 3;
         creatureTargeted.CalculateAllTilesWithinRange();
     }
 }

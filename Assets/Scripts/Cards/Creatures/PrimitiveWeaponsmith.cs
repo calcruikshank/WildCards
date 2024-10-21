@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PrimitiveWeaponsmith : Creature
 {
-    List<Creature> creaturesThatHaveExtraRange = new List<Creature>();
     public override void OnCombatStart()
     {
         GivePlusOneRange();
@@ -12,19 +11,15 @@ public class PrimitiveWeaponsmith : Creature
 
     private void GivePlusOneRange()
     {
-        foreach (Creature friendly in friendlyCreaturesWithinRange)
+        foreach (Creature friendly in playerOwningCreature.creaturesOwned)
         {
-            if (!creaturesThatHaveExtraRange.Contains(friendly))
+            if (friendly.currentRange == 1)
             {
-                if (friendly.range == 1)
-                {
-                    friendly.visualAttackParticle = this.visualAttackParticle;
-                }
-
-                friendly.AddOneRange();
+                friendly.visualAttackParticle = this.visualAttackParticle;
             }
+
+            friendly.AddOneRange();
         }
-        creaturesThatHaveExtraRange = friendlyCreaturesWithinRange;
     }
 
     public override void OnDeath()

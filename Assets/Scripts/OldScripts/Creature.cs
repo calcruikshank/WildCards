@@ -16,7 +16,7 @@ public class Creature : MonoBehaviour
 
     Transform colorIndicator;
     [SerializeField] public float speed = 1f; //move speed
-    [SerializeField] public int range; //num of tiles that can attack
+    [SerializeField] public int maxRange; //num of tiles that can attack
     [SerializeField] float UsageRate = 1f; // the rate at which the minion can use abilities/ attack 
 
 
@@ -310,7 +310,7 @@ public class Creature : MonoBehaviour
     }
     public virtual void LocalAttackCreature(Creature creatureToAttack)
     {
-        if (range > 1)
+        if (currentRange > 1)
         {
             if (visualAttackParticle != GameManager.singleton.rangedVisualAttackParticle)
             {
@@ -329,7 +329,7 @@ public class Creature : MonoBehaviour
                 {
                     instantiatedParticle.GetComponent<VisualAttackParticle>().SetDeathtouch(creatureToAttack, currentAttack);
                 }
-                if (range == 1)
+                if (currentRange == 1)
                 {
                     instantiatedParticle.GetComponent<VisualAttackParticle>().SetRange(1);
                 }
@@ -345,7 +345,7 @@ public class Creature : MonoBehaviour
     }
     public void LocalAttackStructure(Structure structureToAttack)
     {
-        if (range > 1)
+        if (currentRange > 1)
         {
             if (visualAttackParticle != GameManager.singleton.rangedVisualAttackParticle)
             {
@@ -358,7 +358,7 @@ public class Creature : MonoBehaviour
             canAttackIcon.gameObject.SetActive(false);
             Transform instantiatedParticle = Instantiate(visualAttackParticle, new Vector3(this.transform.position.x, this.transform.position.y + .2f, this.transform.position.z), Quaternion.identity);
             instantiatedParticle.GetComponent<VisualAttackParticle>().SetTargetStructure(structureToAttack, currentAttack);
-            if (range == 1)
+            if (currentRange == 1)
             {
                 instantiatedParticle.GetComponent<VisualAttackParticle>().SetRange(1);
             }
@@ -757,15 +757,17 @@ public class Creature : MonoBehaviour
        
 
     }
-
+    public int currentRange;
     internal void AddOneRange()
     {
-        this.range++;
+        Debug.LogError(this.maxRange + "range before");
+        this.currentRange++;
+        Debug.LogError(this.maxRange + "range after");
         CalculateAllTilesWithinRange();
     }
     internal void SubtractOneRange()
     {
-        this.range--;
+        this.currentRange--;
         CalculateAllTilesWithinRange();
     }
     public void CalculateAllTilesWithinRange()
@@ -775,12 +777,12 @@ public class Creature : MonoBehaviour
         rangePositions.Clear();
         int xthreshold;
         int threshold;
-        for (int x = 0; x < range + 1; x++)
+        for (int x = 0; x < currentRange + 1; x++)
         {
-            for (int y = 0; y < range + 1; y++)
+            for (int y = 0; y < currentRange + 1; y++)
             {
-                xthreshold = range - x;
-                threshold = range + xthreshold;
+                xthreshold = currentRange - x;
+                threshold = currentRange + xthreshold;
 
                 if (y + x > threshold)
                 {
@@ -803,29 +805,29 @@ public class Creature : MonoBehaviour
                     }
                     continue;
                 }
-                if (y == range && currentCellPosition.y % 2 == 0)
+                if (y == currentRange && currentCellPosition.y % 2 == 0)
                 {
-                    if (range % 2 != 0 && y + x == threshold - 1)
+                    if (currentRange % 2 != 0 && y + x == threshold - 1)
                     {
                         extents.Add(new Vector3Int(x, y, currentCellPosition.z));
                     }
-                    if (range % 2 == 0 && y + x == threshold)
+                    if (currentRange % 2 == 0 && y + x == threshold)
                     {
                         extents.Add(new Vector3Int(x, y, currentCellPosition.z));
                     }
                 }
-                if (y == range && currentCellPosition.y % 2 != 0)
+                if (y == currentRange && currentCellPosition.y % 2 != 0)
                 {
-                    if (range % 2 != 0 && y + x == threshold - 1)
+                    if (currentRange % 2 != 0 && y + x == threshold - 1)
                     {
                         extents.Add(new Vector3Int(x + 1, y, currentCellPosition.z));
                     }
-                    if (range % 2 == 0 && y + x == threshold)
+                    if (currentRange % 2 == 0 && y + x == threshold)
                     {
                         extents.Add(new Vector3Int(x, y, currentCellPosition.z));
                     }
                 }
-                if (x == range && y + x == threshold)
+                if (x == currentRange && y + x == threshold)
                 {
                     extents.Add(new Vector3Int(x, y, currentCellPosition.z));
                 }
@@ -850,7 +852,7 @@ public class Creature : MonoBehaviour
         }
 
         extents.Add(new Vector3Int(extents[0].x, -extents[0].y, extents[0].z));
-        if (range % 2 != 0)
+        if (currentRange % 2 != 0)
         {
             if (currentCellPosition.y % 2 != 0)
             {
@@ -870,7 +872,7 @@ public class Creature : MonoBehaviour
                 extents.Add(new Vector3Int(-extents[0].x - 1, +extents[0].y, extents[0].z));
             }
         }
-        if (range % 2 == 0)
+        if (currentRange % 2 == 0)
         {
             extents.Add(new Vector3Int(-extents[0].x, -extents[0].y, extents[0].z));
             extents.Add(new Vector3Int(-extents[1].x, extents[1].y, extents[1].z));
@@ -952,7 +954,8 @@ public class Creature : MonoBehaviour
         this.baseAttack = cardSelected.currentAttack;
         this.CurrentHealth = cardSelected.currentHealth;
         this.MaxHealth = cardSelected.currentHealth;
-        this.range = cardSelected.range;
+        this.maxRange = cardSelected.range;
+        this.currentRange = cardSelected.range;
         this.creatureType = cardSelected.creatureType;
         this.numberOfTimesThisCanDie = cardSelected.numberOfTimesThisCanDie;
         this.keywords = cardSelected.keywords;
@@ -1222,7 +1225,7 @@ public class Creature : MonoBehaviour
                 cardData.currentAttack = (int)this.baseAttack;
                 cardData.currentHealth = (int)this.MaxHealth;
                 Debug.LogError("Writing to current health " + MaxHealth);
-                cardData.range = (int)this.range;
+                cardData.range = (int)this.maxRange;
                 cardData.numberOfTimesThisCanDie = (int)this.numberOfTimesThisCanDie;
                 cardData.keywords = this.keywords;
                 cardData.SaveCardDataToPlayerData(playerOwningCreature.playerData, playerOwningCreature.playerData.currentRound);
