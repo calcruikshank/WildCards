@@ -1035,7 +1035,6 @@ public class Controller : MonoBehaviour
 
     public virtual Creature CastCreatureOnTile(CardInHand cardSelectedSent, Vector3Int cellSent)
     {
-        Debug.LogError("Spawning creature on tile ");
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
         GameObject instantiatedCreature = Instantiate(cardSelectedSent.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
         if (environmentMap.GetInstantiatedObject(cellSent))

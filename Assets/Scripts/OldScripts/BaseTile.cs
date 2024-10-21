@@ -12,7 +12,7 @@ public class BaseTile : MonoBehaviour
     Grid grid;
     Tilemap environmentMap;
     Tilemap baseTileMap;
-    Creature creatureOnTile;
+    public Creature creatureOnTile;
     GameObject environmentOnTile;
     public Structure structureOnTile;
 
@@ -280,7 +280,7 @@ public class BaseTile : MonoBehaviour
         opaqueColor.a = playerOwningTile.col.a;
         transparentColor.a = playerOwningTile.transparentCol.a;
         instantiatedManaSymbol.GetComponent<Image>().color = opaqueColor;
-        instantiatedManaSymbol.transform.parent = GameManager.singleton.scalableUICanvas.transform;
+        //instantiatedManaSymbol.transform.parent = GameManager.singleton.scalableUICanvas.transform;
         HideHarvestIcon();
         //MakeTextObjectForTileCost(instantiatedManaSymbol);
     }

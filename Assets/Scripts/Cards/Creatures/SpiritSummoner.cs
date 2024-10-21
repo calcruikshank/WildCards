@@ -9,7 +9,8 @@ public class SpiritSummoner : Creature
         CardInHand randomCreatureInHand = playerOwningCreature.GetRandomCreatureInHand();
         if (randomCreatureInHand != null)
         {
-            playerOwningCreature.CastCreatureOnTile(randomCreatureInHand, this.tileCurrentlyOn.tilePosition);
+           Creature iC =  playerOwningCreature.CastCreatureOnTile(randomCreatureInHand, this.tileCurrentlyOn.tilePosition);
+            iC.StartFighting();
         }
         base.OnDeath();
         

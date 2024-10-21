@@ -1137,6 +1137,7 @@ public class Creature : MonoBehaviour
             tempLineRendererBetweenCreaturesGameObject.SetActive(false);
         }
         this.playerOwningCreature.creaturesOwned.Remove(this);
+        tileCurrentlyOn.creatureOnTile = null;
         OnMouseExit();
         creatureState = CreatureState.Dead;
     }
