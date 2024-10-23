@@ -760,9 +760,7 @@ public class Creature : MonoBehaviour
     public int currentRange;
     internal void AddOneRange()
     {
-        Debug.LogError(this.maxRange + "range before");
         this.currentRange++;
-        Debug.LogError(this.maxRange + "range after");
         CalculateAllTilesWithinRange();
     }
     internal void SubtractOneRange()

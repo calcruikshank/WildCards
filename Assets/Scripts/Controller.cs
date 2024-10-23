@@ -651,6 +651,7 @@ public class Controller : MonoBehaviour
         RemoveTileFromHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(selectedOnBoardFarmer.cardData.positionOnBoard));
         PurchaseHarvestTile(cellSent);
         selectedOnBoardFarmer.cardData.positionOnBoard = cellSent;
+        selectedOnBoardFarmer.SetModel();
         SetStateToNothingSelected();
     }
 
@@ -1552,7 +1553,6 @@ public class Controller : MonoBehaviour
             if (cardsInHand[randomNumber].cardData.cardType == SpellSiegeData.CardType.Creature)
             {
                 creatureSelectedInHand = cardsInHand[randomNumber];
-                Debug.LogError(" Grabbing " + creatureSelectedInHand);
             }
         }
         return creatureSelectedInHand;

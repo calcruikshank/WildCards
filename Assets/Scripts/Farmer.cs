@@ -10,11 +10,18 @@ public class Farmer : MonoBehaviour
     public CardInHand originalCard;
     Transform originalCardTransform;
 
+    [SerializeField] Transform visualForForest;
+    [SerializeField] Transform visualForMountain;
+    [SerializeField] Transform visualForPlains;
+    [SerializeField] Transform visualForSwamp;
 
+    public Grid grid;
     internal void SetToPlayerOwningFarmer(Controller controller)
     {
+        grid = GameManager.singleton.grid;
         playerOwningFarmer = controller;
         SetOriginalCard(cardData);
+        SetModel();
     }
     private void OnMouseOver()
     {
@@ -99,4 +106,38 @@ public class Farmer : MonoBehaviour
     {
         OnMouseExit();
     }
+
+    public void SetModel()
+    {
+        BaseTile tileCurrentlyOn = BaseMapTileState.singleton.GetBaseTileAtCellPosition(cardData.positionOnBoard);
+
+        // Determine which visual should be active based on mana type
+        GameObject activeVisual = null;
+
+        switch (tileCurrentlyOn.manaType)
+        {
+            case SpellSiegeData.ManaType.Red:
+                activeVisual = visualForMountain.gameObject;
+                break;
+            case SpellSiegeData.ManaType.Black:
+                activeVisual = visualForSwamp.gameObject;
+                break;
+            case SpellSiegeData.ManaType.White:
+                activeVisual = visualForPlains.gameObject;
+                break;
+            case SpellSiegeData.ManaType.Green:
+                activeVisual = visualForForest.gameObject;
+                break;
+        }
+
+        // Only change the visuals if necessary
+        if (activeVisual != null)
+        {
+            visualForForest.gameObject.SetActive(visualForForest.gameObject == activeVisual);
+            visualForMountain.gameObject.SetActive(visualForMountain.gameObject == activeVisual);
+            visualForPlains.gameObject.SetActive(visualForPlains.gameObject == activeVisual);
+            visualForSwamp.gameObject.SetActive(visualForSwamp.gameObject == activeVisual);
+        }
+    }
+
 }
