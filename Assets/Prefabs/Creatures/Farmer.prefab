@@ -767,7 +767,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -820,7 +820,7 @@ MonoBehaviour:
   visualForForest: {fileID: 411669823739418787}
   visualForMountain: {fileID: 6492512554499627715}
   visualForPlains: {fileID: 6017775350143056619}
-  visualForSwamp: {fileID: 3786604453292013563}
+  visualForSwamp: {fileID: 3148462316058318487}
   grid: {fileID: 0}
 --- !u!1 &6330952787006823200
 GameObject:

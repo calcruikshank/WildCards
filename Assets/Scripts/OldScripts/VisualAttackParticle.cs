@@ -22,8 +22,9 @@ public class VisualAttackParticle : MonoBehaviour
 
     float timer = 0;
     float timerThreshold = .1f;
-    private void FixedUpdate()
+    private void Update()
     {
+        this.transform.position = new Vector3(this.transform.position.x, .2f, this.transform.position.z);
         if (range != 1)
         {
             if (shutDown)
@@ -32,9 +33,9 @@ public class VisualAttackParticle : MonoBehaviour
             }
             if (targetedCreature != null)
             {
-                this.transform.position = Vector3.MoveTowards(this.transform.position, targetedCreature.actualPosition, speed * Time.deltaTime);
+                this.transform.position = Vector3.MoveTowards(this.transform.position, new Vector3(targetedCreature.actualPosition.x, .2f, targetedCreature.actualPosition.z), speed * Time.deltaTime);
 
-                if (Vector3.Distance(this.transform.position, targetedCreature.actualPosition) < .02f && shutDown == false)
+                if (Vector3.Distance(this.transform.position, new Vector3(targetedCreature.actualPosition.x, .2f, targetedCreature.actualPosition.z)) < .02f && shutDown == false)
                 {
                     targetedCreature.TakeDamage(amountofdamage);
                     if (deathtouch)

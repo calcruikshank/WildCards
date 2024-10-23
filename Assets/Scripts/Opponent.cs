@@ -152,19 +152,23 @@ public class Opponent : Controller
                 }
                 else
                 {
-                    CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
                     if (cardData.cardType == SpellSiegeData.CardType.Farmer)
                     {
-                        PurchaseHarvestTile(MirrorVector(cardToImmediatelyPlay.cardData.positionOnBoard));
+                        CardInHand cardToImmediatelyPlay = InstantiateCardInHand(cardData);
+                        cardToImmediatelyPlay.cardData = cardData.Clone();
+                        cardToImmediatelyPlay.cardData.positionOnBoard = MirrorVector(cardData.positionOnBoard);
+                        PurchaseHarvestTile(cardData.positionOnBoard);
+                        CastFarmerOnTile(cardToImmediatelyPlay);
 
 
                         if (selectedOnBoardFarmer != null)
                         {
                             Destroy(selectedOnBoardFarmer.gameObject);
                         }
+                        RemoveCardFromHand(cardToImmediatelyPlay);
                         SetStateToNothingSelected();
+                        RemoveCardFromHand(cardToImmediatelyPlay);
                     }
-                    RemoveCardFromHand(cardToImmediatelyPlay);
                 }
             }
             foreach (CardData cardData in roundConfiguration.allOwnedCards)

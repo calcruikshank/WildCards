@@ -487,11 +487,6 @@ public class Controller : MonoBehaviour
     }
     protected void PurchaseHarvestTile(Vector3Int vector3Int)
     {
-        //ShowingPurchasableHarvestTiles = false;
-        if (BaseMapTileState.singleton.GetBaseTileAtCellPosition(vector3Int).isBeingHarvested)
-        {
-            return;
-        }
         AddTileToHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(vector3Int));
 
         //IncreaseCostOfHarvestTiles();
@@ -1788,11 +1783,13 @@ public class Controller : MonoBehaviour
         }
         foreach (Farmer farmer in farmersOwned)
         {
+            RemoveTileFromHarvestedTilesList(BaseMapTileState.singleton.GetBaseTileAtCellPosition(farmer.cardData.positionOnBoard));
             Destroy(farmer.gameObject);
         }
         creaturesOwned.Clear();
         cardsInHand.Clear();
         farmersOwned.Clear();
+        ResetMana();
 
         allOwnedCardsInScene.Clear();
         RoundConfiguration roundConfiguration = GrabBuildByCurrentRound(playerDataSent, playerDataSent.currentRound);
