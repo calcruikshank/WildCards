@@ -416,10 +416,10 @@ MonoBehaviour:
   cardData:
     greenManaCost: 0
     whiteManaCost: 0
-    blackManaCost: 0
+    blackManaCost: 2
     redManaCost: 0
     genericManaCost: 0
-    tier: 1
+    tier: 2
     currentAttack: 1
     currentHealth: 4
     range: 2
@@ -431,10 +431,10 @@ MonoBehaviour:
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
     manaType: 3
-    cardAssignedToObject: 0
+    cardAssignedToObject: 6
     cardType: 0
-    creatureType: 0
-    rarity: 0
+    creatureType: 4
+    rarity: 1
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
