@@ -501,13 +501,13 @@ MonoBehaviour:
   cardData:
     greenManaCost: 0
     whiteManaCost: 0
-    blackManaCost: 0
+    blackManaCost: 3
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
-    currentAttack: 0
-    currentHealth: 0
-    range: 0
+    tier: 3
+    currentAttack: 4
+    currentHealth: 4
+    range: 2
     cardTitle: 
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
@@ -515,18 +515,18 @@ MonoBehaviour:
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
+    manaType: 3
+    cardAssignedToObject: 2
     cardType: 0
-    creatureType: 0
-    rarity: 0
-    traversableType: 0
+    creatureType: 1
+    rarity: 3
+    traversableType: 3
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 3b914f13dfb39c24fa20f1507eb02468, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 3b914f13dfb39c24fa20f1507eb02468, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
   - {fileID: 1087928222838449144}
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Start of combat: Double the attack of all animals in range.'
+  m_text: When this dies give all of your animals rebirth 1.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
