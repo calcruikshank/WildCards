@@ -7,9 +7,23 @@ public class Avacyn : Creature
     public override void OnCombatStart()
     {
         base.OnCombatStart();
-        foreach (Creature creatureOwned in playerOwningCreature.creaturesOwned)
+        if (playerOwningCreature == GameManager.singleton.playerInScene)
         {
-            creatureOwned.GiveBubble();
+            Creature creatureBehind = BaseMapTileState.singleton.GetBaseTileAtCellPosition(new Vector3Int(cardData.positionOnBoard.x - 1, cardData.positionOnBoard.y, cardData.positionOnBoard.z)).creatureOnTile;
+            if (creatureBehind)
+            {
+                creatureBehind.GiveBubble();
+                creatureBehind.GiveSpeed();
+            }
+        }
+        else
+        {
+            Creature creatureBehind = BaseMapTileState.singleton.GetBaseTileAtCellPosition(new Vector3Int(cardData.positionOnBoard.x +1, cardData.positionOnBoard.y, cardData.positionOnBoard.z)).creatureOnTile;
+            if (creatureBehind)
+            {
+                creatureBehind.GiveBubble();
+                creatureBehind.GiveSpeed();
+            }
         }
     }
 }

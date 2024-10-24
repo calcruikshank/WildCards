@@ -114,6 +114,7 @@ public struct SpellSiegeData
         Reach,
         Trample,
         Stealth,
+        Speed,
         BubbleShield
     }
     public enum PlayerBoon

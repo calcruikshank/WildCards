@@ -456,12 +456,10 @@ public class Creature : MonoBehaviour
 
     public virtual void OnTurnMoveIfNoCreatures()
     {
-        if (turnStealthOff == true)
+        if (keywords.Contains(SpellSiegeData.Keywords.Speed))
         {
-            if (keywords.Contains(SpellSiegeData.Keywords.Stealth))
-            {
-                keywords.Remove(SpellSiegeData.Keywords.Stealth);
-            }
+            animatorForObject.SetTrigger("Attack");
+            Move();
         }
 
         animatorForObject.SetTrigger("Attack");
@@ -472,6 +470,17 @@ public class Creature : MonoBehaviour
     public bool canAttackThisTurn = true;
     internal bool AttackIfCreature()
     {
+        if (keywords.Contains(SpellSiegeData.Keywords.Speed))
+        {
+            canAttackThisTurn = true;
+        }
+        if (turnStealthOff == true)
+        {
+            if (keywords.Contains(SpellSiegeData.Keywords.Stealth))
+            {
+                keywords.Remove(SpellSiegeData.Keywords.Stealth);
+            }
+        }
         CheckForCreaturesWithinRange();
         
         HandleFriendlyCreaturesList();
@@ -589,7 +598,7 @@ public class Creature : MonoBehaviour
                 targetedCellForChoosingTargets = BaseMapTileState.singleton.GetBaseTileAtCellPosition(nextCellPosition);
 
                 actualPosition = new Vector3(targetedCell.transform.position.x, this.transform.position.y, targetedCell.transform.position.z);
-                currentCellPosition = grid.WorldToCell(new Vector3(actualPosition.x, 0, actualPosition.z));
+                currentCellPosition = targetedCell.tilePosition;
 
                 SetStateToIdle();
                 CheckForCreaturesWithinRange();
@@ -642,7 +651,7 @@ public class Creature : MonoBehaviour
         }
     }
 
-    private void ExplodeOnPlayerKeep()
+    public void ExplodeOnPlayerKeep()
     {
         VisualAttackAnimationOnStructure(playerOwningCreature.opponent.instantiatedCaste);
         this.numberOfTimesThisCanDie = 0;
@@ -1117,6 +1126,7 @@ public class Creature : MonoBehaviour
 
     private void OnDestroy()
     {
+        Destroy(instantiatedBubbleShield);
         if (GameManager.singleton.allCreaturesOnField.ContainsValue(this))
         {
             GameManager.singleton.allCreaturesOnField.Remove(this.creatureID);
@@ -1344,6 +1354,11 @@ public class Creature : MonoBehaviour
         {
             instantiatedBubbleShield = Instantiate(GameManager.singleton.bubbleVizualization, this.transform.position, this.transform.rotation);
         }
+    }
+
+    internal void GiveSpeed()
+    {
+        keywords.Add(SpellSiegeData.Keywords.Speed);
     }
 
 

@@ -500,13 +500,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData:
     greenManaCost: 0
-    whiteManaCost: 3
+    whiteManaCost: 2
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 3
-    currentAttack: 4
-    currentHealth: 4
+    tier: 2
+    currentAttack: 2
+    currentHealth: 2
     range: 1
     cardTitle: 
     cardArtSprite: {fileID: 0}
@@ -525,7 +525,7 @@ MonoBehaviour:
     isInHand: 1
     purchaseCost: 1
     numberOfTimesThisCanDie: 1
-    keywords: 
+    keywords: 0700000006000000
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: d9f6401ac41d61047ab93c6b9b75f090, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
@@ -630,7 +630,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start of combat give your animals a bubble shield.
+  m_text: 'Start of combat give the animal behind Peggy shield and speed.
+
+    Speed,
+    Shield'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
@@ -657,7 +660,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.9
+  m_fontSize: 0.8
   m_fontSizeBase: 0.66
   m_fontWeight: 400
   m_enableAutoSizing: 1

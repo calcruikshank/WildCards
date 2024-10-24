@@ -278,7 +278,7 @@ MonoBehaviour:
   originalCard: {fileID: 0}
   targetToFollow: {fileID: 0}
   structureToFollow: {fileID: 0}
-  keywords: 
+  keywords: 0600000007000000
 --- !u!1 &6674363181753822816
 GameObject:
   m_ObjectHideFlags: 0

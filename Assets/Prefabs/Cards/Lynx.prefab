@@ -525,7 +525,7 @@ MonoBehaviour:
     isInHand: 1
     purchaseCost: 1
     numberOfTimesThisCanDie: 1
-    keywords: 05000000
+    keywords: 0500000006000000
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: a7b44a386d066b941960c3d5147f9f4f, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Stealth
+  m_text: Stealth, Speed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
