@@ -298,21 +298,9 @@ public class CardData
             playerData.playerRoundConfigurations.Add(roundConfig);
         }
 
-        // Check if the card already exists in the round's owned cards list
-        CardData existingCard = roundConfig.allOwnedCards.Find(card => card.positionOnBoard == this.positionOnBoard);
-
-        if (existingCard != null)
-        {
-            // Update the existing card's data
-            int index = roundConfig.allOwnedCards.IndexOf(existingCard);
-            roundConfig.allOwnedCards[index] = this;
-        }
-        else
-        {
-            // Add the new card data to the list
-            roundConfig.allOwnedCards.Add(this);
-        }
-        
+        // Overwrite the round configuration by finding and replacing or adding the current card
+        roundConfig.allOwnedCards.RemoveAll(card => card.positionOnBoard == this.positionOnBoard);
+        roundConfig.allOwnedCards.Add(this);
     }
 
     public CardData Clone()

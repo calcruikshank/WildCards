@@ -180,7 +180,8 @@ public class Opponent : Controller
                     if (cardData.cardType == SpellSiegeData.CardType.Creature)
                     {
                         cardToImmediatelyPlay.cardData.positionOnBoard = cardData.positionOnBoard;
-                        CastCreatureOnTile(cardToImmediatelyPlay, MirrorVector( cardToImmediatelyPlay.cardData.positionOnBoard ));
+                        Creature inCrea =  CastCreatureOnTile(cardToImmediatelyPlay, MirrorVector( cardToImmediatelyPlay.cardData.positionOnBoard ));
+                        inCrea.SetStateToIdle();
                         if (selectedOnBoardCreature != null)
                         {
                             Destroy(selectedOnBoardCreature.gameObject);
