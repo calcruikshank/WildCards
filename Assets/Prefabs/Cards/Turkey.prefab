@@ -430,18 +430,18 @@ MonoBehaviour:
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 0
-    cardAssignedToObject: 0
+    manaType: 1
+    cardAssignedToObject: 35
     cardType: 0
     creatureType: 0
     rarity: 0
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 3
+    purchaseCost: 1
     numberOfTimesThisCanDie: 1
     keywords: 
-  GameObjectToInstantiate: {fileID: 6239865746917987993, guid: 5afe7b37484b1ae4d8f6962398ef387a, type: 3}
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 5afe7b37484b1ae4d8f6962398ef387a, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:
   - {fileID: 1865930526497011896}

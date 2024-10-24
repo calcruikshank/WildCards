@@ -419,7 +419,7 @@ MonoBehaviour:
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
+    tier: 1
     currentAttack: 1
     currentHealth: 1
     range: 1

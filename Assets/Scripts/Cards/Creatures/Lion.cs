@@ -6,7 +6,7 @@ public class Lion : Creature
 {
     public override void OnCombatStart()
     {
-        base.OnTurnMoveIfNoCreatures();
+        base.OnCombatStart();
 
         foreach (Creature kvp in playerOwningCreature.creaturesOwned)
         {

@@ -525,7 +525,7 @@ MonoBehaviour:
     isInHand: 1
     purchaseCost: 1
     numberOfTimesThisCanDie: 1
-    keywords: 
+    keywords: 000000000100000005000000
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: ec67ad1df1cbc8f4882294a41bbfd2ef, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:

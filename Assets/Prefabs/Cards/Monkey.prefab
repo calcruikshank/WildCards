@@ -431,7 +431,7 @@ MonoBehaviour:
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
     manaType: 1
-    cardAssignedToObject: 0
+    cardAssignedToObject: 7
     cardType: 0
     creatureType: 9
     rarity: 1

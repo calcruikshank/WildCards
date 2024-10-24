@@ -1222,7 +1222,6 @@ public class Creature : MonoBehaviour
             {
                 cardData.currentAttack = (int)this.baseAttack;
                 cardData.currentHealth = (int)this.MaxHealth;
-                Debug.LogError("Writing to current health " + MaxHealth);
                 cardData.range = (int)this.maxRange;
                 cardData.numberOfTimesThisCanDie = (int)this.numberOfTimesThisCanDie;
                 cardData.keywords = this.keywords;
