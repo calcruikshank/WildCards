@@ -6,13 +6,12 @@ public class SpiritSummoner : Creature
 {
     public override void OnDeath()
     {
+        base.OnDeath();
         CardInHand randomCreatureInHand = playerOwningCreature.GetRandomCreatureInHand();
         if (randomCreatureInHand != null)
         {
            Creature iC =  playerOwningCreature.CastCreatureOnTile(randomCreatureInHand, this.tileCurrentlyOn.tilePosition);
             iC.StartFighting();
         }
-        base.OnDeath();
-        
     }
 }

@@ -215,13 +215,14 @@ public class Creature : MonoBehaviour
     public bool tauntFound = false;
     public virtual Creature ChooseTarget()
     {
-        float lowestHealthCreatureWithinRange = -1;
-
         Creature closestCreature = null;
+        Creature tauntCreature = null;
         float minDistance = float.MaxValue;
+        float tauntMinDistance = float.MaxValue;
 
         currentTargetedCreature = null;
         tauntFound = false;
+
         foreach (Creature creatureWithinRange in creaturesWithinRange)
         {
             if (creatureWithinRange.playerOwningCreature != this.playerOwningCreature)
@@ -232,29 +233,38 @@ public class Creature : MonoBehaviour
                     continue;
                 }
 
+                float distance = Vector3.Distance(this.transform.position, creatureWithinRange.transform.position);
+
                 if (creatureWithinRange.keywords.Contains(SpellSiegeData.Keywords.Taunt))
                 {
-                    currentTargetedCreature = creatureWithinRange;
+                    // If it's a taunt creature, check if it's the closest taunt creature so far
                     tauntFound = true;
-                    break; // Since we always want to target the creature with taunt, we can break the loop here
+                    if (distance < tauntMinDistance)
+                    {
+                        tauntMinDistance = distance;
+                        tauntCreature = creatureWithinRange;
+                    }
                 }
-
-                float distance = Vector3.Distance(this.transform.position, creatureWithinRange.transform.position);
-                if (!tauntFound && distance < minDistance)
+                else if (!tauntFound && distance < minDistance)
                 {
+                    // Track the closest non-taunt creature only if no taunt creature has been found
                     minDistance = distance;
                     closestCreature = creatureWithinRange;
                 }
             }
         }
 
-        if (!tauntFound && closestCreature != null)
+        if (tauntFound)
         {
-            currentTargetedCreature = closestCreature;
+            currentTargetedCreature = tauntCreature;
+            return tauntCreature; // Prioritize taunt creatures
         }
 
+        // If no taunt creature is found, target the closest non-taunt creature
+        currentTargetedCreature = closestCreature;
         return closestCreature;
     }
+
 
 
     [SerializeField] public Transform visualAttackParticle;
@@ -584,10 +594,39 @@ public class Creature : MonoBehaviour
 
         }
 
-
-        if (playerOwningCreature.opponent.instantiatedCaste.tileCurrentlyOn.tilePosition.x == this.tileCurrentlyOn.tilePosition.x)
+        if (playerOwningCreature == GameManager.singleton.playerInScene)
         {
-            ExplodeOnPlayerKeep();
+            if (tileCurrentlyOn.tilePosition.y % 2 == 0)
+            {
+                if (playerOwningCreature.opponent.instantiatedCaste.tileCurrentlyOn.tilePosition.x == this.tileCurrentlyOn.tilePosition.x)
+                {
+                    ExplodeOnPlayerKeep();
+                }
+            }
+            else
+            {
+                if (playerOwningCreature.opponent.instantiatedCaste.tileCurrentlyOn.tilePosition.x == this.tileCurrentlyOn.tilePosition.x + 1)
+                {
+                    ExplodeOnPlayerKeep();
+                }
+            }
+        }
+        else
+        {
+            if (tileCurrentlyOn.tilePosition.y % 2 == 0)
+            {
+                if (playerOwningCreature.opponent.instantiatedCaste.tileCurrentlyOn.tilePosition.x == this.tileCurrentlyOn.tilePosition.x)
+                {
+                    ExplodeOnPlayerKeep();
+                }
+            }
+            else
+            {
+                if (playerOwningCreature.opponent.instantiatedCaste.tileCurrentlyOn.tilePosition.x == this.tileCurrentlyOn.tilePosition.x)
+                {
+                    ExplodeOnPlayerKeep();
+                }
+            }
         }
     }
 
