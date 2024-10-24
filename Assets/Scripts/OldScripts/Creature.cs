@@ -478,8 +478,8 @@ public class Creature : MonoBehaviour
         if (this != null && this.transform != null)
         {
             baseAttack += numOfCounters;
-            CurrentHealth += numOfCounters;
             MaxHealth += numOfCounters;
+            CurrentHealth += numOfCounters;
             currentAttack += numOfCounters;
             cardData.currentAttack += numOfCounters;
 
@@ -724,6 +724,7 @@ public class Creature : MonoBehaviour
         }
 
         creatureState = CreatureState.Summoned;
+
     }
 
     public void SetStateToIdle()
@@ -989,6 +990,7 @@ public class Creature : MonoBehaviour
         UpdateCreatureHUD();
         CalculateAllTilesWithinRange();
 
+        HandleBoons();
     }
 
     private void OnMouseOver()
@@ -1262,6 +1264,21 @@ public class Creature : MonoBehaviour
     public virtual void OtherCreatureAttacked(Creature creature)
     {
         Debug.Log(creature + " attacked");
+    }
+
+
+    internal void HandleBoons()
+    {
+        foreach (SpellSiegeData.PlayerBoon pb in playerOwningCreature.currentBoons)
+        {
+            if (playerOwningCreature.currentBoons.Contains(SpellSiegeData.PlayerBoon.Leviathan))
+            {
+                if (GameManager.singleton.state == GameManager.State.Game)
+                {
+                    GiveCounter(5);
+                }
+            }
+        }
     }
 
 

@@ -1045,8 +1045,8 @@ public class Controller : MonoBehaviour
         }
         instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData.Clone();
-        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         instantiatedCreature.GetComponent<Creature>().cardData.positionOnBoard = cellSent;
+        instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(instantiatedCreature.GetComponent<Creature>().cardData);
 
@@ -1888,9 +1888,9 @@ public class Controller : MonoBehaviour
 
     internal void StartRound()
     {
+        currentBoons.Clear();
         instantiatedPlayerUI.gameObject.SetActive(true);
         farmerParent.transform.parent.gameObject.SetActive(true);
-
 
         string directoryPath = $"{Application.persistentDataPath}/playerData/";
 
@@ -1982,6 +1982,11 @@ public class Controller : MonoBehaviour
 
     }
 
+    public List<SpellSiegeData.PlayerBoon> currentBoons = new List<SpellSiegeData.PlayerBoon>();
+    internal void GiveLeviathanBoon()
+    {
+        currentBoons.Add(SpellSiegeData.PlayerBoon.Leviathan);
+    }
 }
 
 

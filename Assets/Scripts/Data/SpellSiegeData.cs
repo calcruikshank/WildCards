@@ -114,4 +114,8 @@ public struct SpellSiegeData
         Trample,
         Stealth
     }
+    public enum PlayerBoon
+    {
+        Leviathan
+    }
 }

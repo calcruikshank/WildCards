@@ -4,4 +4,9 @@ using UnityEngine;
 
 public class Leviathan : Creature
 {
+    public override void OnDeath()
+    {
+        base.OnDeath();
+        playerOwningCreature.GiveLeviathanBoon();
+    }
 }

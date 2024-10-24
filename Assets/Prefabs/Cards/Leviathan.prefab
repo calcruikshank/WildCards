@@ -504,9 +504,9 @@ MonoBehaviour:
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 0
-    currentAttack: 20
-    currentHealth: 20
+    tier: 3
+    currentAttack: 5
+    currentHealth: 5
     range: 1
     cardTitle: 
     cardArtSprite: {fileID: 0}
@@ -525,7 +525,7 @@ MonoBehaviour:
     isInHand: 1
     purchaseCost: 1
     numberOfTimesThisCanDie: 1
-    keywords: 
+    keywords: 02000000
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 4012b7123dc11d04bbc3c57df1323d52, type: 3}
   cardArt: {fileID: 8030601344647228176}
   raritySymbols:
@@ -591,7 +591,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2225130581075521889}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -599,8 +599,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.18761}
-  m_SizeDelta: {x: 12.11955, y: 3.07628}
+  m_AnchoredPosition: {x: 0, y: 0.020943329}
+  m_SizeDelta: {x: 10.24009, y: 3.40961}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &198032678743028451
 CanvasRenderer:
@@ -630,7 +630,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Taunt
+  m_text: 'Taunt
+
+    When this animal dies give animals you summon +5/+5 fot the
+    rest of combat.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
@@ -657,7 +660,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.9
+  m_fontSize: 0.7
   m_fontSizeBase: 0.66
   m_fontWeight: 400
   m_enableAutoSizing: 1
