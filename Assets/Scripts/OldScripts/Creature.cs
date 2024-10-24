@@ -153,6 +153,10 @@ public class Creature : MonoBehaviour
             case CreatureState.Dead:
                 break;
         }
+        if (instantiatedBubbleShield != null)
+        {
+            instantiatedBubbleShield.transform.position = this.transform.position;
+        }
     }
 
 
@@ -378,6 +382,14 @@ public class Creature : MonoBehaviour
 
     public virtual void TakeDamage(float attack)
     {
+        if (instantiatedBubbleShield != null)
+        {
+            animatorForObject.SetTrigger("TakeDamage");
+            Destroy(instantiatedBubbleShield);
+            instantiatedBubbleShield = null;
+            GameManager.singleton.SpawnDamageText(new Vector3(this.transform.position.x, this.transform.position.y + .2f, this.transform.position.z), 0);
+            return;
+        }
         animatorForObject.SetTrigger("TakeDamage");
         GameManager.singleton.SpawnDamageText(new Vector3(this.transform.position.x, this.transform.position.y + .2f, this.transform.position.z), attack);
         if (indestructible) return;
@@ -404,7 +416,7 @@ public class Creature : MonoBehaviour
         rangeLrGO.SetActive(false);
         OnDeath();
         GameManager.singleton.CreatureDied(this.creatureID);
-
+        Destroy(instantiatedBubbleShield);
         if (canAttackIcon != null)
         {
             canAttackIcon.gameObject.SetActive(false);
@@ -1030,6 +1042,11 @@ public class Creature : MonoBehaviour
         CalculateAllTilesWithinRange();
 
         HandleBoons();
+
+        if (keywords.Contains(SpellSiegeData.Keywords.BubbleShield))
+        {
+            GiveBubble();
+        }
     }
 
     private void OnMouseOver()
@@ -1320,8 +1337,11 @@ public class Creature : MonoBehaviour
         }
     }
 
-
-
+    GameObject instantiatedBubbleShield;
+    public void GiveBubble()
+    {
+        instantiatedBubbleShield = Instantiate(GameManager.singleton.bubbleVizualization, this.transform.position, this.transform.rotation);
+    }
 
 
     #endregion

@@ -84,6 +84,8 @@ public class GameManager : MonoBehaviour
     public float turnTimer;
     public float turnThreshold = 1f;
 
+    public GameObject bubbleVizualization;
+
     private void Awake()
     {
         if (singleton != null) Destroy(this);

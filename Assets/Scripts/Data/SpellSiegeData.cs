@@ -50,6 +50,7 @@ public struct SpellSiegeData
         Attack, //attack
         Baboon, //baboon
         farmer, //farmer
+        Bubble,
         NumOfCardTypes
     }
 
@@ -112,7 +113,8 @@ public struct SpellSiegeData
         Taunt,
         Reach,
         Trample,
-        Stealth
+        Stealth,
+        BubbleShield
     }
     public enum PlayerBoon
     {

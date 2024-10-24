@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class Bubblr : MonoBehaviour
+public class Bubblr : TargetedSpell
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void SpecificSpellAbility()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        creatureTargeted.keywords.Add(SpellSiegeData.Keywords.BubbleShield);
+        creatureTargeted.GiveBubble();
     }
 }
