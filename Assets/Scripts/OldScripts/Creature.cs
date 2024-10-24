@@ -1340,7 +1340,10 @@ public class Creature : MonoBehaviour
     GameObject instantiatedBubbleShield;
     public void GiveBubble()
     {
-        instantiatedBubbleShield = Instantiate(GameManager.singleton.bubbleVizualization, this.transform.position, this.transform.rotation);
+        if (instantiatedBubbleShield == null)
+        {
+            instantiatedBubbleShield = Instantiate(GameManager.singleton.bubbleVizualization, this.transform.position, this.transform.rotation);
+        }
     }
 
 

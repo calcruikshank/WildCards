@@ -414,8 +414,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
-    greenManaCost: 1
-    whiteManaCost: 0
+    greenManaCost: 0
+    whiteManaCost: 1
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0

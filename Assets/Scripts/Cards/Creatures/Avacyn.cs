@@ -4,44 +4,12 @@ using UnityEngine;
 
 public class Avacyn : Creature
 {
-    List<Creature> creaturesDoubled = new List<Creature>();
-    protected override void CheckForCreaturesWithinRange()
+    public override void OnCombatStart()
     {
-        base.CheckForCreaturesWithinRange();
-
-        //MakeIndestructible();
-
-    }
-
-    private void MakeIndestructible()
-    {
-        if (creaturesDoubled != null)
+        base.OnCombatStart();
+        foreach (Creature creatureOwned in playerOwningCreature.creaturesOwned)
         {
-            foreach (Creature friendly in creaturesDoubled)
-            {
-                if (!friendlyCreaturesWithinRange.Contains(friendly))
-                {
-                    friendly.ToggleIndestructibilty(false);
-                }
-            }
+            creatureOwned.GiveBubble();
         }
-        foreach (Creature friendly in friendlyCreaturesWithinRange)
-        {
-            if (!creaturesDoubled.Contains(friendly))
-            {
-                friendly.ToggleIndestructibilty(true);
-            }
-        }
-        creaturesDoubled = friendlyCreaturesWithinRange;
-    }
-
-    public override void OnDeath()
-    {
-        foreach (Creature friendly in creaturesDoubled)
-        {
-            friendly.ToggleIndestructibilty(false);
-        }
-        base.OnDeath();
-        
     }
 }
