@@ -500,15 +500,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData:
     greenManaCost: 0
-    whiteManaCost: 1
+    whiteManaCost: 0
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
     tier: 1
-    currentAttack: 1
-    currentHealth: 1
-    range: 1
-    cardTitle: Dog
+    currentAttack: 2
+    currentHealth: 2
+    range: 2
+    cardTitle: Giraffe
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
@@ -516,14 +516,14 @@ MonoBehaviour:
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
     manaType: 4
-    cardAssignedToObject: 16
+    cardAssignedToObject: 50
     cardType: 0
     creatureType: 9
     rarity: 1
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 1
+    purchaseCost: 0
     numberOfTimesThisCanDie: 1
     keywords: 
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 2032737dfb482ad42b48fca5a4567c8f, type: 3}
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: On turn heal all friendly animals in range for this attack.
+  m_text: Your animals have +1 to range.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}

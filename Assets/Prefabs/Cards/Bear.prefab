@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 4255716214507035492}
   - component: {fileID: 3785849203500994701}
   m_Layer: 5
-  m_Name: Horse
+  m_Name: Bear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -420,28 +420,28 @@ MonoBehaviour:
     redManaCost: 0
     genericManaCost: 0
     tier: 0
-    currentAttack: 2
-    currentHealth: 2
-    range: 0
-    cardTitle: Horse
+    currentAttack: 1
+    currentHealth: 4
+    range: 1
+    cardTitle: Bear
     cardArtSprite: {fileID: 0}
     commonRarityImage: {fileID: 0}
     uncommonImage: {fileID: 0}
     rareImage: {fileID: 0}
     mythicImage: {fileID: 0}
     legendaryImage: {fileID: 0}
-    manaType: 4
-    cardAssignedToObject: 45
+    manaType: 1
+    cardAssignedToObject: 46
     cardType: 0
     creatureType: 9
     rarity: 4
     traversableType: 0
     positionOnBoard: {x: 0, y: 0, z: 0}
     isInHand: 1
-    purchaseCost: 1
+    purchaseCost: 0
     numberOfTimesThisCanDie: 1
-    keywords: 06000000
-  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: e923d84116cff714896b544dc040e7a2, type: 3}
+    keywords: 02000000
+  GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 0c64d0b7efc4aa546892ca55a95c519d, type: 3}
   cardArt: {fileID: 4644461047457251852}
   raritySymbols:
   - {fileID: 1865930526497011896}
@@ -1673,7 +1673,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 971309faf1b49834a91eb3fe27a89962, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b4995aa4ba6934c4a8c99bf3654ce630, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2030,7 +2030,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Horse
+  m_text: Bear
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bd7fe8ee4cd11c849a96131ebf6a69f6, type: 2}
   m_sharedMaterial: {fileID: 5803435293214564226, guid: bd7fe8ee4cd11c849a96131ebf6a69f6, type: 2}
@@ -2596,7 +2596,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Your creatures are fast
+  m_text: 'Taunt
+
+    Start of combat: gain health equal to your highest health animal.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
   m_sharedMaterial: {fileID: 3128815464167386921, guid: f18e066a4ba1ab54dab6987841997390, type: 2}
@@ -2623,7 +2625,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.9
+  m_fontSize: 0.7
   m_fontSizeBase: 0.66
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2988,7 +2990,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383068, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383069, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_Pivot.x
@@ -3008,7 +3010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383069, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383069, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_AnchorMin.x
@@ -3016,7 +3018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383069, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383069, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_SizeDelta.x
@@ -3068,11 +3070,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383069, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 12.365425
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383069, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -2.17382
       objectReference: {fileID: 0}
     - target: {fileID: 2834243347094383069, guid: f2f2e4eacf75f62408f70b0c7cfcf5e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

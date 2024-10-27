@@ -50,7 +50,15 @@ public struct SpellSiegeData
         Attack, //attack
         Baboon, //baboon
         farmer, //farmer
-        Bubble,
+        Bubble, //bubble
+        Horse,
+        Bear,
+        Panda,
+        Goose,
+        Gorilla,
+        Giraffe,
+        Tiger,
+        Alligator,
         NumOfCardTypes
     }
 
