@@ -118,6 +118,8 @@ public class Controller : MonoBehaviour
     public Creature currentCreatureHoveringOver;
     public Farmer currentFarmerHoveringOver;
 
+    Creature commanderInScene;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -177,6 +179,11 @@ public class Controller : MonoBehaviour
         GameManager.singleton.opponentInScene.GetComponent<Opponent>().StartFromGameManager();
 
         currentRoundText.text = "Current Round: " + playerData.currentRound;
+
+        if (commanderInScene == null)
+        {
+            GameManager.singleton.DiscoverCommander(0);
+        }
     }
 
     [SerializeField] Transform farmerParent;

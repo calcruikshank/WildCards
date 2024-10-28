@@ -96,7 +96,6 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SpawnCardChoices();
     }
 
     public Controller playerInScene;
@@ -122,6 +121,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void DiscoverCommander(int tierSent)
+    {
+        if (cardChoices.Count > 0)
+        {
+            for (int i = 0; i < cardChoices.Count; i++)
+            {
+                Destroy(cardChoices[i]);
+            }
+        }
+        cardChoices.Clear();
+        for (int i = 0; i < 3; i++)
+        {
+            GameObject cardGrabbed = GrabRandomCommander();
+            GameObject instantiatedCard = Instantiate(cardGrabbed.gameObject, parentOfCardSelections.transform);
+            cardChoices.Add(instantiatedCard);
+        }
+    }
+
+
+    private GameObject GrabRandomCommander()
+    {
+        int tierGrabbed = 0;
+        return GetCardAssociatedWithType(GetCardAssociatedWithTier(tierGrabbed));
+    }
     private GameObject GrabRandomCard()
     {
         int tierGrabbed = UnityEngine.Random.Range(1, playerInScene.farmersOwned.Count);
