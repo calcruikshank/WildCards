@@ -1137,6 +1137,8 @@ public class Controller : MonoBehaviour
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(instantiatedCreature.GetComponent<Creature>().cardData);
 
+        instantiatedCreature.GetComponent<Creature>().StartFighting();
+
     }
 
     private void HandleSpellInHandSelected(Vector3Int cellSent)
