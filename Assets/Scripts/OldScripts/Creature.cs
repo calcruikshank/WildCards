@@ -382,6 +382,7 @@ public class Creature : MonoBehaviour
 
     public virtual void TakeDamage(float attack)
     {
+        OnTakeDamage();
         if (instantiatedBubbleShield != null)
         {
             animatorForObject.SetTrigger("TakeDamage");
@@ -1190,6 +1191,10 @@ public class Creature : MonoBehaviour
         turnStealthOff = true;
         GameManager.singleton.CreatureAttacked(creatureID);
     }
+    public virtual void OnTakeDamage()
+    {
+        GameManager.singleton.CreatureTookDamage(creatureID);
+    }
 
     void SetStateToDead()
     {
@@ -1329,7 +1334,6 @@ public class Creature : MonoBehaviour
 
     public virtual void OtherCreatureAttacked(Creature creature)
     {
-        Debug.Log(creature + " attacked");
     }
 
 
@@ -1359,6 +1363,10 @@ public class Creature : MonoBehaviour
     internal void GiveSpeed()
     {
         keywords.Add(SpellSiegeData.Keywords.Speed);
+    }
+
+    public virtual void OtherCreatureTookDamage(Creature creature)
+    {
     }
 
 

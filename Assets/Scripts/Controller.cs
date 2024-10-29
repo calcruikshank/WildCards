@@ -118,7 +118,7 @@ public class Controller : MonoBehaviour
     public Creature currentCreatureHoveringOver;
     public Farmer currentFarmerHoveringOver;
 
-    Creature commanderInScene;
+    public List<CardData> leadersOwned = new List<CardData>();
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -179,11 +179,6 @@ public class Controller : MonoBehaviour
         GameManager.singleton.opponentInScene.GetComponent<Opponent>().StartFromGameManager();
 
         currentRoundText.text = "Current Round: " + playerData.currentRound;
-
-        if (commanderInScene == null)
-        {
-            GameManager.singleton.DiscoverCommander(0);
-        }
     }
 
     [SerializeField] Transform farmerParent;
@@ -1125,7 +1120,7 @@ public class Controller : MonoBehaviour
     public void SpawnCreatureOnTileWithoutCard(GameObject animalToSpawn, Vector3Int cellSent, CardInHand cardSelectedSent)
     {
         Vector3 positionToSpawn = BaseMapTileState.singleton.GetWorldPositionOfCell(cellSent);
-        GameObject instantiatedCreature = Instantiate(animalToSpawn.gameObject, positionToSpawn, Quaternion.identity);
+        GameObject instantiatedCreature = Instantiate(cardSelectedSent.GameObjectToInstantiate.gameObject, positionToSpawn, Quaternion.identity);
         if (environmentMap.GetInstantiatedObject(cellSent))
         {
             GameObject instantiatedObject = environmentMap.GetInstantiatedObject(cellSent);
@@ -1136,13 +1131,12 @@ public class Controller : MonoBehaviour
             ChangeTransparency instantiatedObjectsChangeTransparency = instantiatedObject.GetComponent<ChangeTransparency>();
             instantiatedObjectsChangeTransparency.ChangeTransparent(100);
         }
+        instantiatedCreature.GetComponent<Creature>().cardData.isInHand = false;
         instantiatedCreature.GetComponent<Creature>().cardData = cardSelectedSent.cardData.Clone();
         instantiatedCreature.GetComponent<Creature>().SetToPlayerOwningCreature(this);
         creaturesOwned.Add(instantiatedCreature.GetComponent<Creature>());
         instantiatedCreature.GetComponent<Creature>().SetOriginalCard(instantiatedCreature.GetComponent<Creature>().cardData);
-        instantiatedCreature.GetComponent<Creature>().OnETB();
 
-        instantiatedCreature.GetComponent<Creature>().SetStructureToFollow(opponent.instantiatedCaste, instantiatedCreature.GetComponent<Creature>().actualPosition);
     }
 
     private void HandleSpellInHandSelected(Vector3Int cellSent)
@@ -1318,8 +1312,15 @@ public class Controller : MonoBehaviour
         {
             SetStateToNothingSelected();
         }
+        if (instantiatedCardInHandBehaviour.cardData.tier == 0 && leadersOwned.Count == 0)
+        {
+            leadersOwned.Add(instantiatedCardInHandBehaviour.cardData);
+            if (leadersOwned.Count > 0)
+            {
+                GameManager.singleton.SpawnCardChoices();
+            }
+        }
 
-        Debug.Log(cardSent.cardType + " instantiating card in hand");
 
         return instantiatedCardInHandBehaviour;
     }
@@ -1780,6 +1781,7 @@ public class Controller : MonoBehaviour
 
     public virtual void InstantiateCardsBasedOnPlayerData(PlayerData playerDataSent)
     {
+        leadersOwned.Clear();
         foreach (CardInHand cardInHand in cardsInHand)
         {
             Destroy(cardInHand.gameObject);

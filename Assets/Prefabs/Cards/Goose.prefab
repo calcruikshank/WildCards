@@ -440,6 +440,7 @@ MonoBehaviour:
     isInHand: 1
     purchaseCost: 0
     numberOfTimesThisCanDie: 1
+    isLeader: 1
     keywords: 
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: e6ae640ab0e11c742bf9157af32c5cd2, type: 3}
   cardArt: {fileID: 4644461047457251852}

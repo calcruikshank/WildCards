@@ -504,7 +504,7 @@ MonoBehaviour:
     blackManaCost: 0
     redManaCost: 0
     genericManaCost: 0
-    tier: 1
+    tier: 0
     currentAttack: 2
     currentHealth: 2
     range: 2
@@ -525,6 +525,7 @@ MonoBehaviour:
     isInHand: 1
     purchaseCost: 0
     numberOfTimesThisCanDie: 1
+    isLeader: 1
     keywords: 
   GameObjectToInstantiate: {fileID: 6239865746917987997, guid: 2032737dfb482ad42b48fca5a4567c8f, type: 3}
   cardArt: {fileID: 8030601344647228176}

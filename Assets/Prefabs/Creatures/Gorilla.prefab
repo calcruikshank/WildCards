@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 6239865746917987993}
   - component: {fileID: 6239865746917987992}
   - component: {fileID: 6239865746917987998}
+  - component: {fileID: 8723562322434565339}
   m_Layer: 7
   m_Name: Gorilla
   m_TagString: Untagged
@@ -265,6 +266,83 @@ CapsuleCollider:
   m_Height: 1.0085878
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0.3, z: -0.1}
+--- !u!114 &8723562322434565339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6239865746917987997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d42705c5e5f6e324a9fd1dfe12c249d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardData:
+    greenManaCost: 0
+    whiteManaCost: 0
+    blackManaCost: 0
+    redManaCost: 0
+    genericManaCost: 0
+    tier: 0
+    currentAttack: 0
+    currentHealth: 0
+    range: 0
+    cardTitle: 
+    cardArtSprite: {fileID: 0}
+    commonRarityImage: {fileID: 0}
+    uncommonImage: {fileID: 0}
+    rareImage: {fileID: 0}
+    mythicImage: {fileID: 0}
+    legendaryImage: {fileID: 0}
+    manaType: 0
+    cardAssignedToObject: 0
+    cardType: 0
+    creatureType: 0
+    rarity: 0
+    traversableType: 0
+    positionOnBoard: {x: 0, y: 0, z: 0}
+    isInHand: 0
+    purchaseCost: 1
+    numberOfTimesThisCanDie: 1
+    keywords: 
+  speed: 1
+  maxRange: 0
+  UsageRate: 1
+  highlightForCreatureSelected: {fileID: 0}
+  currentAttack: 0
+  baseAttack: 0
+  CurrentHealth: 0
+  MaxHealth: 0
+  attackText: {fileID: 1242414366132656171}
+  healthText: {fileID: 6086426790295408981}
+  numOfTargetables: 1
+  allTilesWithinRange: []
+  creatureID: 0
+  creatureState: 0
+  numberOfTimesThisCanDie: 1
+  playerOwningCreature: {fileID: 0}
+  thisTraversableType: 0
+  currentCellPosition: {x: 0, y: 0, z: 0}
+  tileCurrentlyOn: {fileID: 0}
+  previousTilePosition: {fileID: 0}
+  actualPosition: {x: 0, y: 0, z: 0}
+  targetedPosition: {x: 0, y: 0, z: 0}
+  currentTargetedCreature: {fileID: 0}
+  currentTargetedStructure: {fileID: 0}
+  tauntFound: 0
+  visualAttackParticle: {fileID: 420905379914296888, guid: 6a73103765723cb4bb65855a803ac760, type: 3}
+  canAttackThisTurn: 1
+  animatorForObject: {fileID: 0}
+  targetedCell: {fileID: 0}
+  targetedCellForChoosingTargets: {fileID: 0}
+  tempLineRendererBetweenCreaturesGameObject: {fileID: 0}
+  canAttackIcon: {fileID: 0}
+  currentRange: 0
+  originalCard: {fileID: 0}
+  targetToFollow: {fileID: 0}
+  structureToFollow: {fileID: 0}
+  keywords: 
 --- !u!1001 &545575571717559103
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -471,6 +549,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb6f80e4e7aed404cb65ada7a833a795, type: 3}
+--- !u!114 &1242414366132656171 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7480914659161426140, guid: bb6f80e4e7aed404cb65ada7a833a795, type: 3}
+  m_PrefabInstance: {fileID: 8569362144179097847}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6086426790295408981 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2493632571246838178, guid: bb6f80e4e7aed404cb65ada7a833a795, type: 3}
+  m_PrefabInstance: {fileID: 8569362144179097847}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &9022787225713367121 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 854307731147475110, guid: bb6f80e4e7aed404cb65ada7a833a795, type: 3}

@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        SpawnCardChoices();
     }
 
     public Controller playerInScene;
@@ -119,6 +120,10 @@ public class GameManager : MonoBehaviour
             GameObject instantiatedCard = Instantiate(cardGrabbed.gameObject, parentOfCardSelections.transform);
             cardChoices.Add(instantiatedCard);
         }
+        if (playerInScene.leadersOwned.Count == 0)
+        {
+            DiscoverCommander(0);
+        }
     }
 
     public void DiscoverCommander(int tierSent)
@@ -135,6 +140,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject cardGrabbed = GrabRandomCommander();
             GameObject instantiatedCard = Instantiate(cardGrabbed.gameObject, parentOfCardSelections.transform);
+            instantiatedCard.GetComponent<CardInHand>().cardData.purchaseCost = 0;
             cardChoices.Add(instantiatedCard);
         }
     }
@@ -305,6 +311,20 @@ public class GameManager : MonoBehaviour
                 if (kvp.Value.creatureID != creatureID)
                 {
                     kvp.Value.OtherCreatureAttacked(allCreaturesOnField[creatureID]);
+                }
+            }
+        }
+    }
+
+    internal void CreatureTookDamage(int creatureID)
+    {
+        if (allCreaturesOnField[creatureID] != null)
+        {
+            foreach (KeyValuePair<int, Creature> kvp in allCreaturesOnField)
+            {
+                if (kvp.Value.creatureID != creatureID)
+                {
+                    kvp.Value.OtherCreatureTookDamage(allCreaturesOnField[creatureID]);
                 }
             }
         }
