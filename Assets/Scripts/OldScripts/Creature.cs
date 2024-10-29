@@ -524,6 +524,21 @@ public class Creature : MonoBehaviour
            playerOwningCreature.SavePlayerConfigLocallyInRoundGUID(playerOwningCreature.playerData, playerOwningCreature.currentGUIDForPlayer);
         }
     }
+    public void GiveHealth(int numOfCounters)
+    {
+        if (this != null && this.transform != null)
+        {
+            MaxHealth += numOfCounters;
+            CurrentHealth += numOfCounters;
+            UpdateCreatureHUD();
+        }
+        WriteCurrentDataToCardData();
+        if (playerOwningCreature == GameManager.singleton.playerInScene)
+        {
+            playerOwningCreature.SavePlayerConfigLocallyInRoundGUID(playerOwningCreature.playerData, playerOwningCreature.currentGUIDForPlayer);
+        }
+    }
+
 
     public virtual void SetMove(Vector3 positionToTarget, Vector3 originalPosition)
     {  
